@@ -2,7 +2,7 @@
 import React, {FC} from "react";
 import Loading from "@/components/shared/loading/Loading";
 
-export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+export interface ButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
     type?: "button" | "submit";
     classNames?: string;
     value: string;
@@ -13,7 +13,7 @@ export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttribute
     icon?: HTMLElement | undefined;
 }
 
-const Button: FC<props> = ({
+const Button: FC<ButtonProps> = ({
                                   type = "button", classNames = "",
                                   value, theme = "btn-primary", size = "btn-md",
                                   icon = undefined,

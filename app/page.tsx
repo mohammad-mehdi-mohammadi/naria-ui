@@ -1,10 +1,10 @@
-import {Button} from "@/components";
+import {Button} from "naria-ui";
 
 
 export default function Home() {
   return (
     <>
-      <Button value={'asda'} />
+      <Button value={'asda'} isLoading = {true} />
     </>
   );
 }

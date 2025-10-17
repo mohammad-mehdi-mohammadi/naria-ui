@@ -1,7 +1,7 @@
 "use client"
-import React, {FC} from "react";
+import React, {FC, ReactNode, useRef} from "react";
 
-export interface ButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+export interface ButtonProps {
     type?: "button" | "submit";
     classNames?: string;
     value: string;
@@ -9,7 +9,7 @@ export interface ButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAtt
     size?: "btn-md" | "btn-sm";
     isLoading?: boolean;
     isDisabled?: boolean;
-    icon?: HTMLElement | undefined;
+    icon?: ReactNode | undefined;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -18,8 +18,9 @@ const Button: FC<ButtonProps> = ({
                                   icon = undefined,
                                   isLoading = false, isDisabled = false, ...otherProps
                               }) => {
+    const ref = useRef(null);
     return (
-        <button type={type} disabled={isDisabled} {...otherProps}
+        <button type={type} disabled={isDisabled} {...otherProps}  ref={ref as React.Ref<HTMLButtonElement>}
                 className={`flex items-center gap-1.5 justify-center rounded-lg w-full ${theme} ${size} ${classNames}`}
         >{isLoading ? <></> : undefined}{icon}{value}</button>
     );

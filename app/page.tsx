@@ -1,9 +1,0 @@
-import {Button} from "naria-ui";
-
-
-export default function Home() {
-  return (
-    <>
-    </>
-  );
-}

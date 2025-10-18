@@ -1,6 +1,6 @@
 {
   "name": "naria-ui",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "type": "module",
   "files": [
     "dist"
@@ -44,6 +44,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mohammad-mehdi-mohammadi/naria-ui"
+    "url": "git+https://github.com/mohammad-mehdi-mohammadi/naria-ui.git"
   }
 }

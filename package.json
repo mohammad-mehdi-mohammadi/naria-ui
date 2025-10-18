@@ -1,21 +1,29 @@
 {
   "name": "naria-ui",
   "private": false,
-  "version": "0.1.25",
+  "version": "0.1.27",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc -p tsconfig.build.json && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "main": "./dist/naria-ui.umd.js",
-  "module": "./dist/naria-ui.es.js",
+  "main": "dist/naria-ui.cjs.js",
+  "module": "dist/naria-ui.es.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/naria-ui.es.js",
-      "require": "./dist/naria-ui.umd.js"
+      "require": "./dist/naria-ui.cjs.js"
     }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohammad-mehdi-mohammadi/naria-ui.git"
   },
   "dependencies": {
     "react": "^19.1.1",
@@ -33,7 +41,8 @@
     "globals": "^16.4.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
-    "vite": "npm:rolldown-vite@7.1.14"
+    "vite": "npm:rolldown-vite@7.1.14",
+    "vite-plugin-dts": "^4.5.4"
   },
   "overrides": {
     "vite": "npm:rolldown-vite@7.1.14"

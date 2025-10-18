@@ -1,16 +1,35 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import dts from 'vite-plugin-dts'
+// import postcss from 'rollup-plugin-postcss';
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  // plugins: [react(), tsconfigPaths()],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    dts({
+      insertTypesEntry: true,
+    }),
+    // postcss()
+  ],
   build: {
-    sourcemap: true,
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+    lib: {
+      entry: 'lib/main.ts',
+      name: 'naria-ui',
+      fileName: 'naria-ui'
     },
-  },
+    rollupOptions: {
+      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'reactDOM',
+          'react/jsx-runtime': 'react/jsx-runtime'
+        }
+      }
+    }
+  }
 })

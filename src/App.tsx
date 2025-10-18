@@ -1,14 +1,14 @@
-
 import './App.css'
-import {Button} from "../lib";
+import {Button, Input} from "../lib";
 
 function App() {
 
-  return (
-    <>
-      <Button value = "sadasd" />
-    </>
-  )
+    return (
+        <>
+            <Button value="sadasd"/>
+            <Input placeholder="test"/>
+        </>
+    )
 }
 
 export default App

@@ -7,9 +7,9 @@ export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttribute
 export const Button: FC<props> = ({type = "button", value}) => {
 
   return (
-    <>
+    <button type={type}>
       {value}
-    </>
+    </button>
   );
 };
 

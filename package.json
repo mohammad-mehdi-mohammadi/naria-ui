@@ -1,49 +1,33 @@
 {
   "name": "naria-ui",
-  "version": "0.1.16",
+  "private": false,
+  "version": "0.1.21",
   "type": "module",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/naria-ui.umd.cjs",
-  "module": "./dist/naria-ui.js",
-  "types": "./dist/main.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/naria-ui.js",
-      "require": "./dist/naria-ui.umd.cjs"
-    },
-    "./dist/style.css": "./dist/style.css"
-  },
-  "sideEffects": false,
   "scripts": {
     "dev": "vite",
-    "prebuild": "if exist dist rmdir /s /q dist",
     "build": "vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "vite-tsconfig-paths": "^4.3.2"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.15.0",
-    "@typescript-eslint/parser": "^7.15.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.7",
-    "rollup-plugin-postcss": "^4.0.2",
-    "typescript": "^5.2.2",
-    "vite": "^5.3.4",
-    "vite-plugin-dts": "^4.0.0-beta.2"
+    "@eslint/js": "^9.36.0",
+    "@types/node": "^24.6.0",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.22",
+    "globals": "^16.4.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.45.0",
+    "vite": "npm:rolldown-vite@7.1.14"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mohammad-mehdi-mohammadi/naria-ui.git"
+  "overrides": {
+    "vite": "npm:rolldown-vite@7.1.14"
   }
 }

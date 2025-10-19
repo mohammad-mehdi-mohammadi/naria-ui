@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
+import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -13,6 +14,7 @@ export default defineConfig({
       // Specify the path to the build-specific tsconfig file
       tsconfigPath: "./tsconfig.build.json",
     }),
+    svgr()
   ],
   // Build configuration options
   build: {

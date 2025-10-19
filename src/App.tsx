@@ -1,5 +1,5 @@
 import './App.css'
-import {Button, Input} from "../lib";
+import {Button, Input, Select} from "../lib";
 
 function App() {
 
@@ -7,6 +7,7 @@ function App() {
         <>
             <Button value="sadasd"/>
             <Input placeholder="test" label="test"/>
+            <Select label="id" value="name" list = {[{id: 1, name: "sad"}]} />
         </>
     )
 }

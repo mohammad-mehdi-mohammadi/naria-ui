@@ -6,7 +6,7 @@ function App() {
     return (
         <>
             <Button value="sadasd"/>
-            <Input placeholder="test"/>
+            <Input placeholder="test" label="test"/>
         </>
     )
 }

@@ -1,4 +1,4 @@
-# Genmoji
+# Naria UI
 
 [![npm version](https://img.shields.io/npm/v/naria-ui?style=flat-square)](https://www.npmjs.com/package/naria-ui)
 [![npm downloads](https://img.shields.io/npm/dm/@janardanPethani/naria-ui?style=flat-square)](https://www.npmjs.com/package/naria-ui)
@@ -66,17 +66,6 @@ The `Chat` component provides a floating button. Click it, enter your mood, and 
 
 No configuration or environment variables are required.
 
----
-
-## 🤝 Contributing & Support
-
-Maintained by [Janardan Pethani](https://janardanpethani.in)  
-Email: jpethani11@gmail.com  
-GitHub: [JanardanPethani/naria-ui](https://github.com/JanardanPethani/naria-ui)
-
-Feel free to open issues or pull requests!
-
----
 
 ## 📄 License
 
@@ -84,4 +73,4 @@ _This project currently does not specify a license. To make your project open so
 
 ---
 
-> _Generated with ❤️ by [Janardan Pethani](https://janardanpethani.in)_
+> _Generated with ❤️ by [naria.enenom.com](https://naria.enenom.com)_

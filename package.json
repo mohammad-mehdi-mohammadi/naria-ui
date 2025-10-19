@@ -25,7 +25,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p tsconfig.build.json && vite build",
+    "build": "vite build",
+    "tsc": "tsc -p tsconfig.build.json",
     "lint": "eslint .",
     "preview": "vite preview"
   },

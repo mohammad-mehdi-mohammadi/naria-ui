@@ -3,6 +3,7 @@ import AngleDown from "../../../src/assets/icons/angle-down.svg?react";
 import Close from '../../../src/assets/icons/close.svg?react';
 import {useWidth} from "../../../hooks/use-width";
 import Loading from "../../../shared/loading/Loading";
+import './select.scss';
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 
 export interface props {

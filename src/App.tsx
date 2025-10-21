@@ -7,7 +7,11 @@ function App() {
         <>
             <Button value="sadasd"/>
             <Input placeholder="test" label="test"/>
-            <Select label="id" value="name" list = {[{id: 1, name: "sad"}]} />
+            <hr/>
+            <h1>Select option (Basic usage | primitive list)</h1>
+            <Select label="id" options = {["Yellow", "Red", "Blue"]} />
+            <h1>Select option (Basic usage | non-primitive list)</h1>
+            <Select options = {[{label: 1, value: "Yellow"}, {label: 2, value: "Red"}, {label: 3, value: "Blue"}]} />
         </>
     )
 }

@@ -4,40 +4,44 @@ import Close from '../../../src/assets/icons/close.svg?react';
 import {useWidth} from "../../../hooks/use-width";
 import Loading from "../../../shared/loading/Loading";
 import './select.scss';
-import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
+import {addNavigation, removeNavigation} from "../../utils/navigator";
 
 export interface props {
-    list?: any[];
-    label?: string;
+    options?: any[];
+    label?: string | "label";
     title: string;
-    value?: string;
+    value?: string | "value";
     api?: any;
     maxHeight?: string;
-    theme?: "secondary";
     hasError?: string | null;
-    size?: "md" | "sm";
-    onSelectChange?: any;
     selected?: any;
+    placeholder?: string;
+    onSelectChange?: any;
 }
 
 export const Select: FC<props> = ({
-                                      list, label, hasError,
-                                      title, value, api,
-                                      maxHeight = "max-h-64", theme = "secondary", size = "md",
-                                      onSelectChange,
-                                      selected
+                                      options,
+                                      label,
+                                      hasError,
+                                      title,
+                                      value,
+                                      api,
+                                      maxHeight = "max-h-64",
+                                      selected,
+                                      placeholder,
+                                      onSelectChange
                                   }) => {
     const getDeviceWidth = useWidth();
     const [isShow, setIsShow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [localSelected, setLocalSelected] = useState(null);
-    const [localList, setLocalList] = useState(null);
+    const [localOptions, setLocalOptions] = useState(null);
     useEffect(() => {
         if (api) {
             setIsLoading(true);
             api().then((res) => {
                 setIsLoading(false);
-                setLocalList(res?.data?.message ? [] : res.data);
+                setLocalOptions(res?.data?.message ? [] : res.data);
             })
         }
     }, [api]);
@@ -59,17 +63,17 @@ export const Select: FC<props> = ({
 
     useEffect(() => {
         if (label?.length) {
-            setLocalSelected(localList?.find(item => item[label] === selected));
+            setLocalSelected(localOptions?.find(item => item[label] === selected));
         } else {
             setLocalSelected(selected);
         }
-    }, [selected, localList]);
+    }, [selected, localOptions]);
 
     useEffect(() => {
-        if (list?.length) {
-            setLocalList(list)
+        if (options?.length) {
+            setLocalOptions(options)
         }
-    }, [list]);
+    }, [options]);
 
     const onToggle = () => {
         setIsShow(prevState => !prevState);
@@ -82,7 +86,9 @@ export const Select: FC<props> = ({
     const onSelect = (item) => {
         setLocalSelected(item);
         onToggle();
-        onSelectChange(item);
+        if(onSelectChange) {
+            onSelectChange(item);
+        }
     }
 
     const getActiveClass = (item) => {
@@ -110,7 +116,7 @@ export const Select: FC<props> = ({
                     {
                         localSelected ? (
                             value?.length ? localSelected[value] : localSelected
-                        ) : "انتخاب"
+                        ) : (placeholder?.length ? placeholder : "Select")
                     } <AngleDown
                     className={`w-4 h-4 transition ease duration-200 ${!isShow ? "rotate-0" : "rotate-180"}`}/>
                 </button>
@@ -139,7 +145,7 @@ export const Select: FC<props> = ({
                                             ) : undefined
                                         }
                                         {
-                                            localList?.map((item, index) => {
+                                            localOptions?.map((item, index) => {
                                                 return (
                                                     <button type="button" onClick={() => onSelect(item)}
                                                             key={index.toString()}

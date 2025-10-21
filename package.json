@@ -19,7 +19,7 @@
     "./dist/*.css": "./dist/*.css",
     "./assets/*.css": "./assets/*.css"
   },
-  "files": ["*.md", "dist", "lib", "es", "src"],
+  "files": ["*.md", "dist", "lib", "es"],
   "publishConfig": {
     "access": "public"
   },

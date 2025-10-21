@@ -10,11 +10,11 @@ export const addNavigation = (state: string) => {
 }
 
 
-export const onHashChanges = () => {
+export const onHashChanges = (state: string) => {
     const [isHashChanged, setIsHashChanged] = useState(false)
     useEffect(() => {
         const handleHashChange = (e) => {
-            if(window.location.hash !== "#modal") {
+            if(window.location.hash !== state) {
                 setIsHashChanged(true);
             } else {
                 setIsHashChanged(false);

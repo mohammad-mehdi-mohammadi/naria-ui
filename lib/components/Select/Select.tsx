@@ -4,7 +4,7 @@ import Close from '../../../src/assets/icons/close.svg?react';
 import {useWidth} from "../../../hooks/use-width";
 import Loading from "../../../shared/loading/Loading";
 import './select.scss';
-import {addNavigation, removeNavigation} from "../../utils/navigator";
+import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 
 export interface props {
     options?: any[];
@@ -32,6 +32,7 @@ export const Select: FC<props> = ({
                                       onSelectChange
                                   }) => {
     const getDeviceWidth = useWidth();
+    const isHashChanged = onHashChanges('#select');
     const [isShow, setIsShow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [localSelected, setLocalSelected] = useState(null);
@@ -46,13 +47,12 @@ export const Select: FC<props> = ({
         }
     }, [api]);
     useEffect(() => {
-        if (getDeviceWidth < 1024) {
-
+        if (getDeviceWidth < 768) {
+            console.log(`${window.location.hash} ${!document.referrer.includes('#')}`, isShow)
             if (isShow) {
                 addNavigation('select');
                 document.body.style.overflow = 'hidden';
             } else {
-
                 if (window.location.hash && !document.referrer.includes('#')) {
                     removeNavigation();
                 }
@@ -62,12 +62,22 @@ export const Select: FC<props> = ({
     }, [isShow]);
 
     useEffect(() => {
-        if (label?.length) {
-            setLocalSelected(localOptions?.find(item => item[label] === selected));
-        } else {
-            setLocalSelected(selected);
+        if (selected) {
+            if (label?.length) {
+                setLocalSelected(localOptions?.find(item => item[label] === selected));
+            } else {
+                setLocalSelected(selected);
+            }
         }
     }, [selected, localOptions]);
+
+    useEffect(() => {
+        console.log('asda', isHashChanged)
+        if (isHashChanged) {
+            setIsShow(false)
+        }
+    }, [isHashChanged])
+
 
     useEffect(() => {
         if (options?.length) {
@@ -86,7 +96,7 @@ export const Select: FC<props> = ({
     const onSelect = (item) => {
         setLocalSelected(item);
         onToggle();
-        if(onSelectChange) {
+        if (onSelectChange) {
             onSelectChange(item);
         }
     }
@@ -115,7 +125,7 @@ export const Select: FC<props> = ({
                         onClick={onToggle}>
                     {
                         localSelected ? (
-                            value?.length ? localSelected[value] : localSelected
+                            value?.length ? localSelected[value] : (typeof localSelected === 'object' ? localSelected['value'] : localSelected)
                         ) : (placeholder?.length ? placeholder : "Select")
                     } <AngleDown
                     className={`w-4 h-4 transition ease duration-200 ${!isShow ? "rotate-0" : "rotate-180"}`}/>
@@ -125,9 +135,9 @@ export const Select: FC<props> = ({
             {
                 isShow ? (
                     <div
-                        className={`wrapper ${getDeviceWidth < 1024 ? "mobile" : ""}`}>
+                        className={`wrapper ${getDeviceWidth < 768 ? "mobile" : ""}`}>
                         <div
-                            className={`list ${getDeviceWidth < 1024 ? "mobile" : `desktop ${maxHeight}`}`}>
+                            className={`list ${getDeviceWidth < 768 ? "mobile" : `desktop ${maxHeight}`}`}>
                             {
                                 api && isLoading ? (
                                     <div className="py-10 flex justify-center">
@@ -136,7 +146,7 @@ export const Select: FC<props> = ({
                                 ) : (
                                     <>
                                         {
-                                            getDeviceWidth < 1024 ? (
+                                            getDeviceWidth < 768 ? (
                                                 <div className="sticky top-0 text-left">
                                                     <button className="p-3" onClick={onToggle}>
                                                         <Close className="w-6"/>
@@ -150,7 +160,7 @@ export const Select: FC<props> = ({
                                                     <button type="button" onClick={() => onSelect(item)}
                                                             key={index.toString()}
                                                             className={`text-right py-2.5 px-4 text-base hover:bg-grey-100 rounded-lg ${getActiveClass(item)}`}>
-                                                        {value?.length ? item[value] : item}
+                                                        {value?.length ? item[value] : (typeof item === 'object' ? item['value'] : item)}
                                                     </button>
                                                 )
                                             })

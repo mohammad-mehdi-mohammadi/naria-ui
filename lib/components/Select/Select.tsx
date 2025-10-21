@@ -16,6 +16,7 @@ export interface props {
     hasError?: string | null;
     selected?: any;
     placeholder?: string;
+    disabled?: boolean;
     onSelectChange?: any;
 }
 
@@ -29,6 +30,7 @@ export const Select: FC<props> = ({
                                       maxHeight = "max-h-64",
                                       selected,
                                       placeholder,
+                                      disabled= false,
                                       onSelectChange
                                   }) => {
     const getDeviceWidth = useWidth();
@@ -113,12 +115,13 @@ export const Select: FC<props> = ({
         }
     }
     return (
-        <div className="naria-select">
+        <div className={`naria-select ${disabled ? 'disabled' : ''}`}>
             <label
                 className={`cursor-pointer
                 ${hasError && "!text-danger-100"}`}>
                 <span className={``}>{title}</span>
                 <button type="button"
+                        disabled={disabled}
                         className={`relative z-20 flex items-center mt-1 text-base justify-between gap-2 w-full
                          ${localSelected ? "text-dark-100" : "text-grey-300"}
                          ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
@@ -148,7 +151,7 @@ export const Select: FC<props> = ({
                                         {
                                             getDeviceWidth < 768 ? (
                                                 <div className="sticky top-0 text-left">
-                                                    <button className="p-3" onClick={onToggle}>
+                                                    <button className="p-3" onClick={onToggle} disabled = {disabled}>
                                                         <Close className="w-6"/>
                                                     </button>
                                                 </div>
@@ -157,7 +160,7 @@ export const Select: FC<props> = ({
                                         {
                                             localOptions?.map((item, index) => {
                                                 return (
-                                                    <button type="button" onClick={() => onSelect(item)}
+                                                    <button type="button" onClick={() => onSelect(item)} disabled = {disabled}
                                                             key={index.toString()}
                                                             className={`text-right py-2.5 px-4 text-base hover:bg-grey-100 rounded-lg ${getActiveClass(item)}`}>
                                                         {value?.length ? item[value] : (typeof item === 'object' ? item['value'] : item)}

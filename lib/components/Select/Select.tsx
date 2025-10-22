@@ -118,7 +118,6 @@ export const Select: FC<props> = ({
             getData().then((res) => {
                 if (isSubscribed) {
                     setIsLoading(false);
-                    console.log(";asda")
                     setLocalPagination({
                         ...localPagination,
                         isLoading: false
@@ -136,6 +135,7 @@ export const Select: FC<props> = ({
             if (isShow) {
                 addNavigation('select');
                 document.body.style.overflow = 'hidden';
+                handlerRef.current?.focus();
             } else {
                 if (window.location.hash && !document.referrer.includes('#')) {
                     removeNavigation();
@@ -147,14 +147,18 @@ export const Select: FC<props> = ({
 
     useEffect(() => {
         if (selected) {
+            if (hasSearch) {
+                console.log(localOptions, value, localOptions?.find(item => item[label] === selected), selected, label)
+                if (value?.length) {
+                    setSearchTerm(localOptions?.find(item => item[label] === selected)[value] || '');
+                } else {
+                    setSearchTerm(selected);
+                }
+            }
             if (label?.length) {
                 setLocalSelected(localOptions?.find(item => item[label] === selected));
             } else {
-                if (localOptions?.find(item => item['label'] === selected)) {
-                    setLocalSelected(localOptions?.find(item => item['label'] === selected));
-                } else {
-                    setLocalSelected(selected);
-                }
+                setLocalSelected(selected);
             }
         }
     }, [selected, localOptions]);
@@ -179,20 +183,23 @@ export const Select: FC<props> = ({
         setIsShow(prevState => !prevState);
     }
     const onClose = () => {
-        console.log(localSelected)
         if (hasSearch) {
             setLocalOptions(options)
             if (typeof localSelected === "string") {
                 setSearchTerm(localSelected);
             } else {
-                setSearchTerm("")
+                setSearchTerm(localSelected ? localSelected[value] : "")
             }
         }
         setIsShow(false);
     }
     const onSelect = (item) => {
         if (hasSearch) {
-            setSearchTerm(item);
+            if (value?.length) {
+                setSearchTerm(item[value]);
+            } else {
+                setSearchTerm(item);
+            }
         }
         setLocalSelected(item);
         onToggle();
@@ -226,13 +233,13 @@ export const Select: FC<props> = ({
 
     }
     const onSearch = (e) => {
-        const tempList = options.filter(val => typeof val === "string" && val.includes(e?.target?.value))
-        console.log(tempList)
-        setLocalOptions(tempList)
+        const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[value].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
+        console.log(tempList, e?.target?.value, )
+        // setLocalOptions(tempList)
         setSearchTerm(e?.target?.value)
-        if(!isShow) {
-            setIsShow(true)
-        }
+        // if (!isShow) {
+        //     setIsShow(true)
+        // }
     }
     useClickOutside(wrapperRef, handlerRef, onClose);
     return (
@@ -294,7 +301,7 @@ export const Select: FC<props> = ({
                                         {
                                             getDeviceWidth < 768 ? (
                                                 <div className="sticky top-0 text-left">
-                                                    <button className="p-3" onClick={onToggle} disabled={disabled}>
+                                                    <button className="p-3" onClick={onClose} disabled={disabled}>
                                                         <Close className="w-6"/>
                                                     </button>
                                                 </div>

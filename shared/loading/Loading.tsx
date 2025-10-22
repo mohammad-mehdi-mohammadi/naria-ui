@@ -1,7 +1,7 @@
 import {FC} from "react";
 import './loading.scss';
 export interface props {
-    classNames: {
+    classNames?: {
         wrapper: string;
         color: string;
 

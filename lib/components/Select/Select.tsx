@@ -1,22 +1,34 @@
-import {FC, useEffect, useState} from "react";
-import AngleDown from "../../../src/assets/icons/angle-down.svg?react";
-import Close from '../../../src/assets/icons/close.svg?react';
+import {FC, useEffect, useRef, useState} from "react";
+import AngleDown from "../../../assets/icons/angle-down.svg?react";
+import Close from '../../../assets/icons/close.svg?react';
 import {useWidth} from "../../../hooks/use-width";
 import Loading from "../../../shared/loading/Loading";
 import './select.scss';
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
+import useClickOutside from "../../../hooks/click-outside";
+
+interface Pagination {
+    page?: number;
+    pageLabel?: string;
+    size?: number;
+    sizeLabel?: string;
+}
+
+interface SDS extends Pagination {
+    isLoading?: boolean;
+}
 
 export interface props {
     options?: any[];
     label?: string | "label";
     title: string;
     value?: string | "value";
-    api?: any;
-    maxHeight?: string;
+    api?: string;
     hasError?: string | null;
     selected?: any;
     placeholder?: string;
     disabled?: boolean;
+    pagination?: Pagination;
     onSelectChange?: any;
 }
 
@@ -27,30 +39,95 @@ export const Select: FC<props> = ({
                                       title,
                                       value,
                                       api,
-                                      maxHeight = "max-h-64",
                                       selected,
                                       placeholder,
-                                      disabled= false,
+                                      disabled = false,
+                                      pagination,
                                       onSelectChange
                                   }) => {
+    let isSubscribed = true;
     const getDeviceWidth = useWidth();
+
     const isHashChanged = onHashChanges('#select');
     const [isShow, setIsShow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [localSelected, setLocalSelected] = useState(null);
     const [localOptions, setLocalOptions] = useState(null);
+    const [localPagination, setLocalPagination] = useState<SDS>({
+        page: 1,
+        pageLabel: 'page',
+        size: 20,
+        sizeLabel: 'size',
+        isLoading: false
+    });
+    const localApi = useRef<string | undefined>(undefined);
+    const wrapperRef = useRef(undefined);
+    const handlerRef = useRef(undefined);
+
+    const getData = async () => {
+        if (localApi?.current) {
+            try {
+                const response = await fetch(localApi?.current);
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+    }
+
     useEffect(() => {
-        if (api) {
+        return () => {
+            isSubscribed = false;
+        };
+    }, [])
+    useEffect(() => {
+        if (api?.length) {
+            localApi.current = api;
+            if (localApi.current.includes(pagination?.pageLabel || 'page')) {
+                const url = new URL(api);
+                url.searchParams.set(pagination?.pageLabel || 'page', (pagination?.page || localPagination.page).toString());
+                url.searchParams.set(pagination?.sizeLabel || 'size', (pagination?.size || localPagination.size).toString());
+                localApi.current = url.href;
+            }
             setIsLoading(true);
-            api().then((res) => {
-                setIsLoading(false);
-                setLocalOptions(res?.data?.message ? [] : res.data);
+            getData().then((res) => {
+                if (isSubscribed) {
+                    setIsLoading(false);
+                    setLocalOptions(res);
+                }
             })
         }
-    }, [api]);
+    }, [api, pagination]);
+
+    useEffect(() => {
+        if (localPagination.isLoading) {
+            if (localApi.current.includes(pagination?.pageLabel || 'page')) {
+                const url = new URL(localApi.current);
+                url.searchParams.set(pagination?.pageLabel || 'page', (localPagination.page).toString());
+                localApi.current = url.href;
+            }
+            getData().then((res) => {
+                if (isSubscribed) {
+                    setIsLoading(false);
+                    console.log(";asda")
+                    setLocalPagination({
+                        ...localPagination,
+                        isLoading: false
+                    })
+                    setLocalOptions([
+                        ...localOptions,
+                        ...res
+                    ]);
+                }
+            })
+        }
+    }, [localPagination]);
     useEffect(() => {
         if (getDeviceWidth < 768) {
-            console.log(`${window.location.hash} ${!document.referrer.includes('#')}`, isShow)
             if (isShow) {
                 addNavigation('select');
                 document.body.style.overflow = 'hidden';
@@ -74,7 +151,6 @@ export const Select: FC<props> = ({
     }, [selected, localOptions]);
 
     useEffect(() => {
-        console.log('asda', isHashChanged)
         if (isHashChanged) {
             setIsShow(false)
         }
@@ -90,10 +166,8 @@ export const Select: FC<props> = ({
     const onToggle = () => {
         setIsShow(prevState => !prevState);
     }
-    const onToggleEvent = (e) => {
-        if (e?.target?.className.toString()?.includes('backdrop-select')) {
-            onToggle()
-        }
+    const onClose = () => {
+        setIsShow(false);
     }
     const onSelect = (item) => {
         setLocalSelected(item);
@@ -114,15 +188,30 @@ export const Select: FC<props> = ({
             return "bg-grey-100"
         }
     }
+    const onScroll = (e) => {
+        if (localOptions?.length && !localPagination.isLoading) {
+            const bottom = e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - 100;
+
+            if (bottom) {
+                setLocalPagination({
+                    page: localPagination.page + 1,
+                    isLoading: true
+                })
+            }
+        }
+
+    }
+    useClickOutside(wrapperRef, handlerRef, onClose);
     return (
-        <div className={`naria-select ${disabled ? 'disabled' : ''}`}>
+        <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''}`}>
             <label
                 className={`cursor-pointer
                 ${hasError && "!text-danger-100"}`}>
                 <span className={``}>{title}</span>
                 <button type="button"
+                        ref={handlerRef}
                         disabled={disabled}
-                        className={`relative z-20 flex items-center mt-1 text-base justify-between gap-2 w-full
+                        className={`nariaHandler
                          ${localSelected ? "text-dark-100" : "text-grey-300"}
                          ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
                         onClick={onToggle}>
@@ -131,27 +220,29 @@ export const Select: FC<props> = ({
                             value?.length ? localSelected[value] : (typeof localSelected === 'object' ? localSelected['value'] : localSelected)
                         ) : (placeholder?.length ? placeholder : "Select")
                     } <AngleDown
-                    className={`w-4 h-4 transition ease duration-200 ${!isShow ? "rotate-0" : "rotate-180"}`}/>
+                    className={`nariaArrowIcon ${isShow ? "nariaArrowIcon-rotate-180" : ""}`}/>
                 </button>
             </label>
 
             {
                 isShow ? (
                     <div
-                        className={`wrapper ${getDeviceWidth < 768 ? "mobile" : ""}`}>
+                        className={`nariaListWrapper ${getDeviceWidth < 768 ? "nariaListWrapper-mobile" : ""}`}
+                        ref={wrapperRef}>
                         <div
-                            className={`list ${getDeviceWidth < 768 ? "mobile" : `desktop ${maxHeight}`}`}>
+                            className={`nariaList ${getDeviceWidth < 768 ? "nariaList-mobile" : `nariaList-desktop`}`}
+                            onScroll={onScroll}>
                             {
                                 api && isLoading ? (
-                                    <div className="py-10 flex justify-center">
-                                        <Loading size="w-7 h-7"/>
+                                    <div className="nariaLoadingWrapper">
+                                        <Loading/>
                                     </div>
                                 ) : (
                                     <>
                                         {
                                             getDeviceWidth < 768 ? (
                                                 <div className="sticky top-0 text-left">
-                                                    <button className="p-3" onClick={onToggle} disabled = {disabled}>
+                                                    <button className="p-3" onClick={onToggle} disabled={disabled}>
                                                         <Close className="w-6"/>
                                                     </button>
                                                 </div>
@@ -160,7 +251,8 @@ export const Select: FC<props> = ({
                                         {
                                             localOptions?.map((item, index) => {
                                                 return (
-                                                    <button type="button" onClick={() => onSelect(item)} disabled = {disabled}
+                                                    <button type="button" onClick={() => onSelect(item)}
+                                                            disabled={disabled}
                                                             key={index.toString()}
                                                             className={`text-right py-2.5 px-4 text-base hover:bg-grey-100 rounded-lg ${getActiveClass(item)}`}>
                                                         {value?.length ? item[value] : (typeof item === 'object' ? item['value'] : item)}
@@ -168,14 +260,17 @@ export const Select: FC<props> = ({
                                                 )
                                             })
                                         }
+
+                                        {
+                                            localPagination.isLoading ? (
+                                                <div className="nariaLoadingMoreWrapper">
+                                                    <Loading/>
+                                                </div>
+                                            ) : undefined
+                                        }
                                     </>
                                 )
                             }
-                        </div>
-                        <div
-                            className={`backdrop-select`}
-                            onClick={onToggleEvent}>
-
                         </div>
                     </div>
                 ) : undefined

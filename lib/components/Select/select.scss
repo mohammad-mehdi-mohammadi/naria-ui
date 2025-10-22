@@ -1,8 +1,10 @@
-.naria-select {
+.nariaSelect {
   position: relative;
-  .wrapper {
+
+  .nariaListWrapper {
     overflow: hidden;
-    &.mobile {
+
+    &.nariaListWrapper-mobile {
       position: fixed;
       top: 0;
       right: 0;
@@ -11,33 +13,70 @@
       z-index: 97;
     }
   }
-  .list {
+
+  .nariaList {
     display: flex;
     flex-direction: column;
     width: 100%;
     z-index: 99;
-    &.mobile {
+    position: relative;
+
+    &.nariaList-mobile {
       position: relative;
       height: 100%;
     }
-    &.desktop {
+
+    &.nariaList-desktop {
       overflow: auto;
       position: absolute;
       animation: fadeInTranslateY 0.3s ease-out forwards;
+      max-height: 100px;
+    }
+    .nariaLoadingWrapper {
+      padding: 24px 0;
+      display: flex;
+      justify-content: center;
+
+    }
+    .nariaLoadingMoreWrapper {
+      position: sticky;
+      bottom: 0;
+      text-align: center;
+      width: 100%;
+
+      .nariaLoading {
+        width: 20px;
+      }
     }
   }
-  .backdrop-select {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
+
+  .nariaHandler {
+    position: relative;
+    display: flex;
+    gap: 4px;
     width: 100%;
-    height: 100%;
-    z-index: 98;
-    background-color: rgba(0, 0, 0, 0.2);
+    align-items: center;
+    .nariaArrowIcon {
+      width: 12px;
+      height: 12px;
+      transition: transform 0.4s;
+
+      -webkit-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      transform: rotate(0deg);
+
+      &.nariaArrowIcon-rotate-180 {
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg);
+      }
+    }
   }
 }
-
 
 
 @keyframes fadeInTranslateY {

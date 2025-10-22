@@ -29,6 +29,8 @@ export interface props {
     placeholder?: string;
     disabled?: boolean;
     pagination?: Pagination;
+    optionFilterLabel?: string;
+    hasSearch?: boolean;
     onSelectChange?: any;
 }
 
@@ -43,6 +45,8 @@ export const Select: FC<props> = ({
                                       placeholder,
                                       disabled = false,
                                       pagination,
+                                      optionFilterLabel,
+                                      hasSearch = false,
                                       onSelectChange
                                   }) => {
     let isSubscribed = true;
@@ -51,8 +55,9 @@ export const Select: FC<props> = ({
     const isHashChanged = onHashChanges('#select');
     const [isShow, setIsShow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [localSelected, setLocalSelected] = useState(null);
+    const [localSelected, setLocalSelected] = useState<string | null>(null);
     const [localOptions, setLocalOptions] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
     const [localPagination, setLocalPagination] = useState<SDS>({
         page: 1,
         pageLabel: 'page',
@@ -145,7 +150,11 @@ export const Select: FC<props> = ({
             if (label?.length) {
                 setLocalSelected(localOptions?.find(item => item[label] === selected));
             } else {
-                setLocalSelected(selected);
+                if (localOptions?.find(item => item['label'] === selected)) {
+                    setLocalSelected(localOptions?.find(item => item['label'] === selected));
+                } else {
+                    setLocalSelected(selected);
+                }
             }
         }
     }, [selected, localOptions]);
@@ -164,12 +173,27 @@ export const Select: FC<props> = ({
     }, [options]);
 
     const onToggle = () => {
+        if (hasSearch) {
+            setLocalOptions(options)
+        }
         setIsShow(prevState => !prevState);
     }
     const onClose = () => {
+        console.log(localSelected)
+        if (hasSearch) {
+            setLocalOptions(options)
+            if (typeof localSelected === "string") {
+                setSearchTerm(localSelected);
+            } else {
+                setSearchTerm("")
+            }
+        }
         setIsShow(false);
     }
     const onSelect = (item) => {
+        if (hasSearch) {
+            setSearchTerm(item);
+        }
         setLocalSelected(item);
         onToggle();
         if (onSelectChange) {
@@ -201,6 +225,15 @@ export const Select: FC<props> = ({
         }
 
     }
+    const onSearch = (e) => {
+        const tempList = options.filter(val => typeof val === "string" && val.includes(e?.target?.value))
+        console.log(tempList)
+        setLocalOptions(tempList)
+        setSearchTerm(e?.target?.value)
+        if(!isShow) {
+            setIsShow(true)
+        }
+    }
     useClickOutside(wrapperRef, handlerRef, onClose);
     return (
         <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''}`}>
@@ -208,20 +241,30 @@ export const Select: FC<props> = ({
                 className={`cursor-pointer
                 ${hasError && "!text-danger-100"}`}>
                 <span className={``}>{title}</span>
-                <button type="button"
-                        ref={handlerRef}
-                        disabled={disabled}
-                        className={`nariaHandler
-                         ${localSelected ? "text-dark-100" : "text-grey-300"}
-                         ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
-                        onClick={onToggle}>
-                    {
-                        localSelected ? (
-                            value?.length ? localSelected[value] : (typeof localSelected === 'object' ? localSelected['value'] : localSelected)
-                        ) : (placeholder?.length ? placeholder : "Select")
-                    } <AngleDown
-                    className={`nariaArrowIcon ${isShow ? "nariaArrowIcon-rotate-180" : ""}`}/>
-                </button>
+                {
+                    hasSearch ? (
+                        <input ref={handlerRef}
+                               className={`nariaHandler ${localSelected ? "text-dark-100" : "text-grey-300"} 
+                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
+                               value={searchTerm}
+                               disabled={disabled} type="text" onClick={onToggle} onChange={onSearch}/>
+                    ) : (
+                        <button type="button"
+                                ref={handlerRef}
+                                disabled={disabled}
+                                className={`nariaHandler ${localSelected ? "text-dark-100" : "text-grey-300"} 
+                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
+                                onClick={onToggle}>
+                            {
+                                localSelected ? (
+                                    value?.length ? localSelected[value] : (typeof localSelected === 'object' ? localSelected['value'] : localSelected)
+                                ) : (placeholder?.length ? placeholder : "Select")
+                            } <AngleDown
+                            className={`nariaArrowIcon ${isShow ? "nariaArrowIcon-rotate-180" : ""}`}/>
+                        </button>
+                    )
+                }
+
             </label>
 
             {
@@ -229,6 +272,15 @@ export const Select: FC<props> = ({
                     <div
                         className={`nariaListWrapper ${getDeviceWidth < 768 ? "nariaListWrapper-mobile" : ""}`}
                         ref={wrapperRef}>
+                        {
+                            hasSearch && getDeviceWidth < 768 ? (
+                                <input ref={handlerRef}
+                                       className={`nariaHandler ${localSelected ? "text-dark-100" : "text-grey-300"} 
+                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
+                                       value={searchTerm}
+                                       disabled={disabled} type="text" onChange={onSearch}/>
+                            ) : undefined
+                        }
                         <div
                             className={`nariaList ${getDeviceWidth < 768 ? "nariaList-mobile" : `nariaList-desktop`}`}
                             onScroll={onScroll}>
@@ -249,17 +301,28 @@ export const Select: FC<props> = ({
                                             ) : undefined
                                         }
                                         {
-                                            localOptions?.map((item, index) => {
-                                                return (
-                                                    <button type="button" onClick={() => onSelect(item)}
-                                                            disabled={disabled}
-                                                            key={index.toString()}
-                                                            className={`text-right py-2.5 px-4 text-base hover:bg-grey-100 rounded-lg ${getActiveClass(item)}`}>
-                                                        {value?.length ? item[value] : (typeof item === 'object' ? item['value'] : item)}
-                                                    </button>
-                                                )
-                                            })
+                                            localOptions?.length ? (
+                                                <>
+                                                    {
+                                                        localOptions?.map((item, index) => {
+                                                            return (
+                                                                <button type="button" onClick={() => onSelect(item)}
+                                                                        disabled={disabled}
+                                                                        key={index.toString()}
+                                                                        className={`text-right py-2.5 px-4 text-base hover:bg-grey-100 rounded-lg ${getActiveClass(item)}`}>
+                                                                    {value?.length ? item[value] : (typeof item === 'object' ? item['value'] : item)}
+                                                                </button>
+                                                            )
+                                                        })
+                                                    }
+                                                </>
+                                            ) : (
+                                                <div>
+                                                    No Data
+                                                </div>
+                                            )
                                         }
+
 
                                         {
                                             localPagination.isLoading ? (

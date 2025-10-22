@@ -20,14 +20,13 @@
     width: 100%;
     z-index: 99;
     position: relative;
-
+    overflow: auto;
     &.nariaList-mobile {
       position: relative;
       height: 100%;
     }
 
     &.nariaList-desktop {
-      overflow: auto;
       position: absolute;
       animation: fadeInTranslateY 0.3s ease-out forwards;
       max-height: 100px;

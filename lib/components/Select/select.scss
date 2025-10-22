@@ -1,3 +1,4 @@
+
 .nariaSelect {
   position: relative;
 
@@ -21,6 +22,7 @@
     z-index: 99;
     position: relative;
     overflow: auto;
+
     &.nariaList-mobile {
       position: relative;
       height: 100%;
@@ -31,12 +33,14 @@
       animation: fadeInTranslateY 0.3s ease-out forwards;
       max-height: 100px;
     }
+
     .nariaLoadingWrapper {
       padding: 24px 0;
       display: flex;
       justify-content: center;
 
     }
+
     .nariaLoadingMoreWrapper {
       position: sticky;
       bottom: 0;
@@ -49,12 +53,36 @@
     }
   }
 
+  .nariaSearchInput {
+    position: relative;
+    display: flex;
+
+    input {
+      width: 100%;
+      padding-right: 20px;
+    }
+
+    .nariaArrowIcon, .nariaSearchIcon {
+      position: absolute;
+      bottom: 0;
+      margin-top: auto;
+      margin-bottom: auto;
+      top: 0;
+      right: 6px;
+      width: 12px;
+      height: 12px;
+    }
+
+  }
+
   .nariaHandler {
     position: relative;
     display: flex;
     gap: 4px;
     width: 100%;
     align-items: center;
+    justify-content: space-between;
+
     .nariaArrowIcon {
       width: 12px;
       height: 12px;
@@ -77,6 +105,20 @@
   }
 }
 
+html[dir="rtl"] {
+  .nariaSelect {
+    .nariaSearchInput {
+      input {
+        padding-left: 20px;
+        padding-right: 0;
+      }
+      .nariaArrowIcon, .nariaSearchIcon {
+        left: 6px;
+        right: auto;
+      }
+    }
+  }
+}
 
 @keyframes fadeInTranslateY {
   from {

@@ -1,6 +1,7 @@
 import {FC, useEffect, useRef, useState} from "react";
 import AngleDown from "../../../assets/icons/angle-down.svg?react";
 import Close from '../../../assets/icons/close.svg?react';
+import Search from '../../../assets/icons/search.svg?react';
 import {useWidth} from "../../../hooks/use-width";
 import Loading from "../../../shared/loading/Loading";
 import './select.scss';
@@ -20,9 +21,9 @@ interface SDS extends Pagination {
 
 export interface props {
     options?: any[];
-    label?: string | "label";
+    label?: string;
     title: string;
-    value?: string | "value";
+    value?: string;
     api?: string;
     hasError?: string | null;
     selected?: any;
@@ -146,22 +147,26 @@ export const Select: FC<props> = ({
     }, [isShow]);
 
     useEffect(() => {
-        if (selected) {
-            if (hasSearch) {
-                console.log(localOptions, value, localOptions?.find(item => item[label] === selected), selected, label)
-                if (value?.length) {
-                    setSearchTerm(localOptions?.find(item => item[label] === selected)[value] || '');
-                } else {
-                    setSearchTerm(selected);
-                }
-            }
-            if (label?.length) {
-                setLocalSelected(localOptions?.find(item => item[label] === selected));
+        if (selected && options?.length) {
+            if (options?.find(item => item[label] === selected)) {
+                setLocalSelected(options?.find(item => item[label] === selected));
             } else {
                 setLocalSelected(selected);
             }
         }
-    }, [selected, localOptions]);
+    }, [selected]);
+
+    useEffect(() => {
+        if (localSelected) {
+            if (hasSearch) {
+                if (value?.length && localOptions?.find(item => item[label] === localSelected[label])) {
+                    setSearchTerm(localOptions?.find(item => item[label] === localSelected[label])[value] || '');
+                } else {
+                    setSearchTerm(localSelected);
+                }
+            }
+        }
+    }, [localSelected]);
 
     useEffect(() => {
         if (isHashChanged) {
@@ -234,12 +239,11 @@ export const Select: FC<props> = ({
     }
     const onSearch = (e) => {
         const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[value].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
-        console.log(tempList, e?.target?.value, )
-        // setLocalOptions(tempList)
+        setLocalOptions(tempList)
         setSearchTerm(e?.target?.value)
-        // if (!isShow) {
-        //     setIsShow(true)
-        // }
+        if (!isShow) {
+            setIsShow(true)
+        }
     }
     useClickOutside(wrapperRef, handlerRef, onClose);
     return (
@@ -250,11 +254,25 @@ export const Select: FC<props> = ({
                 <span className={``}>{title}</span>
                 {
                     hasSearch ? (
-                        <input ref={handlerRef}
-                               className={`nariaHandler ${localSelected ? "text-dark-100" : "text-grey-300"} 
+                        <div className="nariaSearchInput">
+                            <input ref={handlerRef}
+                                   placeholder={placeholder?.length ? placeholder : "Select"}
+                                   className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
                                 ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
-                               value={searchTerm}
-                               disabled={disabled} type="text" onClick={onToggle} onChange={onSearch}/>
+                                   value={searchTerm}
+                                   disabled={disabled} type="text" onClick={onToggle} onChange={onSearch}/>
+                            {
+                                isShow ? (
+                                    <Search
+                                        className="nariaSearchIcon"/>
+                                ) : (
+                                    <AngleDown
+                                        className={`nariaArrowIcon ${isShow ? "nariaArrowIcon-rotate-180" : ""}`}/>
+                                )
+                            }
+
+
+                        </div>
                     ) : (
                         <button type="button"
                                 ref={handlerRef}
@@ -264,7 +282,7 @@ export const Select: FC<props> = ({
                                 onClick={onToggle}>
                             {
                                 localSelected ? (
-                                    value?.length ? localSelected[value] : (typeof localSelected === 'object' ? localSelected['value'] : localSelected)
+                                    value?.length ? localSelected[value] : localSelected
                                 ) : (placeholder?.length ? placeholder : "Select")
                             } <AngleDown
                             className={`nariaArrowIcon ${isShow ? "nariaArrowIcon-rotate-180" : ""}`}/>
@@ -281,11 +299,18 @@ export const Select: FC<props> = ({
                         ref={wrapperRef}>
                         {
                             hasSearch && getDeviceWidth < 768 ? (
-                                <input ref={handlerRef}
-                                       className={`nariaHandler ${localSelected ? "text-dark-100" : "text-grey-300"} 
+                                <div className="nariaSearchInput">
+                                    <input ref={handlerRef}
+                                           placeholder={placeholder?.length ? placeholder : "Select"}
+                                           className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
                                 ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
-                                       value={searchTerm}
-                                       disabled={disabled} type="text" onChange={onSearch}/>
+                                           value={searchTerm}
+                                           disabled={disabled} type="text" onChange={onSearch}/>
+                                    <Search
+                                        className="nariaSearchIcon"/>
+
+
+                                </div>
                             ) : undefined
                         }
                         <div
@@ -317,7 +342,7 @@ export const Select: FC<props> = ({
                                                                         disabled={disabled}
                                                                         key={index.toString()}
                                                                         className={`text-right py-2.5 px-4 text-base hover:bg-grey-100 rounded-lg ${getActiveClass(item)}`}>
-                                                                    {value?.length ? item[value] : (typeof item === 'object' ? item['value'] : item)}
+                                                                    {value?.length ? item[value] : item}
                                                                 </button>
                                                             )
                                                         })

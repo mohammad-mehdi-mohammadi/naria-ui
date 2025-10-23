@@ -267,12 +267,13 @@ export const Select: FC<props> = ({
     }
     useClickOutside(wrapperRef, handlerRef, onClose);
     return (
-        <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''} ${classNames?.wrapper}`}>
+        <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''} ${classNames?.wrapper}`}
+             data-prop="wrapper">
             <label
                 className={`cursor-pointer
                 ${hasError && "!text-danger-100"}
-                ${classNames?.label}`}>
-                <span className={classNames?.title}>{title}</span>
+                ${classNames?.label}`} data-prop="label">
+                <span className={classNames?.title} data-prop="title">{title}</span>
                 {
                     hasSearch ? (
                         <div className="nariaSearchInput">
@@ -281,7 +282,8 @@ export const Select: FC<props> = ({
                                    className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
                                 ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${classNames?.input}`}
                                    value={searchTerm}
-                                   disabled={disabled} type="text" onClick={onToggle} onChange={onSearch}/>
+                                   disabled={disabled} type="text" onClick={onToggle} onChange={onSearch}
+                                   data-prop="input"/>
                             {
                                 isShow ? (
                                     <Search
@@ -300,6 +302,7 @@ export const Select: FC<props> = ({
                                 disabled={disabled}
                                 className={`nariaHandler ${localSelected ? "text-dark-100" : "text-grey-300"} 
                                 ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${classNames?.button}`}
+                                data-prop="button"
                                 onClick={onToggle}>
                             {
                                 localSelected ? (
@@ -317,25 +320,11 @@ export const Select: FC<props> = ({
                 isShow ? (
                     <div
                         className={`nariaListWrapper ${getDeviceWidth < 768 ? "nariaListWrapper-mobile" : ""} ${classNames?.listWrapper}`}
+                        data-prop="listWrapper"
                         ref={wrapperRef}>
-                        {
-                            hasSearch && getDeviceWidth < 768 ? (
-                                <div className="nariaSearchInput">
-                                    <input ref={handlerRef}
-                                           placeholder={placeholder?.length ? placeholder : "Select"}
-                                           className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
-                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${classNames?.input}`}
-                                           value={searchTerm}
-                                           disabled={disabled} type="text" onChange={onSearch}/>
-                                    <Search
-                                        className="nariaSearchIcon"/>
-
-
-                                </div>
-                            ) : undefined
-                        }
                         <div
                             className={`nariaList ${getDeviceWidth < 768 ? "nariaList-mobile" : `nariaList-desktop`} ${classNames?.list}`}
+                            data-prop="input"
                             onScroll={onScroll}>
                             {
                                 api && isLoading ? (
@@ -346,7 +335,23 @@ export const Select: FC<props> = ({
                                     <>
                                         {
                                             getDeviceWidth < 768 ? (
-                                                <div className="sticky top-0 text-left">
+                                                <div className="nariaSelectMobileHeader">
+                                                    {
+                                                        hasSearch ? (
+                                                            <div className="nariaSearchInput">
+                                                                <input ref={handlerRef}
+                                                                       placeholder={placeholder?.length ? placeholder : "Select"}
+                                                                       className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
+                                                               ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${classNames?.input}`}
+                                                                       data-prop="input"
+                                                                       value={searchTerm}
+                                                                       disabled={disabled} type="text"
+                                                                       onChange={onSearch}/>
+                                                                <Search
+                                                                    className="nariaSearchIcon"/>
+                                                            </div>
+                                                        ) : undefined
+                                                    }
                                                     <button className="p-3" onClick={onClose} disabled={disabled}>
                                                         <Close className="w-6"/>
                                                     </button>
@@ -362,7 +367,8 @@ export const Select: FC<props> = ({
                                                                 <button type="button" onClick={() => onSelect(item)}
                                                                         disabled={disabled}
                                                                         key={index.toString()}
-                                                                        className={`${classNames?.option} ${getActiveClass(item)}`}>
+                                                                        className={`${classNames?.option} ${getActiveClass(item)}`}
+                                                                        data-prop="option">
                                                                     {value?.length ? item[value] : item}
                                                                 </button>
                                                             )

@@ -225,7 +225,7 @@ export const Select: FC<props> = ({
         }
     }
     const onScroll = (e) => {
-        if (localOptions?.length && !localPagination.isLoading) {
+        if (api?.length && localOptions?.length && !localPagination.isLoading) {
             const bottom = e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - 100;
 
             if (bottom) {

@@ -36,6 +36,8 @@ export interface props {
         wrapper: string;
         label?: string;
         title?: string;
+        button?: string;
+        input?: string;
     };
     onSelectChange?: any;
 }
@@ -57,6 +59,8 @@ export const Select: FC<props> = ({
                                           wrapper: "",
                                           label: "",
                                           title: "",
+                                          button: "",
+                                          input: "",
 
                                       },
                                       onSelectChange
@@ -258,19 +262,19 @@ export const Select: FC<props> = ({
     }
     useClickOutside(wrapperRef, handlerRef, onClose);
     return (
-        <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''} ${classNames?.wrapper}`}>
+        <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''} ${!!classNames?.wrapper && ''}`}>
             <label
                 className={`cursor-pointer
-                ${classNames?.label}
-                ${hasError && "!text-danger-100"}`}>
-                <span className={classNames?.title}>{title}</span>
+                ${hasError && "!text-danger-100"}
+                ${!!classNames?.label && ''}`}>
+                <span className={!!classNames?.title && ''}>{title}</span>
                 {
                     hasSearch ? (
                         <div className="nariaSearchInput">
                             <input ref={handlerRef}
                                    placeholder={placeholder?.length ? placeholder : "Select"}
                                    className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
-                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
+                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${!!classNames?.input && ''}`}
                                    value={searchTerm}
                                    disabled={disabled} type="text" onClick={onToggle} onChange={onSearch}/>
                             {
@@ -290,7 +294,7 @@ export const Select: FC<props> = ({
                                 ref={handlerRef}
                                 disabled={disabled}
                                 className={`nariaHandler ${localSelected ? "text-dark-100" : "text-grey-300"} 
-                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
+                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${!!classNames?.button && ''}`}
                                 onClick={onToggle}>
                             {
                                 localSelected ? (
@@ -315,7 +319,7 @@ export const Select: FC<props> = ({
                                     <input ref={handlerRef}
                                            placeholder={placeholder?.length ? placeholder : "Select"}
                                            className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
-                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"}`}
+                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${!!classNames?.input && ''}`}
                                            value={searchTerm}
                                            disabled={disabled} type="text" onChange={onSearch}/>
                                     <Search

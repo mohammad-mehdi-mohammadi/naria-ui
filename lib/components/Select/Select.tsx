@@ -67,7 +67,6 @@ export const Select: FC<props> = ({
                                           listWrapper: "",
                                           list: "",
                                           option: "",
-
                                       },
                                       onSelectChange
                                   }) => {

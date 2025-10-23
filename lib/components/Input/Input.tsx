@@ -2,10 +2,11 @@ import {FC} from "react";
 
 export interface props {
     type?: "password" | "text";
-    wrapperClass?: string;
-    labelClass?: string;
-    inputClass?: string;
-    errorClass?: string;
+    classNames?: {
+        wrapper?: string;
+        label?: string;
+        input?: string;
+    };
     placeholder: string;
     label: string;
     hasError?: string | null;
@@ -18,10 +19,11 @@ export interface props {
 export const Input: FC<props> = ({
                                      type = "text",
                                      placeholder,
-                                     wrapperClass = "",
-                                     labelClass = "",
-                                     inputClass = "",
-                                     errorClass = "",
+                                     classNames = {
+                                         wrapper: "",
+                                         label: "",
+                                         input: "",
+                                     },
                                      label,
                                      hasError,
                                      register, name,
@@ -31,10 +33,10 @@ export const Input: FC<props> = ({
                                  }) => {
 
     return (
-        <div className={wrapperClass}>
+        <div className={`nariaInputWrapper ${classNames.wrapper}`}>
             <label
                 htmlFor={name}
-                className={`${labelClass} ${hasError && "error"}`}>
+                className={`${classNames.label} ${hasError && "nariaInputLabel-error"}`}>
                 {label}
                 <input
                     disabled={isDisabled}
@@ -44,13 +46,13 @@ export const Input: FC<props> = ({
                     {...otherProps}
                     type={type}
                     name={name}
-                    className={`${inputClass} ${hasError && "error"} ${errorClass}`}
+                    className={`${classNames.input} ${hasError && "nariaInput-error"}`}
                     placeholder={placeholder}
                 />
             </label>
             {
                 hasError &&
-                <p className={errorClass}>{hasError}</p>
+                <p className="nariaInputErrorText">{hasError}</p>
             }
         </div>
     );

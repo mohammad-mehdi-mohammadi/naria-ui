@@ -41,6 +41,7 @@ export interface props {
         listWrapper?: string;
         list?: string;
         option?: string;
+        mobileHeader?: string;
     };
     onSelectChange?: any;
 }
@@ -67,6 +68,7 @@ export const Select: FC<props> = ({
                                           listWrapper: "",
                                           list: "",
                                           option: "",
+                                          mobileHeader: "",
                                       },
                                       onSelectChange
                                   }) => {
@@ -335,7 +337,7 @@ export const Select: FC<props> = ({
                                     <>
                                         {
                                             getDeviceWidth < 768 ? (
-                                                <div className="nariaSelectMobileHeader">
+                                                <div className={`nariaSelectMobileHeader ${classNames?.mobileHeader}`} data-prop="mobileHeader">
                                                     {
                                                         hasSearch ? (
                                                             <div className="nariaSearchInput">

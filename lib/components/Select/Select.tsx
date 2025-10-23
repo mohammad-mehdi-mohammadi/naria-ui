@@ -38,6 +38,9 @@ export interface props {
         title?: string;
         button?: string;
         input?: string;
+        listWrapper?: string;
+        list?: string;
+        option?: string;
     };
     onSelectChange?: any;
 }
@@ -61,6 +64,9 @@ export const Select: FC<props> = ({
                                           title: "",
                                           button: "",
                                           input: "",
+                                          listWrapper: "",
+                                          list: "",
+                                          option: "",
 
                                       },
                                       onSelectChange
@@ -311,7 +317,7 @@ export const Select: FC<props> = ({
             {
                 isShow ? (
                     <div
-                        className={`nariaListWrapper ${getDeviceWidth < 768 ? "nariaListWrapper-mobile" : ""}`}
+                        className={`nariaListWrapper ${getDeviceWidth < 768 ? "nariaListWrapper-mobile" : ""} ${classNames?.listWrapper}`}
                         ref={wrapperRef}>
                         {
                             hasSearch && getDeviceWidth < 768 ? (
@@ -330,7 +336,7 @@ export const Select: FC<props> = ({
                             ) : undefined
                         }
                         <div
-                            className={`nariaList ${getDeviceWidth < 768 ? "nariaList-mobile" : `nariaList-desktop`}`}
+                            className={`nariaList ${getDeviceWidth < 768 ? "nariaList-mobile" : `nariaList-desktop`} ${classNames?.list}`}
                             onScroll={onScroll}>
                             {
                                 api && isLoading ? (
@@ -357,7 +363,7 @@ export const Select: FC<props> = ({
                                                                 <button type="button" onClick={() => onSelect(item)}
                                                                         disabled={disabled}
                                                                         key={index.toString()}
-                                                                        className={`text-right py-2.5 px-4 text-base hover:bg-grey-100 rounded-lg ${getActiveClass(item)}`}>
+                                                                        className={`${classNames?.option} ${getActiveClass(item)}`}>
                                                                     {value?.length ? item[value] : item}
                                                                 </button>
                                                             )

@@ -238,7 +238,7 @@ export const Select: FC<props> = ({
 
     }
     const onSearch = (e) => {
-        const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[value].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
+        const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[(optionFilterLabel?.length ? optionFilterLabel : value)].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
         setLocalOptions(tempList)
         setSearchTerm(e?.target?.value)
         if (!isShow) {
@@ -251,7 +251,7 @@ export const Select: FC<props> = ({
             <label
                 className={`cursor-pointer
                 ${hasError && "!text-danger-100"}`}>
-                <span className={``}>{title}</span>
+                <span className="">{title}</span>
                 {
                     hasSearch ? (
                         <div className="nariaSearchInput">

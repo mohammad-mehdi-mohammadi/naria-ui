@@ -27,6 +27,9 @@ function App() {
             <p>Search with search field | Non-primitive</p>
             <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
                     value="name" hasSearch={true}/>
+            <p>Search with search field | Non-primitive | Custom filter prop</p>
+            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
+                    value="name" hasSearch={true} optionFilterLabel = "name"/>
             <p>Search with search field | primitive | Selected</p>
             <Select options={["Yellow", "Red", "Blue"]} selected={"Red"} hasSearch={true}/>
             <p>Search with search field | Non-primitive | Selected</p>

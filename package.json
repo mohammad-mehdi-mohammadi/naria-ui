@@ -5,7 +5,7 @@
     "name": "Mohammad Mehdi Mohammadi",
     "url": ""
   },
-  "version": "0.1.38",
+  "version": "0.1.39",
   "type": "module",
   "main": "dist/naria-ui.cjs.js",
   "module": "dist/naria-ui.es.js",
@@ -19,7 +19,9 @@
     "./dist/*.css": "./dist/*.css",
     "./assets/*.css": "./assets/*.css"
   },
-  "files": ["*.md", "dist", "lib", "es"],
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },

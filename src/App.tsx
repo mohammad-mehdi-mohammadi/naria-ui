@@ -9,7 +9,12 @@ function App() {
             <hr/>
             <h1>Select</h1>
             <p>Primitive list</p>
-            <Select options={["Yellow", "Red", "Blue"]}/>
+            <Select options={["Yellow", "Red", "Blue"]} classNames = {
+                {
+                    input: "input input-bordered w-full",
+                    title: "text-[var(--primary-800)] font-bold text-xs mr-2 mb-1.5",
+                }
+            }/>
             <p>Non-primitive list</p>
             <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
                     value="name"/>

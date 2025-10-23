@@ -59,7 +59,6 @@
 
     input {
       width: 100%;
-      padding-right: 20px;
     }
 
     .nariaArrowIcon, .nariaSearchIcon {
@@ -68,7 +67,7 @@
       margin-top: auto;
       margin-bottom: auto;
       top: 0;
-      right: 6px;
+      right: 0;
       width: 12px;
       height: 12px;
     }
@@ -108,12 +107,8 @@
 html[dir="rtl"] {
   .nariaSelect {
     .nariaSearchInput {
-      input {
-        padding-left: 20px;
-        padding-right: 0;
-      }
       .nariaArrowIcon, .nariaSearchIcon {
-        left: 6px;
+        left: 0;
         right: auto;
       }
     }

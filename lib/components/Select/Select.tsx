@@ -32,6 +32,11 @@ export interface props {
     pagination?: Pagination;
     optionFilterLabel?: string;
     hasSearch?: boolean;
+    classNames?: {
+        wrapper: string;
+        label?: string;
+        title?: string;
+    };
     onSelectChange?: any;
 }
 
@@ -48,6 +53,12 @@ export const Select: FC<props> = ({
                                       pagination,
                                       optionFilterLabel,
                                       hasSearch = false,
+                                      classNames = {
+                                          wrapper: "",
+                                          label: "",
+                                          title: "",
+
+                                      },
                                       onSelectChange
                                   }) => {
     let isSubscribed = true;
@@ -247,11 +258,12 @@ export const Select: FC<props> = ({
     }
     useClickOutside(wrapperRef, handlerRef, onClose);
     return (
-        <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''}`}>
+        <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''} ${classNames?.wrapper}`}>
             <label
                 className={`cursor-pointer
+                ${classNames?.label}
                 ${hasError && "!text-danger-100"}`}>
-                <span className="">{title}</span>
+                <span className={classNames?.title}>{title}</span>
                 {
                     hasSearch ? (
                         <div className="nariaSearchInput">

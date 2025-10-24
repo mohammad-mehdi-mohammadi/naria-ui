@@ -42,8 +42,8 @@ export default defineConfig({
     },
     // Empty the output directory before building
     emptyOutDir: true,
-    // Do not copy the public directory to the output directory
-    copyPublicDir: false,
+    // copy the public directory to the output directory
+    copyPublicDir: true,
     // Minify the output code
     minify: true,
   },

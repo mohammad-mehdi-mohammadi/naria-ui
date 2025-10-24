@@ -1,11 +1,25 @@
 import './App.css'
 import {Button, Input, Select} from "../lib";
-
 function App() {
     return (
         <>
-            <Button value="sadasd"/>
-            <Input placeholder="test" label="test"/>
+            <h1>Button</h1>
+            <p>Default</p>
+            <Button value="Default"/>
+            <p>Loading</p>
+            <Button value="Loading" isLoading = {true}/>
+            <p>Disabled</p>
+            <Button value="Disabled" isDisabled = {true}/>
+            <p>Loading | Disabled</p>
+            <Button value="Loading | Disabled" isDisabled = {true} isLoading = {true}/>
+            <hr/>
+            <h1>Input</h1>
+            <p>Default</p>
+            <Input label="Default"/>
+            <p>Placeholder</p>
+            <Input placeholder = "Placeholder" label="Placeholder"/>
+            <p>Disabled</p>
+            <Input disabled = {true} placeholder = "Placeholder" label="Disabled"/>
             <hr/>
             <h1>Select</h1>
             <p>Primitive list</p>

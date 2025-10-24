@@ -1,0 +1,9 @@
+.test {
+    color: red;
+    &.x {
+        background-color: yellow;
+    }
+    & .y {
+        color: blue;
+    }
+}

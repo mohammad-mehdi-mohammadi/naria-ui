@@ -5,19 +5,18 @@
     "name": "Mohammad Mehdi Mohammadi",
     "url": ""
   },
-  "version": "0.1.49",
+  "version": "0.1.50",
   "type": "module",
-  "main": "dist/naria-ui.cjs.js",
-  "module": "dist/naria-ui.es.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/naria-ui.cjs.js",
+  "module": "./dist/naria-ui.es.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/naria-ui.es.js",
       "require": "./dist/naria-ui.cjs.js"
     },
-    "./dist/*.css": "./dist/*.css",
-    "./assets/*.css": "./assets/*.css"
+    "./*": "./*"
   },
   "files": [
     "dist"
@@ -30,7 +29,8 @@
     "build": "vite build",
     "tsc": "tsc -p tsconfig.build.json",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sass-prod": "sass --no-source-map --style=compressed public"
   },
   "dependencies": {
     "vite-plugin-svgr": "^4.5.0"

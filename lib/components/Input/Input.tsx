@@ -6,6 +6,7 @@ export interface props {
         wrapper?: string;
         label?: string;
         input?: string;
+        errorText?: string;
     };
     placeholder: string;
     label: string;
@@ -23,6 +24,7 @@ export const Input: FC<props> = ({
                                          wrapper: "",
                                          label: "",
                                          input: "",
+                                         errorText: "",
                                      },
                                      label,
                                      hasError,
@@ -33,10 +35,10 @@ export const Input: FC<props> = ({
                                  }) => {
 
     return (
-        <div className={`nariaInputWrapper ${classNames.wrapper}`}>
+        <div className={`nariaInputWrapper ${classNames.wrapper}`} data-prop = "wrapper">
             <label
                 htmlFor={name}
-                className={`${classNames.label} ${hasError && "nariaInputLabel-error"}`}>
+                className={`${classNames.label} ${hasError && "nariaInputLabel-error"}`} data-prop = "label">
                 {label}
                 <input
                     disabled={isDisabled}
@@ -48,11 +50,12 @@ export const Input: FC<props> = ({
                     name={name}
                     className={`${classNames.input} ${hasError && "nariaInput-error"}`}
                     placeholder={placeholder}
+                    data-prop = "input"
                 />
             </label>
             {
                 hasError &&
-                <p className="nariaInputErrorText">{hasError}</p>
+                <p className={`nariaInputErrorText ${classNames?.errorText}`} data-prop = "errorText">{hasError}</p>
             }
         </div>
     );

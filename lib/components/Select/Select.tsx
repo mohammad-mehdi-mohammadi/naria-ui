@@ -43,6 +43,7 @@ export interface props {
         option?: string;
         optionActive?: string;
         mobileHeader?: string;
+        errorText?: string;
     };
     onSelectChange?: any;
 }
@@ -71,6 +72,7 @@ export const Select: FC<props> = ({
                                           option: "",
                                           optionActive: "",
                                           mobileHeader: "",
+                                          errorText: "",
                                       },
                                       onSelectChange
                                   }) => {
@@ -404,7 +406,7 @@ export const Select: FC<props> = ({
             }
             {
                 hasError &&
-                <p className="text-xs mt-1 text-danger-100">{hasError}</p>
+                <p className={`nariaSelectErrorText ${classNames?.errorText}`} data-prop = "errorText">{hasError}</p>
             }
 
         </div>

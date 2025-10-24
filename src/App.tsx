@@ -15,11 +15,11 @@ function App() {
             <hr/>
             <h1>Input</h1>
             <p>Default</p>
-            <Input label="Default"/>
+            <Input title="Default"/>
             <p>Placeholder</p>
-            <Input placeholder = "Placeholder" label="Placeholder"/>
+            <Input placeholder = "Placeholder" title="Placeholder"/>
             <p>Disabled</p>
-            <Input disabled = {true} placeholder = "Placeholder" label="Disabled"/>
+            <Input disabled = {true} placeholder = "Placeholder" title="Disabled"/>
             <hr/>
             <h1>Select</h1>
             <p>Primitive list</p>

@@ -5,11 +5,12 @@ export interface props {
     classNames?: {
         wrapper?: string;
         label?: string;
+        title?: string;
         input?: string;
         errorText?: string;
     };
     placeholder: string;
-    label: string;
+    title: string;
     hasError?: string | null;
     register?: any;
     name?: string;
@@ -23,10 +24,11 @@ export const Input: FC<props> = ({
                                      classNames = {
                                          wrapper: "",
                                          label: "",
+                                         title: "",
                                          input: "",
                                          errorText: "",
                                      },
-                                     label,
+                                     title,
                                      hasError,
                                      register, name,
                                      isDisabled = false,
@@ -39,7 +41,7 @@ export const Input: FC<props> = ({
             <label
                 htmlFor={name}
                 className={`${classNames.label} ${hasError && "nariaInputLabel-error"}`} data-prop = "label">
-                {label}
+                <span className={classNames?.title} data-prop="title">{title}</span>
                 <input
                     disabled={isDisabled}
                     autoComplete={autocomplete ? "on" : "off"}

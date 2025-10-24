@@ -41,6 +41,7 @@ export interface props {
         listWrapper?: string;
         list?: string;
         option?: string;
+        optionActive?: string;
         mobileHeader?: string;
     };
     onSelectChange?: any;
@@ -68,6 +69,7 @@ export const Select: FC<props> = ({
                                           listWrapper: "",
                                           list: "",
                                           option: "",
+                                          optionActive: "",
                                           mobileHeader: "",
                                       },
                                       onSelectChange
@@ -240,10 +242,10 @@ export const Select: FC<props> = ({
             return "";
         }
         if (label?.length && item[label] === localSelected[label]) {
-            return "bg-grey-100"
+            return `nariaSelectOption-active ${classNames?.optionActive}`
         }
         if (item === localSelected) {
-            return "bg-grey-100"
+            return `nariaSelectOption-active ${classNames?.optionActive}`
         }
     }
     const onScroll = (e) => {
@@ -272,8 +274,7 @@ export const Select: FC<props> = ({
         <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''} ${classNames?.wrapper}`}
              data-prop="wrapper">
             <label
-                className={`cursor-pointer
-                ${hasError && "!text-danger-100"}
+                className={`${hasError && "!text-danger-100"}
                 ${classNames?.label}`} data-prop="label">
                 <span className={classNames?.title} data-prop="title">{title}</span>
                 {
@@ -337,7 +338,8 @@ export const Select: FC<props> = ({
                                     <>
                                         {
                                             getDeviceWidth < 768 ? (
-                                                <div className={`nariaSelectMobileHeader ${classNames?.mobileHeader}`} data-prop="mobileHeader">
+                                                <div className={`nariaSelectMobileHeader ${classNames?.mobileHeader}`}
+                                                     data-prop="mobileHeader">
                                                     {
                                                         hasSearch ? (
                                                             <div className="nariaSearchInput">
@@ -369,8 +371,9 @@ export const Select: FC<props> = ({
                                                                 <button type="button" onClick={() => onSelect(item)}
                                                                         disabled={disabled}
                                                                         key={index.toString()}
-                                                                        className={`${classNames?.option} ${getActiveClass(item)}`}
-                                                                        data-prop="option">
+                                                                        className={`nariaSelectOption ${classNames?.option} ${getActiveClass(item)}`}
+                                                                        data-prop="option"
+                                                                        data-prop-active="optionActive">
                                                                     {value?.length ? item[value] : item}
                                                                 </button>
                                                             )

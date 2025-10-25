@@ -5,7 +5,7 @@ import Search from '../../../assets/icons/search.svg?react';
 import {useWidth} from "../../../hooks/use-width";
 import Loading from "../../../shared/loading/Loading";
 import './select.scss';
-import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
+import {addNavigation, onHashChanges, removeNavigation} from "../../../utils/navigator";
 import useClickOutside from "../../../hooks/click-outside";
 
 interface Pagination {

@@ -3,9 +3,9 @@
   "compilerOptions": {
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "dist",
+    "outDir": "./dist",
     "declarationMap": false,
     "noEmit": false
   },
-  "include": ["lib"]
+  "include": ["lib/**/*"]
 }

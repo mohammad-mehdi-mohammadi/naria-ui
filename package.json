@@ -5,7 +5,7 @@
     "name": "",
     "url": ""
   },
-  "version": "0.2.0",
+  "version": "0.2.2",
   "type": "module",
   "main": "dist/naria-ui.cjs.js",
   "module": "dist/naria-ui.es.js",
@@ -15,7 +15,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/naria-ui.es.js",
       "require": "./dist/naria-ui.cjs.js"
-    }
+    },
+    "./dist/*.css": "./dist/*.css"
   },
   "files": [
     "dist"

@@ -25,8 +25,5 @@
       "vite-plugin-svgr/client"
     ]
   },
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "include": ["vite.config.ts"]
 }

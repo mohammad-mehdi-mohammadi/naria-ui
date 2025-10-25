@@ -7,10 +7,5 @@
     "declarationMap": false,
     "noEmit": false
   },
-  "include": [
-    "lib"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["lib"]
 }

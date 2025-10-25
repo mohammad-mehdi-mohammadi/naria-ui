@@ -15,8 +15,6 @@
     "verbatimModuleSyntax": false,
     "moduleDetection": "force",
     "noEmit": true,
-    "declarationDir": "./",
-    "baseUrl": "./",
     "jsx": "react-jsx",
     "strict": false,
     "noUnusedLocals": false,
@@ -28,7 +26,6 @@
     ]
   },
   "exclude": [
-    "dist",
-    "node_modules"
+    "dist"
   ]
 }

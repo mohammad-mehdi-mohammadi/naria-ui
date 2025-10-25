@@ -1,8 +1,8 @@
-# Naria UI
+# naria
 
 [![npm version](https://img.shields.io/npm/v/naria-ui?style=flat-square)](https://www.npmjs.com/package/naria-ui)
-[![npm downloads](https://img.shields.io/npm/dm/@janardanPethani/naria-ui?style=flat-square)](https://www.npmjs.com/package/naria-ui)
-[![GitHub](https://img.shields.io/badge/github-JanardanPethani%2Fnaria-ui-blue?logo=github&style=flat-square)](https://github.com/JanardanPethani/naria-ui)
+[![npm downloads](https://img.shields.io/npm/dm/naria-ui?style=flat-square)](https://www.npmjs.com/package/naria-ui)
+[![GitHub](https://img.shields.io/badge/github-JanardanPethani%2Fnaria-blue?logo=github&style=flat-square)](https://github.com/JanardanPethani/naria)
 
 <!-- Add a license badge if you add a LICENSE file, e.g. MIT:
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -39,7 +39,7 @@ import { Chat } from "naria-ui";
 function App() {
   return (
     <div>
-      <h1>Genmoji Demo</h1>
+      <h1>naria Demo</h1>
       <Chat />
     </div>
   );
@@ -66,6 +66,17 @@ The `Chat` component provides a floating button. Click it, enter your mood, and 
 
 No configuration or environment variables are required.
 
+---
+
+## 🤝 Contributing & Support
+
+Maintained by [Janardan Pethani](https://janardanpethani.in)  
+Email: jpethani11@gmail.com  
+GitHub: [JanardanPethani/naria](https://github.com/JanardanPethani/naria)
+
+Feel free to open issues or pull requests!
+
+---
 
 ## 📄 License
 
@@ -73,4 +84,4 @@ _This project currently does not specify a license. To make your project open so
 
 ---
 
-> _Generated with ❤️ by [naria.enenom.com](https://naria.enenom.com)_
+> _Generated with ❤️ by [Janardan Pethani](https://janardanpethani.in)_

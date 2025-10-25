@@ -1,20 +1,20 @@
 {
   "name": "naria-ui",
   "author": {
-    "email": "phoneticem@gmail.com",
-    "name": "Mohammad Mehdi Mohammadi",
+    "email": "",
+    "name": "",
     "url": ""
   },
-  "version": "0.1.64",
+  "version": "0.2.0",
   "type": "module",
-  "main": "dist/naria.cjs.js",
-  "module": "dist/naria.es.js",
+  "main": "dist/naria-ui.cjs.js",
+  "module": "dist/naria-ui.es.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/naria.es.js",
-      "require": "./dist/naria.cjs.js"
+      "import": "./dist/naria-ui.es.js",
+      "require": "./dist/naria-ui.cjs.js"
     }
   },
   "files": [
@@ -25,11 +25,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "tsc": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "sass-prod": "sass --no-source-map --style=compressed public"
+    "preview": "vite preview"
   },
   "dependencies": {
     "vite-plugin-svgr": "^4.5.0"
@@ -39,22 +37,22 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.38.0",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "@vitejs/plugin-react": "^5.0.4",
-    "@vitest/browser": "^3.2.4",
-    "@vitest/coverage-v8": "^3.2.4",
-    "eslint": "^9.38.0",
-    "eslint-plugin-react-hooks": "^7.0.0",
-    "eslint-plugin-react-refresh": "^0.4.24",
-    "globals": "^16.4.0",
-    "playwright": "^1.56.1",
+    "@eslint/js": "^9.25.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "@vitest/browser": "^3.1.4",
+    "@vitest/coverage-v8": "^3.1.4",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "playwright": "^1.52.0",
     "sass": "^1.93.2",
-    "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.1",
-    "vite": "^7.1.10",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^3.2.4"
+    "vitest": "^3.1.4"
   }
 }

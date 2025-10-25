@@ -8,7 +8,7 @@ export interface props {
     }
 }
 
-const Loading: FC<props> = ({
+export const Loading: FC<props> = ({
                                 classNames = {
                                     wrapper: "",
                                     color: ""
@@ -31,5 +31,3 @@ const Loading: FC<props> = ({
 
     );
 };
-
-export default Loading;

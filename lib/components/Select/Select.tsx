@@ -1,12 +1,12 @@
 import {FC, useEffect, useRef, useState} from "react";
-import AngleDown from "../../../assets/icons/angle-down.svg?react";
-import Close from '../../../assets/icons/close.svg?react';
-import Search from '../../../assets/icons/search.svg?react';
-import {useWidth} from "../../../hooks/use-width";
-import Loading from "../../../shared/loading/Loading";
+import AngleDown from "../../assets/icons/angle-down.svg?react";
+import Close from '../../assets/icons/close.svg?react';
+import Search from '../../assets/icons/search.svg?react';
 import './select.scss';
-import {addNavigation, onHashChanges, removeNavigation} from "../../../utils/navigator";
-import useClickOutside from "../../../hooks/click-outside";
+import useClickOutside from "../../hooks/click-outside";
+import {useWidth} from "../../hooks/use-width";
+import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
+import {Loading} from "../Loading";
 
 interface Pagination {
     page?: number;

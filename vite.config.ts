@@ -9,12 +9,12 @@ export default defineConfig({
   plugins: [
     // React plugin for Vite
     react(),
+    svgr(),
     // Plugin to generate TypeScript declaration files (d.ts)
     dts({
       // Specify the path to the build-specific tsconfig file
       tsconfigPath: "./tsconfig.build.json",
     }),
-    svgr()
   ],
   // Build configuration options
   build: {
@@ -23,7 +23,7 @@ export default defineConfig({
       // Entry point for the library build
       entry: "lib/index.ts",
       // Function to determine the output file name based on the format
-      fileName: (format) => `index.${format}.js`,
+      fileName: (format) => `naria-ui.${format}.js`,
       // Output formats for the library
       formats: ["es", "cjs"],
     },
@@ -42,7 +42,7 @@ export default defineConfig({
     },
     // Empty the output directory before building
     emptyOutDir: true,
-    // copy the public directory to the output directory
+    // Do not copy the public directory to the output directory
     copyPublicDir: true,
     // Minify the output code
     minify: true,

@@ -1,6 +1,9 @@
 import React, {FC, ReactNode} from "react";
 import './button.scss';
-import Loading from "../../../shared/loading/Loading";
+import {Loading} from "../Loading";
+
+
+
 
 export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
     type?: "button" | "submit";

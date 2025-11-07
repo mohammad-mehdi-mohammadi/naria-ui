@@ -1,0 +1,56 @@
+.nariaCalendar {
+  max-width: 420px;
+  .nariaCalendarHeader {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    align-items: center;
+
+    .nariaMonthYear {
+      grid-column: auto / span 3;
+    }
+    .nariaNextMonth, .nariaPrevMonth, .nariaNextYear, .nariaPrevYear {
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .nariaPrevMonth, .nariaPrevYear {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .nariaCalendarBody {
+    .nariaCalendarDays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      align-items: center;
+    }
+    .nariaCalendarWeekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+    }
+    .nariaCalendarMonths {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+    }
+  }
+
+}
+html[dir="rtl"] {
+  .nariaCalendar {
+    .nariaCalendarHeader {
+      .nariaPrevMonth, .nariaPrevYear {
+        svg {
+          transform: rotate(0deg);
+        }
+      }
+      .nariaNextMonth, .nariaNextYear {
+        svg {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+}

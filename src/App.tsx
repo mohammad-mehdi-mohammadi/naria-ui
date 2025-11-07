@@ -1,29 +1,34 @@
 import './App.css'
-import {Button, Input, Select} from "../lib";
+import {Button, Calendar, Input, Select} from "../lib";
+
 function App() {
     return (
         <>
+            <h1>Calendar</h1>
+            <p>Basic usage</p>
+            <Calendar/>
+            <hr/>
             <h1>Button</h1>
             <p>Default</p>
             <Button value="Default"/>
             <p>Loading</p>
-            <Button value="Loading" isLoading = {true}/>
+            <Button value="Loading" isLoading={true}/>
             <p>Disabled</p>
-            <Button value="Disabled" isDisabled = {true}/>
+            <Button value="Disabled" isDisabled={true}/>
             <p>Loading | Disabled</p>
-            <Button value="Loading | Disabled" isDisabled = {true} isLoading = {true}/>
+            <Button value="Loading | Disabled" isDisabled={true} isLoading={true}/>
             <hr/>
             <h1>Input</h1>
             <p>Default</p>
             <Input title="Default"/>
             <p>Placeholder</p>
-            <Input placeholder = "Placeholder" title="Placeholder"/>
+            <Input placeholder="Placeholder" title="Placeholder"/>
             <p>Disabled</p>
-            <Input disabled = {true} placeholder = "Placeholder" title="Disabled"/>
+            <Input disabled={true} placeholder="Placeholder" title="Disabled"/>
             <hr/>
             <h1>Select</h1>
             <p>Primitive list</p>
-            <Select options={["Yellow", "Red", "Blue"]} classNames = {
+            <Select options={["Yellow", "Red", "Blue"]} classNames={
                 {
                     input: "input input-bordered w-full",
                     title: "text-[var(--primary-800)] font-bold text-xs mr-2 mb-1.5",
@@ -48,7 +53,7 @@ function App() {
                     value="name" hasSearch={true}/>
             <p>Search with search field | Non-primitive | Custom filter prop</p>
             <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
-                    value="name" hasSearch={true} optionFilterLabel = "name"/>
+                    value="name" hasSearch={true} optionFilterLabel="name"/>
             <p>Search with search field | primitive | Selected</p>
             <Select options={["Yellow", "Red", "Blue"]} selected={"Red"} hasSearch={true}/>
             <p>Search with search field | Non-primitive | Selected</p>
@@ -56,6 +61,7 @@ function App() {
                     label="id" value="name"
                     hasSearch={true}
                     selected={2}/>
+            <hr/>
             <h1>Call api</h1>
             <p>Basic usage</p>
             <Select api={"https://jsonplaceholder.typicode.com/users"} label="id" value="name"/>

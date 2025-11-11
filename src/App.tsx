@@ -1,12 +1,23 @@
 import './App.css'
 import {Button, Calendar, Input, Select} from "../lib";
+import moment from "jalali-moment";
 
 function App() {
     return (
         <>
             <h1>Calendar</h1>
-            <p>Basic usage</p>
-            <Calendar/>
+            {/*<p>Basic usage | Gregorian</p>*/}
+            {/*<Calendar mode = "Gregorian"/>*/}
+            {/*<p>Basic usage | Jalali</p>*/}
+            {/*<Calendar mode = "Jalali"/>*/}
+            {/*<p>Basic usage | Hijri</p>*/}
+            {/*<Calendar mode = "Hijri"/>*/}
+            <p>Default value | Gregorian</p>
+            <Calendar mode = "Gregorian" selected={moment("2024/03/02")}/>
+            <p>Default value | Jalali</p>
+            <Calendar mode = "Jalali" selected={moment("1404/08/13", "jYYYY/jMM/jDD")}/>
+            <p>Default value | Hijri</p>
+            <Calendar mode = "Hijri" selected={moment("1447/05/13", "iYYYY/iMM/iDD")}/>
             <hr/>
             <h1>Button</h1>
             <p>Default</p>

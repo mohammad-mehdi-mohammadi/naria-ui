@@ -112,6 +112,25 @@ export const convertWeekDay = (day: number, mode: "Gregorian" | "Jalali" | "Hijr
             }
             break
         }
+        case "Hijri": {
+            switch (+day) {
+                case 1:
+                    return "ح";
+                case 2:
+                    return "ن";
+                case 3:
+                    return "ث";
+                case 4:
+                    return "ر";
+                case 5:
+                    return "خ";
+                case 6:
+                    return "ج";
+                case 7:
+                    return "س";
+            }
+            break
+        }
         default: {
             switch (+day) {
                 case 1:

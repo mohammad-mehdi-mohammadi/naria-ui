@@ -70,9 +70,9 @@ No configuration or environment variables are required.
 
 ## 🤝 Contributing & Support
 
-Maintained by [Janardan Pethani](https://janardanpethani.in)  
+Maintained by [phoneticem](phoneticem)  
 Email: jpethani11@gmail.com  
-GitHub: [JanardanPethani/naria](https://github.com/JanardanPethani/naria)
+GitHub: [phoneticem/naria](https://github.com/phoneticem/naria)
 
 Feel free to open issues or pull requests!
 
@@ -84,4 +84,4 @@ _This project currently does not specify a license. To make your project open so
 
 ---
 
-> _Generated with ❤️ by [Janardan Pethani](https://janardanpethani.in)_
+> _Generated with ❤️ by [phoneticem](https://phoneticem.in)_

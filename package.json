@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "jalali-moment": "^3.3.11",
+    "moment-hijri": "^3.0.0",
     "vite-plugin-svgr": "^4.5.0"
   },
   "peerDependencies": {
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@types/moment-hijri": "^2.1.4",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",

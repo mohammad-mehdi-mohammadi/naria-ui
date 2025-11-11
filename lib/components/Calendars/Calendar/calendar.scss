@@ -21,22 +21,25 @@
     }
   }
   .nariaCalendarBody {
-    .nariaCalendarDays {
+    .nariaCalendarDayWrapper {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       align-items: center;
     }
-    .nariaCalendarWeekdays {
+    .nariaCalendarWeekdayWrapper {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
+      text-align: center;
     }
-    .nariaCalendarMonths {
+    .nariaCalendarMonthWrapper {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       align-items: center;
     }
   }
-
+  .nariaCalendarDay-selected, .nariaCalendarMonth-selected {
+    background-color: red;
+  }
 }
 html[dir="rtl"] {
   .nariaCalendar {

@@ -1,6 +1,7 @@
 import {Children, cloneElement, FC, useRef, useState} from "react";
 import useClickOutside from "../../hooks/click-outside";
 import './popover.scss';
+import useOutOfBounds from '../../hooks/out-of-view';
 export interface props {
     classNames?: {
         root?: string;
@@ -27,20 +28,29 @@ export const Popover: FC<props> = ({
     const [isShow, setIsShow] = useState(false);
     const rootRef = useRef(undefined);
     const handlerRef = useRef(undefined);
+    const componentRef = useRef(undefined);
     const onTrigger = () => {
         setIsShow(prevState => !prevState)
     }
     const onClose = () => {
         setIsShow(false)
     }
+    const onOut = () => {
+        console.log('asdad0a-')
+    }
     useClickOutside(rootRef, handlerRef, onClose);
+    useOutOfBounds(componentRef, onOut)
+
     return (
         <div className={`naria-popover ${classNames.root}`} data-class-prop="root">
+
             {cloneElement(trigger, {onClick: () => onTrigger(), ref: handlerRef})}
             {
                 isShow && (
-                    <div className="naria-popover__content" ref={rootRef}>
-                        {content}
+                    <div ref = {componentRef}>
+                        <div className="naria-popover__content" ref={rootRef}>
+                            {content}
+                        </div>
                     </div>
                 )
             }

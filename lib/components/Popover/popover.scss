@@ -1,0 +1,32 @@
+.naria-popover {
+  position: relative;
+
+  .naria-popover__content {
+    //width: fit-content;
+    //display: contents;
+    position: absolute;
+  }
+
+}
+
+html[dir="rtl"] {
+  //.naria-select {
+  //  .naria-select__search-input-root {
+  //    .naria-select__arrow-icon, .naria-select__search-icon {
+  //      left: 0;
+  //      right: auto;
+  //    }
+  //  }
+  //}
+}
+
+@keyframes fadeInTranslateY {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

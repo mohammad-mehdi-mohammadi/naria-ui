@@ -3,14 +3,12 @@ import './button.scss';
 import {Loading} from "../Loading";
 
 
-
-
 export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
     type?: "button" | "submit";
     classNames?: {
-        button: string;
+        root: string;
         loading: {
-            wrapper: string;
+            root: string;
             color: string;
         };
     };
@@ -23,14 +21,14 @@ export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttribute
 export const Button: FC<props> = ({
                                       type = "button",
                                       classNames = {
-                                          button: "",
+                                          root: "",
                                           loading: {
-                                              wrapper: "",
+                                              root: "",
                                               color: ""
                                           }
                                       },
                                       value,
-                                      icon = null,
+                                      icon = undefined,
                                       isLoading = false,
                                       isDisabled = false,
                                       ...otherProps
@@ -38,12 +36,12 @@ export const Button: FC<props> = ({
 
     return (
         <button type={type} disabled={isDisabled} {...otherProps}
-                className={`nariaButton ${isDisabled ? "nariaButton-disabled" : ""} ${classNames?.button}`}
-                data-prop="button"
+                className={`naria-button ${isDisabled ? "naria-button--disabled" : ""} ${classNames?.root}`}
+                data-class-prop="root"
         >{isLoading ? <Loading classNames={{
-            wrapper: classNames.loading.wrapper,
+            root: classNames.loading.root,
             color: classNames.loading.color
-        }} data-prop-wrapper = "wrapper" data-prop-color = "color" /> : icon}{value}</button>
+        }} data-class-prop="root" data-class-prop-color="color"/> : icon}{value}</button>
     );
 };
 

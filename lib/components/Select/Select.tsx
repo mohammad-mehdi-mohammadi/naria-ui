@@ -33,12 +33,12 @@ export interface props {
     optionFilterLabel?: string;
     hasSearch?: boolean;
     classNames?: {
-        wrapper: string;
+        root: string;
         label?: string;
         title?: string;
         button?: string;
         input?: string;
-        listWrapper?: string;
+        listRoot?: string;
         list?: string;
         option?: string;
         optionActive?: string;
@@ -62,12 +62,12 @@ export const Select: FC<props> = ({
                                       optionFilterLabel,
                                       hasSearch = false,
                                       classNames = {
-                                          wrapper: "",
+                                          root: "",
                                           label: "",
                                           title: "",
                                           button: "",
                                           input: "",
-                                          listWrapper: "",
+                                          listRoot: "",
                                           list: "",
                                           option: "",
                                           optionActive: "",
@@ -93,7 +93,7 @@ export const Select: FC<props> = ({
         isLoading: false
     });
     const localApi = useRef<string | undefined>(undefined);
-    const wrapperRef = useRef(undefined);
+    const rootRef = useRef(undefined);
     const handlerRef = useRef(undefined);
 
     const getData = async () => {
@@ -244,10 +244,10 @@ export const Select: FC<props> = ({
             return "";
         }
         if (label?.length && item[label] === localSelected[label]) {
-            return `nariaSelectOption-active ${classNames?.optionActive}`
+            return `naria-select__option--active ${classNames?.optionActive}`
         }
         if (item === localSelected) {
-            return `nariaSelectOption-active ${classNames?.optionActive}`
+            return `naria-select__option--active ${classNames?.optionActive}`
         }
     }
     const onScroll = (e) => {
@@ -271,31 +271,30 @@ export const Select: FC<props> = ({
             setIsShow(true)
         }
     }
-    useClickOutside(wrapperRef, handlerRef, onClose);
+    useClickOutside(rootRef, handlerRef, onClose);
     return (
-        <div className={`nariaSelect ${disabled ? 'nariaSelect-disabled' : ''} ${classNames?.wrapper}`}
-             data-prop="wrapper">
+        <div className={`naria-select ${disabled ? 'naria-select--disabled' : ''} ${classNames?.root}`}
+             data-class-prop="root">
             <label
-                className={`${hasError && "!text-danger-100"}
-                ${classNames?.label}`} data-prop="label">
-                <span className={classNames?.title} data-prop="title">{title}</span>
+                className={`naria-select__label ${hasError && "naria-select__label--error"} ${classNames?.label}`} data-class-prop="label">
+                <span className={`naria-select__title ${classNames?.title}`} data-class-prop="title">{title}</span>
                 {
                     hasSearch ? (
-                        <div className="nariaSearchInput">
+                        <div className="naria-select__search-input-root">
                             <input ref={handlerRef}
                                    placeholder={placeholder?.length ? placeholder : "Select"}
-                                   className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
-                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${classNames?.input}`}
+                                   className={`naria-select__search-input ${localSelected ? "naria-select__search-input--selected" : ""}
+                                   ${hasError && "naria-select__search-input--error"} ${classNames?.input}`}
                                    value={searchTerm}
                                    disabled={disabled} type="text" onClick={onToggle} onChange={onSearch}
-                                   data-prop="input"/>
+                                   data-class-prop="input"/>
                             {
                                 isShow ? (
                                     <Search
-                                        className="nariaSearchIcon"/>
+                                        className="naria-select__search-icon"/>
                                 ) : (
                                     <AngleDown
-                                        className={`nariaArrowIcon ${isShow ? "nariaArrowIcon-rotate-180" : ""}`}/>
+                                        className={`naria-select__arrow-icon ${isShow ? "naria-select__arrow-icon--rotate-180" : ""}`}/>
                                 )
                             }
 
@@ -305,16 +304,16 @@ export const Select: FC<props> = ({
                         <button type="button"
                                 ref={handlerRef}
                                 disabled={disabled}
-                                className={`nariaHandler ${localSelected ? "text-dark-100" : "text-grey-300"} 
-                                ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${classNames?.button}`}
-                                data-prop="button"
+                                className={`naria-select__handler ${localSelected ? "select__handler--selected" : ""} 
+                                ${hasError && "select__handler--error"} ${classNames?.button}`}
+                                data-class-prop="button"
                                 onClick={onToggle}>
                             {
                                 localSelected ? (
                                     value?.length ? localSelected[value] : localSelected
                                 ) : (placeholder?.length ? placeholder : "Select")
                             } <AngleDown
-                            className={`nariaArrowIcon ${isShow ? "nariaArrowIcon-rotate-180" : ""}`}/>
+                            className={`naria-select__arrow-icon ${isShow ? "naria-select__arrow-icon--rotate-180" : ""}`}/>
                         </button>
                     )
                 }
@@ -324,37 +323,39 @@ export const Select: FC<props> = ({
             {
                 isShow ? (
                     <div
-                        className={`nariaListWrapper ${getDeviceWidth < 768 ? "nariaListWrapper-mobile" : ""} ${classNames?.listWrapper}`}
-                        data-prop="listWrapper"
-                        ref={wrapperRef}>
+                        className={`naria-select__list-root ${getDeviceWidth < 768 ? "naria-select__list-root--mobile" : ""} ${classNames?.listRoot}`}
+                        data-class-prop="listRoot"
+                        ref={rootRef}>
                         <div
-                            className={`nariaList ${getDeviceWidth < 768 ? "nariaList-mobile" : `nariaList-desktop`} ${classNames?.list}`}
-                            data-prop="input"
+                            className={`naria-select__list ${getDeviceWidth < 768 ? "naria-select__list--mobile" : `naria-select__list--desktop`} ${classNames?.list}`}
+                            data-class-prop="input"
                             onScroll={onScroll}>
                             {
                                 api && isLoading ? (
-                                    <div className="nariaLoadingWrapper">
-                                        <Loading/>
+                                    <div className="naria-select__loading-root">
+                                        <div className="naria-select__loading">
+                                            <Loading/>
+                                        </div>
                                     </div>
                                 ) : (
                                     <>
                                         {
                                             getDeviceWidth < 768 ? (
-                                                <div className={`nariaSelectMobileHeader ${classNames?.mobileHeader}`}
-                                                     data-prop="mobileHeader">
+                                                <div className={`naria-select__header--mobile ${classNames?.mobileHeader}`}
+                                                     data-class-prop="mobileHeader">
                                                     {
                                                         hasSearch ? (
-                                                            <div className="nariaSearchInput">
+                                                            <div className="naria-select__search-input-root">
                                                                 <input ref={handlerRef}
                                                                        placeholder={placeholder?.length ? placeholder : "Select"}
-                                                                       className={`${localSelected ? "text-dark-100" : "text-grey-300"} 
-                                                               ${hasError && "!border-danger-100 focus:border-danger-100 outline-danger-100"} ${classNames?.input}`}
-                                                                       data-prop="input"
+                                                                       className={`naria-select__search-input ${localSelected ? "naria-select__search-input--selected" : ""} 
+                                                               ${hasError && "naria-select__search-input--error"} ${classNames?.input}`}
+                                                                       data-class-prop="input"
                                                                        value={searchTerm}
                                                                        disabled={disabled} type="text"
                                                                        onChange={onSearch}/>
                                                                 <Search
-                                                                    className="nariaSearchIcon"/>
+                                                                    className="naria-select__search-icon"/>
                                                             </div>
                                                         ) : undefined
                                                     }
@@ -373,9 +374,9 @@ export const Select: FC<props> = ({
                                                                 <button type="button" onClick={() => onSelect(item)}
                                                                         disabled={disabled}
                                                                         key={index.toString()}
-                                                                        className={`nariaSelectOption ${classNames?.option} ${getActiveClass(item)}`}
-                                                                        data-prop="option"
-                                                                        data-prop-active="optionActive">
+                                                                        className={`naria-select__option ${classNames?.option} ${getActiveClass(item)}`}
+                                                                        data-class-prop="option"
+                                                                        data-class-prop-active="optionActive">
                                                                     {value?.length ? item[value] : item}
                                                                 </button>
                                                             )
@@ -392,8 +393,10 @@ export const Select: FC<props> = ({
 
                                         {
                                             localPagination.isLoading ? (
-                                                <div className="nariaLoadingMoreWrapper">
-                                                    <Loading/>
+                                                <div className="naria-select__loading-more-root">
+                                                    <div className="naria-select__loading-more">
+                                                        <Loading/>
+                                                    </div>
                                                 </div>
                                             ) : undefined
                                         }
@@ -406,7 +409,7 @@ export const Select: FC<props> = ({
             }
             {
                 hasError &&
-                <p className={`nariaSelectErrorText ${classNames?.errorText}`} data-prop = "errorText">{hasError}</p>
+                <p className={`naria-select--error-text ${classNames?.errorText}`} data-class-prop = "errorText">{hasError}</p>
             }
 
         </div>

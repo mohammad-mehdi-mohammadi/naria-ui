@@ -1,55 +1,56 @@
-.nariaCalendar {
+.naria-calendar {
   max-width: 420px;
-  .nariaCalendarHeader {
+  .naria-calendar__header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     align-items: center;
 
-    .nariaMonthYear {
+    .naria-calendar__month-year {
       grid-column: auto / span 3;
     }
-    .nariaNextMonth, .nariaPrevMonth, .nariaNextYear, .nariaPrevYear {
+    .naria-calendar__next-month, .naria-calendar__prev-month, .naria-calendar__next-year, .naria-calendar__prev-year {
       svg {
         width: 16px;
         height: 16px;
       }
     }
-    .nariaPrevMonth, .nariaPrevYear {
+    .naria-calendar__prev-month, .naria-calendar__prev-year {
       svg {
         transform: rotate(180deg);
       }
     }
   }
-  .nariaCalendarBody {
-    .nariaCalendarDayWrapper {
+  .naria-calendar__body {
+    .naria-calendar__days {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       align-items: center;
     }
-    .nariaCalendarWeekdayWrapper {
+    .naria-calendar__weekdays {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       text-align: center;
     }
-    .nariaCalendarMonthWrapper {
+    .naria-calendar__months {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       align-items: center;
     }
   }
-  .nariaCalendarDay-selected, .nariaCalendarMonth-selected {
-    background-color: red;
+  .naria-calendar__day--selected, .naria-calendar__month--selected {
+    background-color: #fff;
   }
+
 }
 html[dir="rtl"] {
-  .nariaCalendar {
-    .nariaCalendarHeader {
-      .nariaPrevMonth, .nariaPrevYear {
+  .naria-calendar {
+    .naria-calendar__header {
+      .naria-calendar__prev-month, .naria-calendar__prev-year {
         svg {
           transform: rotate(0deg);
         }
       }
-      .nariaNextMonth, .nariaNextYear {
+      .naria-calendar__next-month, .naria-calendar__next-year {
         svg {
           transform: rotate(180deg);
         }

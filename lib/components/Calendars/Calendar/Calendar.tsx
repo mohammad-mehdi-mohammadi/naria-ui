@@ -6,6 +6,7 @@ import momentHijri from "moment-hijri";
 import momentJalali from "jalali-moment";
 import {convertMonth, convertWeekDay} from "../utils/convert-month";
 import {addZeroToLessTenNumber} from "../utils/add-zero-less-ten-number";
+
 interface Day {
     year: string;
     month: string;
@@ -24,6 +25,8 @@ export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttribute
         };
     };
     selected: Date;
+    min: Date;
+    max: Date;
     onChange: any;
     isLoading?: boolean;
     isDisabled?: boolean;
@@ -40,6 +43,8 @@ export const Calendar: FC<props> = ({
                                             }
                                         },
                                         selected,
+                                        min,
+                                        max,
                                         onChange,
                                         icon = null,
                                         isLoading = false,
@@ -112,12 +117,9 @@ export const Calendar: FC<props> = ({
             }
         }
         if (selected) {
-
-            if(mode === "Hijri") {
-                // console.log(momentHijri(momentHijri(selected).format('iYYYY/iMM/iDD'), `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`), momentHijri.selected.format('iYYYY/iMM/iDD'))
-                // m.current = momentHijri(momentHijri(selected).format('iYYYY/iMM/iDD'), `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`)
+            if (mode === "Hijri") {
+                m.current = (selected as any).clone().locale(momentHijri.locale())
             } else {
-                console.log(moment.current(selected, mode === 'Jalali' ? 'fa' : 'en', `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`))
                 m.current = moment.current(selected, mode === 'Jalali' ? 'fa' : 'en', `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`)
             }
         }
@@ -150,7 +152,6 @@ export const Calendar: FC<props> = ({
             month: m.current.format(formatType.current.month),
             year: m.current.format(formatType.current.year)
         })
-        console.log(getDayOfWeek(`${m.current.format(formatType.current.year)}/${m.current.format(formatType.current.month)}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`))
         generateCurrentMonth(
             m.current.format(formatType.current.year),
             m.current.format(formatType.current.month),
@@ -211,11 +212,10 @@ export const Calendar: FC<props> = ({
     const generateCurrentMonth = (year: string, month: string, day: string, daysOfMonth: number, dayOfFirstMonth: number, dayOfLastMonth: number) => {
         daysOfCurrentMonth.current = []
         if (dayOfFirstMonth > 0) {
-            console.log(moment.current(`${year}/${month}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).subtract(1, 'day').format(formatType.current.day))
             generatePrevMonth(
-                moment.current(`${year}/${month}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).subtract(1, "year").format(formatType.current.year),
-                moment.current(`${year}/${month}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).subtract(1, "month").format(formatType.current.month),
-                moment.current(`${year}/${month}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).subtract(1, "day").format(formatType.current.day),
+                moment.current(`${year}/${month}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).subtract(1, formatType.current.monthType).format(formatType.current.year),
+                moment.current(`${year}/${month}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).subtract(1, formatType.current.monthType).format(formatType.current.month),
+                moment.current(`${year}/${month}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).subtract(1, formatType.current.day).format(formatType.current.day),
                 getDayOfMonth(moment.current(`${year}/${month}/01`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).subtract(1, "day")),
                 dayOfFirstMonth)
         }
@@ -292,8 +292,7 @@ export const Calendar: FC<props> = ({
                 return momentX.jDaysInMonth()
             }
             case "Hijri": {
-                console.log()
-                return momentX().iDaysInMonth()
+                return momentX.iDaysInMonth()
             }
             default: {
                 return momentX.daysInMonth()
@@ -322,55 +321,102 @@ export const Calendar: FC<props> = ({
             )
         }
     }
+    /*
+        minimum/maximum date of day - BEGIN
+    */
+    const getMinDayDisable = (item: Day) => {
+        return moment.current(`${item.year}/${item.month}/${item.day}`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).diff(min) <= 0
+    }
+    const getMaxDayDisable = (item: Day) => {
+        return moment.current(`${item.year}/${item.month}/${item.day}`, `${formatType.current.year}/${formatType.current.month}/${formatType.current.day}`).diff(max) >= 0
+    }
+    /*
+        minimum/maximum date of day - END
+    */
+    /*
+        minimum/maximum date of month - BEGIN
+    */
+    const getMinMonthDisable = (index: number) => {
+        const diff = moment.current(`${date.year}/${index + 1}`, `${formatType.current.year}/${formatType.current.month}`).diff(min, 'day')
+        if(diff > 0) {
+            return !diff;
+        }
+        return getDayOfMonth(m.current) - Math.abs(diff) < 1;
+    }
+    const getMaxMonthDisable = (index: number) => {
+        const diff = moment.current(`${date.year}/${index + 1}`, `${formatType.current.year}/${formatType.current.month}`).diff(max, 'day')
+        return !(diff <= 0)
+    }
+    /*
+            minimum/maximum date of month - END
+    */
+    /*
+        minimum/maximum date of prev/next month/year - BEGIN
+    */
+    const getMinPrevMonthYearDisable = () => {
+        return moment.current(`${date.year}/${date.month}`, `${formatType.current.year}/${formatType.current.month}`).diff(min) <= 0;
+    }
+    const getMaxNextMonthYearDisable = () => {
+        const diff = moment.current(`${date.year}/${date.month}`, `${formatType.current.year}/${formatType.current.month}`).diff(max, 'day')
+        if(diff > 0) {
+            return true
+        }
+        return getDayOfMonth(m.current) - Math.abs(diff) >= 1;
+    }
+    /*
+        minimum/maximum date of prev/next month/year - END
+    */
     return (
-        <div className="nariaCalendar">
-            {JSON.stringify(date)} - {JSON.stringify(selectedDate)}
-            <div className="nariaCalendarHeader">
-                <button onClick={onPrevYear} className="nariaPrevYear">
+        <div className="naria-calendar">
+            <div className="naria-calendar__header">
+                <button onClick={onPrevYear} className="naria-calendar__prev-year" disabled={min ? getMinPrevMonthYearDisable() : false}>
                     <AnglesRight/>
                 </button>
-                <button onClick={onPrevMonth} className="nariaPrevMonth">
+                <button onClick={onPrevMonth} className="naria-calendar__prev-month" disabled={min ? getMinPrevMonthYearDisable() : false}>
                     <AngleRight/>
                 </button>
-                <button className="nariaMonthYear" onClick={onShowMonths}>
+                <button className="naria-calendar__month-year" onClick={onShowMonths}>
                     {
                         !showMonths && convertMonth(date.month, mode)
                     } {date.year}
                 </button>
-                <button onClick={onNextMonth} className="nariaNextMonth">
+                <button onClick={onNextMonth} className="naria-calendar__next-month" disabled={max ? getMaxNextMonthYearDisable() : false}>
                     <AngleRight/>
                 </button>
-                <button onClick={onNextYear} className="nariaNextYear">
+                <button onClick={onNextYear} className="naria-calendar__next-year" disabled={max ? getMaxNextMonthYearDisable() : false}>
                     <AnglesRight/>
                 </button>
             </div>
-            <div className="nariaCalendarBody">
+            <div className="naria-calendar__body">
                 {
                     showMonths ? (
-                        <div className="nariaCalendarMonthWrapper">
+                        <div className="naria-calendar__months">
                             {
                                 [...Array(12)].map((_, index) => {
                                     return <button key={index + 1}
-                                                   className={`nariaCalendarMonth ${selectedDate.year === date.year && selectedDate.month === addZeroToLessTenNumber(index + 1) ? "nariaCalendarMonth-selected" : ''}`}
-                                                   onClick={() => onMonth(index + 1)}>{convertMonth(index + 1, mode)} {selectedDate.month}{addZeroToLessTenNumber(index + 1)}</button>
+                                                   disabled={(min ? getMinMonthDisable(index) : false) || (max ? getMaxMonthDisable(index) : false)}
+                                                   className={`naria-calendar__month ${selectedDate.year === date.year && selectedDate.month === addZeroToLessTenNumber(index + 1) ? "naria-calendar__month--selected" : ''}`}
+                                                   onClick={() => onMonth(index + 1)}>{convertMonth(index + 1, mode)}</button>
                                 })
                             }
                         </div>
                     ) : (
                         <>
-                            <div className="nariaCalendarWeekdayWrapper">
+                            <div className="naria-calendar__weekdays">
                                 {
                                     [...Array(7)].map((_, index) => {
                                         return <div key={index}>{convertWeekDay(index + 1, mode)}</div>
                                     })
                                 }
                             </div>
-                            <div className="nariaCalendarDayWrapper">
+                            <div className="naria-calendar__days">
                                 {
                                     month.map((item: any, index: number) => {
-                                        return <button key={index} disabled={!item.isCurrent}
-                                                       className={`nariaCalendarDay ${selectedDate.year === item.year && selectedDate.month === item.month && selectedDate.day === addZeroToLessTenNumber(item.day) ? "nariaCalendarDay-selected" : ''}`}
-                                                       onClick={() => onDate(item)}>{item.day}</button>
+                                        return <button key={index}
+                                                       disabled={(min ? getMinDayDisable(item) : false) || (max ? getMaxDayDisable(item) : false) || !item.isCurrent}
+                                                       className={`naria-calendar__day ${selectedDate.year === item.year && selectedDate.month === item.month && selectedDate.day === addZeroToLessTenNumber(item.day) ? "naria-calendar__day--selected" : ''}`}
+                                                       onClick={() => onDate(item)}>{item.day}
+                                        </button>
                                     })
                                 }
                             </div>

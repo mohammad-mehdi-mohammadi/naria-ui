@@ -1,11 +1,10 @@
-
-.nariaSelect {
+.naria-select {
   position: relative;
 
-  .nariaListWrapper {
+  .naria-select__list-root {
     overflow: hidden;
 
-    &.nariaListWrapper-mobile {
+    &.naria-select__list-root--mobile {
       position: fixed;
       top: 0;
       right: 0;
@@ -15,7 +14,7 @@
     }
   }
 
-  .nariaList {
+  .naria-select__list {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -23,47 +22,52 @@
     position: relative;
     overflow: auto;
 
-    &.nariaList-mobile {
+    &.naria-select__list--mobile {
       position: relative;
       height: 100%;
     }
 
-    &.nariaList-desktop {
+    &.naria-select__list--desktop {
       position: absolute;
       animation: fadeInTranslateY 0.3s ease-out forwards;
       max-height: 150px;
     }
 
-    .nariaLoadingWrapper {
+    .naria-select__loading-root {
       padding: 24px 0;
       display: flex;
       justify-content: center;
-
+      .naria-select__loading-root {
+        width: 24px;
+        margin: auto;
+      }
     }
 
-    .nariaLoadingMoreWrapper {
+    .naria-select__loading-more-root {
       position: sticky;
       bottom: 0;
       text-align: center;
       width: 100%;
-
-      .nariaLoading {
-        width: 20px;
+      .naria-select__loading-more {
+        width: 24px;
+        margin: auto;
       }
     }
-    .nariaSelectMobileHeader {
+
+    .naria-select__header--mobile {
       position: sticky;
       top: 0;
       justify-content: end;
       display: flex;
       gap: 8px;
-      .nariaSearchInput {
+
+      .naria-select__search-input-root {
         flex-grow: 1;
       }
     }
   }
 
-  .nariaSearchInput {
+  .naria-select__search-input-root {
     position: relative;
     display: flex;
 
@@ -71,7 +75,7 @@
       width: 100%;
     }
 
-    .nariaArrowIcon, .nariaSearchIcon {
+    .naria-select__arrow-icon, .naria-select__search-icon {
       position: absolute;
       bottom: 0;
       margin-top: auto;
@@ -85,7 +89,7 @@
 
   }
 
-  .nariaHandler {
+  .naria-select__handler {
     position: relative;
     display: flex;
     gap: 4px;
@@ -93,7 +97,7 @@
     align-items: center;
     justify-content: space-between;
 
-    .nariaArrowIcon {
+    .naria-select__arrow-icon {
       width: 12px;
       height: 12px;
       transition: transform 0.4s;
@@ -104,7 +108,7 @@
       -ms-transform: rotate(0deg);
       transform: rotate(0deg);
 
-      &.nariaArrowIcon-rotate-180 {
+      &.naria-select__arrow-icon--rotate-180 {
         -webkit-transform: rotate(180deg);
         -moz-transform: rotate(180deg);
         -o-transform: rotate(180deg);
@@ -116,9 +120,9 @@
 }
 
 html[dir="rtl"] {
-  .nariaSelect {
-    .nariaSearchInput {
-      .nariaArrowIcon, .nariaSearchIcon {
+  .naria-select {
+    .naria-select__search-input-root {
+      .naria-select__arrow-icon, .naria-select__search-icon {
         left: 0;
         right: auto;
       }

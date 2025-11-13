@@ -1,23 +1,59 @@
 import './App.css'
-import {Button, Calendar, Input, Select} from "../lib";
-import moment from "jalali-moment";
+import {Button, Calendar, Input, Popover, Select} from "../lib";
+import momentJalali from "jalali-moment";
+import momentHijri from "moment-hijri";
 
 function App() {
     return (
         <>
+            <h1>Popover</h1>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <p>Basic usage</p>
+            <Popover>
+                <button>sdad</button>
+                <Calendar mode="Gregorian"/>
+            </Popover>
             <h1>Calendar</h1>
-            {/*<p>Basic usage | Gregorian</p>*/}
-            {/*<Calendar mode = "Gregorian"/>*/}
-            {/*<p>Basic usage | Jalali</p>*/}
-            {/*<Calendar mode = "Jalali"/>*/}
-            {/*<p>Basic usage | Hijri</p>*/}
-            {/*<Calendar mode = "Hijri"/>*/}
+            <p>Basic usage | Gregorian</p>
+            <Calendar mode="Gregorian"/>
+            <p>Basic usage | Jalali</p>
+            <Calendar mode="Jalali"/>
+            <p>Basic usage | Hijri</p>
+            <Calendar mode="Hijri"/>
             <p>Default value | Gregorian</p>
-            <Calendar mode = "Gregorian" selected={moment("2024/03/02")}/>
+            <Calendar mode="Gregorian" selected={momentJalali("2024/03/02")}/>
             <p>Default value | Jalali</p>
-            <Calendar mode = "Jalali" selected={moment("1404/08/13", "jYYYY/jMM/jDD")}/>
+            <Calendar mode="Jalali" selected={momentJalali("1404/08/20", "jYYYY/jMM/jDD")}/>
             <p>Default value | Hijri</p>
-            <Calendar mode = "Hijri" selected={moment("1447/05/13", "iYYYY/iMM/iDD")}/>
+            <Calendar mode="Hijri" selected={momentHijri("1447/05/20", "iYYYY/iMM/iDD")}/>
+            <p>Min date value | Gregorian</p>
+            <Calendar mode="Gregorian" min={momentJalali("2025/11/10")}/>
+            <p>Min date value | Jalali</p>
+            <Calendar mode="Jalali" min={momentJalali("1404/08/20", "jYYYY/jMM/jDD")}/>
+            <p>Default value | Hijri</p>
+            <Calendar mode="Hijri" min={momentHijri("1447/05/20", "iYYYY/iMM/iDD")}/>
+            <p>Max date value | Gregorian</p>
+            <Calendar mode="Gregorian" max={momentJalali("2025/11/15")}/>
+            <p>Max date value | Jalali</p>
+            <Calendar mode="Jalali" max={momentJalali("1404/08/24", "jYYYY/jMM/jDD")}/>
+            <p>Max date value | Hijri</p>
+            <Calendar mode="Hijri" max={momentHijri("1447/05/26", "iYYYY/iMM/iDD")}/>
+            <p>Min and max date value | Gregorian</p>
+            <Calendar mode="Gregorian" min={momentJalali("2025/11/10")} max={momentJalali("2025/11/15")}/>
+            <p>Min and max date value | Jalali</p>
+            <Calendar mode="Jalali" min={momentJalali("1404/08/20", "jYYYY/jMM/jDD")}
+                      max={momentJalali("1404/08/24", "jYYYY/jMM/jDD")}/>
+            <p>Min and max date value | Hijri</p>
+            <Calendar mode="Hijri" min={momentHijri("1447/05/20", "iYYYY/iMM/iDD")}
+                      max={momentHijri("1447/05/26", "iYYYY/iMM/iDD")}/>
             <hr/>
             <h1>Button</h1>
             <p>Default</p>

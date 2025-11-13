@@ -3,7 +3,7 @@ import {FC} from "react";
 export interface props {
     type?: "password" | "text";
     classNames?: {
-        wrapper?: string;
+        root?: string;
         label?: string;
         title?: string;
         input?: string;
@@ -22,7 +22,7 @@ export const Input: FC<props> = ({
                                      type = "text",
                                      placeholder,
                                      classNames = {
-                                         wrapper: "",
+                                         root: "",
                                          label: "",
                                          title: "",
                                          input: "",
@@ -37,11 +37,11 @@ export const Input: FC<props> = ({
                                  }) => {
 
     return (
-        <div className={`nariaInputWrapper ${classNames.wrapper}`} data-prop = "wrapper">
+        <div className={`naria-input ${classNames.root}`} data-class-prop = "root">
             <label
                 htmlFor={name}
-                className={`${classNames.label} ${hasError && "nariaInputLabel-error"}`} data-prop = "label">
-                <span className={classNames?.title} data-prop="title">{title}</span>
+                className={`${classNames.label} ${hasError && "naria-input__label--error"}`} data-class-prop = "label">
+                <span className={classNames?.title} data-class-prop="title">{title}</span>
                 <input
                     disabled={isDisabled}
                     autoComplete={autocomplete ? "on" : "off"}
@@ -50,14 +50,14 @@ export const Input: FC<props> = ({
                     {...otherProps}
                     type={type}
                     name={name}
-                    className={`${classNames.input} ${hasError && "nariaInput-error"}`}
+                    className={`${classNames.input} ${hasError && "naria-input__input--error"}`}
                     placeholder={placeholder}
-                    data-prop = "input"
+                    data-class-prop = "input"
                 />
             </label>
             {
                 hasError &&
-                <p className={`nariaInputErrorText ${classNames?.errorText}`} data-prop = "errorText">{hasError}</p>
+                <p className={`naria-input--error-text ${classNames?.errorText}`} data-class-prop = "errorText">{hasError}</p>
             }
         </div>
     );

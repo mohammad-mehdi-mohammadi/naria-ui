@@ -2,25 +2,96 @@ import './App.css'
 import {Button, Calendar, Input, Popover, Select} from "../lib";
 import momentJalali from "jalali-moment";
 import momentHijri from "moment-hijri";
+import {Modal} from "../lib/components/Modal";
+import {useRef} from "react";
 
 function App() {
+    const modalRef = useRef(undefined);
     return (
         <>
+            <h1>Modal</h1>
+            <button onClick={() => modalRef?.current?.toggle()}>Open modal</button>
+            <Modal ref={modalRef} size="lg:max-w-5xl xl:max-w-7xl">
+                <div className="mx-auto max-w-7xl">
+asdadad
+                </div>
+            </Modal>
             <h1>Popover</h1>
             <p>Basic usage</p>
-            <p>Basic usage</p>
-            <p>Basic usage</p>
-            <p>Basic usage</p>
-            <p>Basic usage</p>
-            <p>Basic usage</p>
-            <p>Basic usage</p>
-            <p>Basic usage</p>
-            <p>Basic usage</p>
-            <p>Basic usage</p>
-            <Popover>
-                <button>sdad</button>
-                <Calendar mode="Gregorian"/>
-            </Popover>
+            <div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "top-start">
+                        <button>Top start</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "top">
+                        <button>Top</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "top-end">
+                        <button>Top end</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "bottom-start">
+                        <button>Bottom start</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "bottom">
+                        <button>Bottom</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "bottom-end">
+                        <button>Bottom end</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "right-start">
+                        <button>Right start</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "right">
+                        <button>Right</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "right-end">
+                        <button>Right end</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "left-start">
+                        <button>Left start</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "left">
+                        <button>Left</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+                <div style={{padding: '100px'}}>
+                    <Popover placement = "left-end">
+                        <button>Left end</button>
+                        <Calendar mode="Gregorian"/>
+                    </Popover>
+                </div>
+            </div>
             <h1>Calendar</h1>
             <p>Basic usage | Gregorian</p>
             <Calendar mode="Gregorian"/>

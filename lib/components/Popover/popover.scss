@@ -2,11 +2,17 @@
   position: relative;
 
   .naria-popover__content {
-    //width: fit-content;
-    //display: contents;
     position: absolute;
+
   }
 
+}
+.fade-in-scale {
+  animation: fadeInScale 0.2s ease-out forwards;
+}
+
+.fade-out-scale {
+  animation: fadeOutScale 0.05s ease-out forwards;
 }
 
 html[dir="rtl"] {
@@ -20,13 +26,3 @@ html[dir="rtl"] {
   //}
 }
 
-@keyframes fadeInTranslateY {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}

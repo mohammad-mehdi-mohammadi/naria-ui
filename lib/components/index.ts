@@ -5,3 +5,4 @@ export * from './Button';
 export * from './Loading';
 export * from './Popover';
 export * from './Calendars/Calendar';
+export * from './Modal';

@@ -5,6 +5,7 @@
     cursor: default;
     &.naria-popover__content--desktop {
       position: absolute;
+      z-index: 1;
 
     }
     &.naria-popover__content--mobile {

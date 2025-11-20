@@ -23,7 +23,37 @@ function App() {
             <button onClick={() => setIsOpen({...isOpen, basicModal: true})}>Open modal</button>
             <Modal isOpen={isOpen.basicModal} title = "Modal" onOpenChange = {(e) => setIsOpen({...isOpen, basicModal: e})}>
                 <div className="mx-auto max-w-7xl">
-                    Basic usage modal
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
+                    Basic usage modal<br/>
                 </div>
             </Modal>
             <p>Backdrop</p>
@@ -58,8 +88,11 @@ function App() {
             <div>
                 <div style={{padding: '100px'}}>
                     <Popover placement = "top-start" isOpen = {isOpen.topStartPopover} onOpenChange = {(e) => setIsOpen({...isOpen, topStartPopover: e})}>
-                        <button onClick={() => setIsOpen({...isOpen, basicPopover: true})}>Top start</button>
-                        <Calendar mode="Gregorian"/>
+                        <button onClick={() => setIsOpen({...isOpen, topStartPopover: true})}>Top start</button>
+                        <Calendar mode="Gregorian" onChange = {() => {
+                            console.log('asd-ad-')
+                            setIsOpen({...isOpen, topStartPopover: false})
+                        }}/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>

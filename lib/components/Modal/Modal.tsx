@@ -110,7 +110,7 @@ export const Modal: FC<LibModalProps> = ({
                                 {
                                     closeIcon ? cloneElement((closeIcon as any), {onClick: () => onClose()}) : (
                                         <button className={`naria-modal__close-icon ${classNames.closeIcon}`}
-                                                onClick={close} data-class-prop="closeIcon">
+                                                onClick={onClose} data-class-prop="closeIcon">
                                             <Close/>
                                         </button>
                                     )

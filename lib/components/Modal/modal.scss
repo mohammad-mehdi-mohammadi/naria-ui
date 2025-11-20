@@ -42,6 +42,8 @@
       animation: fadeInTranslateY 0.2s ease-out forwards;
     }
     &.naria-modal--mobile {
+      max-height: 100%;
+      height: 100%;
       animation: fadeInBottomToTop 0.2s ease-out forwards;
     }
     .naria-modal__header {

@@ -7,32 +7,18 @@ import {useRef} from "react";
 
 function App() {
     const modalBasicUsageRef = useRef(undefined);
-    const modalSMRef = useRef(undefined);
-    const modalMDRef = useRef(undefined);
     const modalOpaqueRef = useRef(undefined);
     const modalBlurRef = useRef(undefined);
+    const modalTransparentRef = useRef(undefined);
     const modalNonDismissibleRef = useRef(undefined);
     return (
         <>
             <h1>Modal</h1>
             <p>Basic usage</p>
             <button onClick={() => modalBasicUsageRef?.current?.toggle()}>Open modal</button>
-            <Modal ref={modalBasicUsageRef}>
+            <Modal ref={modalBasicUsageRef} title = "Modal">
                 <div className="mx-auto max-w-7xl">
                     Basic usage modal
-                </div>
-            </Modal>
-            <p>Sizes</p>
-            <button onClick={() => modalSMRef?.current?.toggle()}>Open sm-size modal</button>
-            <Modal ref={modalSMRef} size = "sm">
-                <div className="mx-auto max-w-7xl">
-                    Open sm-size modal
-                </div>
-            </Modal>
-            <button onClick={() => modalMDRef?.current?.toggle()}>Open md-size modal</button>
-            <Modal ref={modalMDRef} size = "md">
-                <div className="mx-auto max-w-7xl">
-                    Open md-size modal
                 </div>
             </Modal>
 
@@ -47,6 +33,12 @@ function App() {
             <Modal ref={modalBlurRef} backdrop = "blur">
                 <div className="mx-auto max-w-7xl">
                     Open blur modal
+                </div>
+            </Modal>
+            <button onClick={() => modalTransparentRef?.current?.toggle()}>Open transparent modal</button>
+            <Modal ref={modalTransparentRef} backdrop = "transparent">
+                <div className="mx-auto max-w-7xl">
+                    Open transparent modal
                 </div>
             </Modal>
 

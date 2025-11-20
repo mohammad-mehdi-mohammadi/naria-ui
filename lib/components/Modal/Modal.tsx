@@ -1,4 +1,4 @@
-import {forwardRef, useEffect, useImperativeHandle, useState} from "react";
+import {cloneElement, forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import {useWidth} from "../../hooks/use-width";
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 import Close from '../../assets/icons/close.svg?react';
@@ -7,9 +7,20 @@ import './modal.scss';
 export interface LibModalProps {
     title?: string;
     children?: React.ReactNode;
-    size?: "sm" | "md" | "lg" | "xl" | "full";
     backdropDismissible?: boolean;
     backdrop: "opaque" | "blur" | "transparent";
+    hideCloseButton?: boolean;
+    footer?: React.ReactNode;
+    closeIcon?: React.ReactNode;
+    classNames?: {
+        root?: string;
+        backdrop?: string;
+        title?: string;
+        header?: string;
+        body?: string;
+        footer?: string;
+        closeIcon?: string;
+    };
 }
 
 export interface LibModalRef {
@@ -18,7 +29,24 @@ export interface LibModalRef {
     toggle: () => void;
 }
 
-export const Modal = forwardRef<LibModalRef, LibModalProps>(({title, size = "lg", backdropDismissible= true, backdrop = "opaque", children}, ref) => {
+export const Modal = forwardRef<LibModalRef, LibModalProps>(({
+                                                                 title,
+                                                                 backdropDismissible = true,
+                                                                 backdrop = "opaque",
+                                                                 hideCloseButton = false,
+                                                                 footer,
+                                                                 closeIcon,
+                                                                 classNames = {
+                                                                     root: "",
+                                                                     backdrop: "",
+                                                                     title: "",
+                                                                     header: "",
+                                                                     body: "",
+                                                                     footer: "",
+                                                                     closeIcon: "",
+                                                                 },
+                                                                 children
+                                                             }, ref) => {
     const getDeviceWidth = useWidth();
     const isHashChanged = onHashChanges('#modal');
     const [isShow, setIsShow] = useState(false);
@@ -34,7 +62,6 @@ export const Modal = forwardRef<LibModalRef, LibModalProps>(({title, size = "lg"
     };
 
     useEffect(() => {
-        console.log(isHashChanged)
         if (isHashChanged) {
             close();
         }
@@ -54,29 +81,49 @@ export const Modal = forwardRef<LibModalRef, LibModalProps>(({title, size = "lg"
         };
 
     }, [isShow]);
-    
+
     return isShow ? (
         <div
-            className={`naria-modal__backdrop naria-modal__backdrop--${backdrop} ${!backdropDismissible ? "naria-modal__backdrop--dismissible" : ""} ${
-                isShow ? "naria-modal__backdrop--show" : ""
-            }`}
+            className={`naria-modal__backdrop ${backdrop !== 'transparent' ? `naria-modal__backdrop--${backdrop}` : ''} ${!backdropDismissible ? "naria-modal__backdrop--dismissible" : ""} ${
+                isShow ? "naria-modal__backdrop--show" : ''
+            } ${classNames.backdrop}`}
+            data-class-prop="backdrop"
             onClick={onBackdropClick}
         >
             <div
-                className={`naria-modal ${size} ${isShow ? "naria-modal--show" : ""} ${
+                className={`naria-modal ${isShow ? "naria-modal--show" : ""} ${
                     getDeviceWidth < 768 ? `naria-modal--mobile ` : `naria-modal--desktop`
-                }`}
+                } ${classNames.root}`}
+                data-class-prop="root"
             >
-                <div className="naria-modal__head flex items-center justify-between">
-                    <div className="font-bold text-base lg:text-lg">{title ?? ""}</div>
-                    <button className="inline-block" onClick={close}>
-                        <Close className="w-6"/>
-                    </button>
-                </div>
+                <header className={`naria-modal__header ${classNames.header}`} data-class-prop="header">
+                    <div className={`naria-modal__title ${classNames.title}`}
+                         data-class-prop="title">{title ?? ""}</div>
+                    {
+                        !hideCloseButton ? (
+                            <>
+                                {
+                                    closeIcon ? cloneElement((closeIcon as any), {onClick: () => close()}) : (
+                                        <button className={`naria-modal__close-icon ${classNames.closeIcon}`} onClick={close} data-class-prop="closeIcon">
+                                            <Close/>
+                                        </button>
+                                    )
+                                }
+                            </>
+                        ) : undefined
+                    }
+                </header>
                 <div
-                    className="naria-modal__body h-full overflow-y-auto mt-3 md:mt-5 max-h-[calc(100%-40px)] lg:max-h-[calc(100vh-90px)]">
+                    className={`naria-modal__body ${classNames.body}`} data-class-prop="body">
                     {children}
                 </div>
+                {
+                    footer ? (
+                        <footer className={`naria-modal__footer ${classNames.footer}`} data-class-prop="footer">
+                            {footer}
+                        </footer>
+                    ) : undefined
+                }
             </div>
         </div>
     ) : undefined;

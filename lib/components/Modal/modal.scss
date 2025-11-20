@@ -44,6 +44,15 @@
     &.naria-modal--mobile {
       animation: fadeInBottomToTop 0.2s ease-out forwards;
     }
+    .naria-modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .naria-modal__body {
+      height: 100%;
+      overflow-y: auto;
+    }
   }
 
 }

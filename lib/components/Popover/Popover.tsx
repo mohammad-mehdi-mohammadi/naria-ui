@@ -372,14 +372,27 @@ export const Popover: FC<props> = ({
             {cloneElement((trigger as any), {onClick: () => onTrigger(), ref: handlerRef})}
             {
                 isShow && (
-                    <div className={`naria-popover__content ${animate.type} ${animate.position}`} ref={rootRef} style={{
-                        bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
-                        top: bounds.top !== undefined ? bounds.top : "unset",
-                        left: bounds.left !== undefined ? bounds.left : "unset",
-                        right: bounds.right !== undefined ? bounds.right : "unset",
-                    }}>
-                        {content}
-                    </div>
+                    <>
+                        {
+                            getDeviceWidth < 768 ? (
+                                <div
+                                    className={`naria-modal__backdrop`}
+                                    data-class-prop="backdrop"
+                                >{content}</div>
+                            ) : (
+                                <div className={`naria-popover__content ${animate.type} ${animate.position}`} ref={rootRef}
+                                     style={{
+                                         bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
+                                         top: bounds.top !== undefined ? bounds.top : "unset",
+                                         left: bounds.left !== undefined ? bounds.left : "unset",
+                                         right: bounds.right !== undefined ? bounds.right : "unset",
+                                     }}>
+                                    {content}
+                                </div>
+                            )
+                        }
+                    </>
+
                 )
             }
         </div>

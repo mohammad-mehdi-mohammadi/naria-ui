@@ -2,10 +2,32 @@
   position: relative;
 
   .naria-popover__content {
-    position: absolute;
 
+    &.naria-popover__content--desktop {
+      position: absolute;
+
+    }
+    &.naria-popover__content--mobile {
+      animation: fadeInBottomToTop 0.2s ease-out forwards;
+    }
   }
-
+  .naria-popover__backdrop {
+    position: fixed;
+    align-items: end;
+    justify-content: center;
+    display: flex;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: fadeIn 0.2s ease-out forwards;
+    opacity: 0;
+    overflow: hidden;
+    z-index: 999;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 }
 .fade-in-scale {
   animation: fadeInScale 0.2s ease-out forwards;
@@ -14,7 +36,13 @@
 .fade-out-scale {
   animation: fadeOutScale 0.05s ease-out forwards;
 }
-
+@media screen and (min-width: 768px) {
+  .naria-popover {
+    .naria-popover__backdrop {
+      place-items: center;
+    }
+  }
+}
 html[dir="rtl"] {
   //.naria-select {
   //  .naria-select__search-input-root {

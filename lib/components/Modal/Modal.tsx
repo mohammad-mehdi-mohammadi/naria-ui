@@ -1,10 +1,11 @@
-import {cloneElement, forwardRef, useEffect, useImperativeHandle, useState} from "react";
+import {cloneElement, FC, forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {useWidth} from "../../hooks/use-width";
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 import Close from '../../assets/icons/close.svg?react';
 import './modal.scss';
 
 export interface LibModalProps {
+    isOpen: boolean;
     title?: string;
     children?: React.ReactNode;
     backdropDismissible?: boolean;
@@ -12,6 +13,7 @@ export interface LibModalProps {
     hideCloseButton?: boolean;
     footer?: React.ReactNode;
     closeIcon?: React.ReactNode;
+    onOpenChange: any;
     classNames?: {
         root?: string;
         backdrop?: string;
@@ -23,75 +25,78 @@ export interface LibModalProps {
     };
 }
 
-export interface LibModalRef {
-    open: () => void;
-    close: () => void;
-    toggle: () => void;
-}
-
-export const Modal = forwardRef<LibModalRef, LibModalProps>(({
-                                                                 title,
-                                                                 backdropDismissible = true,
-                                                                 backdrop = "opaque",
-                                                                 hideCloseButton = false,
-                                                                 footer,
-                                                                 closeIcon,
-                                                                 classNames = {
-                                                                     root: "",
-                                                                     backdrop: "",
-                                                                     title: "",
-                                                                     header: "",
-                                                                     body: "",
-                                                                     footer: "",
-                                                                     closeIcon: "",
-                                                                 },
-                                                                 children
-                                                             }, ref) => {
+export const Modal: FC<LibModalProps> = ({
+                                             isOpen = false,
+                                             title,
+                                             backdropDismissible = true,
+                                             backdrop = "opaque",
+                                             hideCloseButton = false,
+                                             footer,
+                                             closeIcon,
+                                             onOpenChange,
+                                             classNames = {
+                                                 root: "",
+                                                 backdrop: "",
+                                                 title: "",
+                                                 header: "",
+                                                 body: "",
+                                                 footer: "",
+                                                 closeIcon: "",
+                                             },
+                                             children
+                                         }) => {
     const getDeviceWidth = useWidth();
-    const isHashChanged = onHashChanges('#modal');
-    const [isShow, setIsShow] = useState(false);
+    const randomUUIDRef = useRef(window.crypto.randomUUID());
+    const isHashChanged = onHashChanges('#' + randomUUIDRef.current);
+    // const [isShow, setIsShow] = useState(false);
 
-    const open = () => setIsShow(true);
-    const close = () => setIsShow(false);
-    const toggle = () => setIsShow((v) => !v);
-
-    useImperativeHandle(ref, () => ({open, close, toggle}), []);
+    // const open = () => setIsShow(true);
+    const onClose = () => onOpenChange(false);
+    // const toggle = () => setIsShow((v) => !v);
 
     const onBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (backdropDismissible && e.currentTarget === e.target) close();
+        if (backdropDismissible && e.currentTarget === e.target) onClose();
     };
 
     useEffect(() => {
         if (isHashChanged) {
-            close();
+            onClose();
         }
     }, [isHashChanged])
 
     useEffect(() => {
+        return () => {
+            onClose()
+        };
+
+    }, [])
+
+    useEffect(() => {
+        console.log(isOpen)
         if (getDeviceWidth < 768) {
-            if (isShow) {
-                addNavigation('modal')
+            if (isOpen) {
+                addNavigation(randomUUIDRef.current)
             } else {
                 removeNavigation();
             }
         }
-        document.body.style.overflow = isShow ? "hidden" : "auto";
+        document.body.style.overflow = isOpen ? "hidden" : "auto";
         return () => {
             document.body.style.overflow = "auto";
         };
 
-    }, [isShow]);
+    }, [isOpen]);
 
-    return isShow ? (
+    return isOpen ? (
         <div
             className={`naria-modal__backdrop ${backdrop !== 'transparent' ? `naria-modal__backdrop--${backdrop}` : ''} ${!backdropDismissible ? "naria-modal__backdrop--dismissible" : ""} ${
-                isShow ? "naria-modal__backdrop--show" : ''
+                isOpen ? "naria-modal__backdrop--show" : ''
             } ${classNames.backdrop}`}
             data-class-prop="backdrop"
             onClick={onBackdropClick}
         >
             <div
-                className={`naria-modal ${isShow ? "naria-modal--show" : ""} ${
+                className={`naria-modal ${isOpen ? "naria-modal--show" : ""} ${
                     getDeviceWidth < 768 ? `naria-modal--mobile ` : `naria-modal--desktop`
                 } ${classNames.root}`}
                 data-class-prop="root"
@@ -103,8 +108,9 @@ export const Modal = forwardRef<LibModalRef, LibModalProps>(({
                         !hideCloseButton ? (
                             <>
                                 {
-                                    closeIcon ? cloneElement((closeIcon as any), {onClick: () => close()}) : (
-                                        <button className={`naria-modal__close-icon ${classNames.closeIcon}`} onClick={close} data-class-prop="closeIcon">
+                                    closeIcon ? cloneElement((closeIcon as any), {onClick: () => onClose()}) : (
+                                        <button className={`naria-modal__close-icon ${classNames.closeIcon}`}
+                                                onClick={close} data-class-prop="closeIcon">
                                             <Close/>
                                         </button>
                                     )
@@ -127,5 +133,5 @@ export const Modal = forwardRef<LibModalRef, LibModalProps>(({
             </div>
         </div>
     ) : undefined;
-});
+};
 

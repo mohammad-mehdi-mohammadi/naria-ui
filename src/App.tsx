@@ -3,48 +3,52 @@ import {Button, Calendar, Input, Popover, Select} from "../lib";
 import momentJalali from "jalali-moment";
 import momentHijri from "moment-hijri";
 import {Modal} from "../lib/components/Modal";
-import {useRef} from "react";
+import {useState} from "react";
 
 function App() {
-    const modalBasicUsageRef = useRef(undefined);
-    const modalOpaqueRef = useRef(undefined);
-    const modalBlurRef = useRef(undefined);
-    const modalTransparentRef = useRef(undefined);
-    const modalNonDismissibleRef = useRef(undefined);
+    const [isOpen, setIsOpen] = useState({
+        basicModal: false,
+        opaqueModal: false,
+        blurModal: false,
+        transparentModal: false,
+        nonDismissibleModal: false,
+        topStartPopover: false,
+        topPopover: false,
+        topEndPopover: false,
+    })
     return (
         <>
             <h1>Modal</h1>
             <p>Basic usage</p>
-            <button onClick={() => modalBasicUsageRef?.current?.toggle()}>Open modal</button>
-            <Modal ref={modalBasicUsageRef} title = "Modal">
+            <button onClick={() => setIsOpen({...isOpen, basicModal: true})}>Open modal</button>
+            <Modal isOpen={isOpen.basicModal} title = "Modal" onOpenChange = {(e) => setIsOpen({...isOpen, basicModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Basic usage modal
                 </div>
             </Modal>
-
             <p>Backdrop</p>
-            <button onClick={() => modalOpaqueRef?.current?.toggle()}>Open opaque modal</button>
-            <Modal ref={modalOpaqueRef} backdrop = "opaque">
+            <button onClick={() => setIsOpen({...isOpen, opaqueModal: true})}>Open opaque modal</button>
+            <Modal isOpen={isOpen.opaqueModal} title = "Modal" backdrop = "opaque" onOpenChange = {(e) => setIsOpen({...isOpen, opaqueModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Open opaque modal
                 </div>
             </Modal>
-            <button onClick={() => modalBlurRef?.current?.toggle()}>Open blur modal</button>
-            <Modal ref={modalBlurRef} backdrop = "blur">
+            <button onClick={() => setIsOpen({...isOpen, blurModal: true})}>Open blur modal</button>
+            <Modal isOpen={isOpen.blurModal} title = "Modal" backdrop = "blur" onOpenChange = {(e) => setIsOpen({...isOpen, blurModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Open blur modal
                 </div>
             </Modal>
-            <button onClick={() => modalTransparentRef?.current?.toggle()}>Open transparent modal</button>
-            <Modal ref={modalTransparentRef} backdrop = "transparent">
+            <button onClick={() => setIsOpen({...isOpen, transparentModal: true})}>Open transparent modal</button>
+            <Modal isOpen={isOpen.transparentModal} title = "Modal" backdrop = "transparent" onOpenChange = {(e) => setIsOpen({...isOpen, transparentModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Open transparent modal
                 </div>
             </Modal>
 
             <p>Backdrop | Non-dismissible</p>
-            <button onClick={() => modalNonDismissibleRef?.current?.toggle()}>Open non-dismissible modal</button>
-            <Modal ref={modalNonDismissibleRef} backdropDismissible = {false}>
+            <button onClick={() => setIsOpen({...isOpen, nonDismissibleModal: true})}>Open non-dismissible modal</button>
+            <Modal isOpen={isOpen.nonDismissibleModal} title = "Modal" backdropDismissible = {false} onOpenChange = {(e) => setIsOpen({...isOpen, nonDismissibleModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Open non-dismissible modal
                 </div>
@@ -53,20 +57,20 @@ function App() {
             <p>Basic usage</p>
             <div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "top-start">
-                        <button>Top start</button>
+                    <Popover placement = "top-start" isOpen = {isOpen.topStartPopover} onOpenChange = {(e) => setIsOpen({...isOpen, topStartPopover: e})}>
+                        <button onClick={() => setIsOpen({...isOpen, basicPopover: true})}>Top start</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "top">
-                        <button>Top</button>
+                    <Popover placement = "top" isOpen = {isOpen.topPopover} onOpenChange = {(e) => setIsOpen({...isOpen, topPopover: e})}>
+                        <button onClick={() => setIsOpen({...isOpen, topPopover: true})}>Top</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "top-end">
-                        <button>Top end</button>
+                    <Popover placement = "top-end" isOpen = {isOpen.topEndPopover} onOpenChange = {(e) => setIsOpen({...isOpen, topEndPopover: e})}>
+                        <button onClick={() => setIsOpen({...isOpen, topEndPopover: true})}>Top end</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>

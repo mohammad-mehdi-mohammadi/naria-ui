@@ -13,6 +13,8 @@ export interface props {
         errorText?: string;
     };
     placement?: "top-start" | "top" | "top-end" | "bottom-start" | "bottom" | "bottom-end" | "right-start" | "right" | "right-end" | "left-start" | "left" | "left-end";
+    isOpen: boolean;
+    onOpenChange: any;
     children?: any;
 }
 
@@ -25,11 +27,13 @@ export const Popover: FC<props> = ({
                                            errorText: "",
                                        },
                                        placement = "bottom-start",
+                                       isOpen = false,
+                                       onOpenChange,
                                        children,
                                        ...otherProps
                                    }) => {
     const [trigger, content] = Children.toArray(children);
-    const [isShow, setIsShow] = useState(false);
+    // const [isShow, setIsShow] = useState(false);
     const [animate, setAnimation] = useState({
         type: "fade-in-scale",
         position: ""
@@ -46,20 +50,23 @@ export const Popover: FC<props> = ({
         right: undefined,
     });
     const getDeviceWidth = useWidth();
-    const isHashChanged = onHashChanges('#popover');
     const rootRef = useRef(undefined);
     const handlerRef = useRef(undefined);
-    const onTrigger = () => {
-        setIsShow(prevState => !prevState);
-    }
+    const randomUUIDRef = useRef(window.crypto.randomUUID());
+    const isHashChanged = onHashChanges('#' + randomUUIDRef.current);
+    // const onOpen = () => onOpenChange(true);
     const onClose = () => {
-        setIsShow(false);
-
-    }
+        if (onOpenChange) onOpenChange(false)
+    };
+    const onToggle = () => {
+        if (onOpenChange) {
+            onOpenChange(!isOpen)
+        }
+    };
     useClickOutside(rootRef, handlerRef, onClose);
 
     useEffect(() => {
-        if (!isShow) {
+        if (!isOpen) {
             setBounds({
                 top: undefined,
                 bottom: undefined,
@@ -69,11 +76,11 @@ export const Popover: FC<props> = ({
         } else {
             update()
         }
-    }, [isShow])
+    }, [isOpen])
     useEffect(() => {
         if (getDeviceWidth < 768) {
-            if (isShow) {
-                addNavigation('popover');
+            if (isOpen) {
+                addNavigation(randomUUIDRef.current);
                 // document.body.style.overflow = 'hidden';
                 handlerRef.current?.focus();
             } else {
@@ -83,10 +90,10 @@ export const Popover: FC<props> = ({
                 // document.body.style.overflow = 'auto';
             }
         }
-    }, [isShow]);
+    }, [isOpen]);
     useEffect(() => {
         if (isHashChanged) {
-            setIsShow(false)
+            onClose()
         }
     }, [isHashChanged])
 
@@ -360,6 +367,9 @@ export const Popover: FC<props> = ({
             }
         }, 0)
     };
+    const onBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.currentTarget === e.target) onClose();
+    };
 
     useEffect(() => {
         window.addEventListener("resize", update);
@@ -369,18 +379,23 @@ export const Popover: FC<props> = ({
     }, [update]);
     return (
         <div className={`naria-popover ${classNames.root}`} data-class-prop="root">
-            {cloneElement((trigger as any), {onClick: () => onTrigger(), ref: handlerRef})}
+            {cloneElement((trigger as any), {onClick: () => onToggle(), ref: handlerRef})}
             {
-                isShow && (
+                isOpen && (
                     <>
                         {
                             getDeviceWidth < 768 ? (
                                 <div
-                                    className={`naria-modal__backdrop`}
+                                    onClick={onBackdropClick}
+                                    className={`naria-popover__backdrop`}
                                     data-class-prop="backdrop"
-                                >{content}</div>
+                                >
+                                    <div className={`naria-popover__content naria-popover__content--mobile`}>
+                                        {content}
+                                    </div>
+                                </div>
                             ) : (
-                                <div className={`naria-popover__content ${animate.type} ${animate.position}`} ref={rootRef}
+                                <div className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position}`} ref={rootRef}
                                      style={{
                                          bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
                                          top: bounds.top !== undefined ? bounds.top : "unset",

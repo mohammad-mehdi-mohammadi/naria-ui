@@ -7,8 +7,9 @@ import './modal.scss';
 export interface LibModalProps {
     title?: string;
     children?: React.ReactNode;
-    size?: string;
-    height?: string;
+    size?: "sm" | "md" | "lg" | "xl" | "full";
+    backdropDismissible?: boolean;
+    backdrop: "opaque" | "blur" | "transparent";
 }
 
 export interface LibModalRef {
@@ -17,7 +18,7 @@ export interface LibModalRef {
     toggle: () => void;
 }
 
-export const Modal = forwardRef<LibModalRef, LibModalProps>(({title, size, height, children}, ref) => {
+export const Modal = forwardRef<LibModalRef, LibModalProps>(({title, size = "lg", backdropDismissible= true, backdrop = "opaque", children}, ref) => {
     const getDeviceWidth = useWidth();
     const isHashChanged = onHashChanges('#modal');
     const [isShow, setIsShow] = useState(false);
@@ -29,7 +30,7 @@ export const Modal = forwardRef<LibModalRef, LibModalProps>(({title, size, heigh
     useImperativeHandle(ref, () => ({open, close, toggle}), []);
 
     const onBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.currentTarget === e.target) close();
+        if (backdropDismissible && e.currentTarget === e.target) close();
     };
 
     useEffect(() => {
@@ -40,7 +41,7 @@ export const Modal = forwardRef<LibModalRef, LibModalProps>(({title, size, heigh
     }, [isHashChanged])
 
     useEffect(() => {
-        if (getDeviceWidth < 1024) {
+        if (getDeviceWidth < 768) {
             if (isShow) {
                 addNavigation('modal')
             } else {
@@ -56,31 +57,28 @@ export const Modal = forwardRef<LibModalRef, LibModalProps>(({title, size, heigh
     
     return isShow ? (
         <div
-            className={`naria-modal__backdrop ${
+            className={`naria-modal__backdrop naria-modal__backdrop--${backdrop} ${!backdropDismissible ? "naria-modal__backdrop--dismissible" : ""} ${
                 isShow ? "naria-modal__backdrop--show" : ""
             }`}
             onClick={onBackdropClick}
         >
             <div
-                className={`transform p-3 md:p-5 rounded-t-2xl lg:rounded-2xl bg-grey-100 shadow-xl transition-opacity
-                 duration-200 lg:h-auto w-full ${
-                    size || " lg:max-w-2xl"
-                } ${isShow ? "opacity-1" : "opacity-0 pointer-events-none"} ${
-                    getDeviceWidth < 1024 ? `${height ? height : "h-[90vh]"} animate-drawer-bottom-to-top` : `${height ? height : "h-full"} animate-fade-in-translate-y`
+                className={`naria-modal ${size} ${isShow ? "naria-modal--show" : ""} ${
+                    getDeviceWidth < 768 ? `naria-modal--mobile ` : `naria-modal--desktop`
                 }`}
             >
-                <div className="flex items-center justify-between">
+                <div className="naria-modal__head flex items-center justify-between">
                     <div className="font-bold text-base lg:text-lg">{title ?? ""}</div>
                     <button className="inline-block" onClick={close}>
                         <Close className="w-6"/>
                     </button>
                 </div>
                 <div
-                    className="h-full overflow-y-auto mt-3 md:mt-5 max-h-[calc(100%-40px)] lg:max-h-[calc(100vh-90px)]">
+                    className="naria-modal__body h-full overflow-y-auto mt-3 md:mt-5 max-h-[calc(100%-40px)] lg:max-h-[calc(100vh-90px)]">
                     {children}
                 </div>
             </div>
         </div>
-    ) : <></>;
+    ) : undefined;
 });
 

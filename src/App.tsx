@@ -6,14 +6,55 @@ import {Modal} from "../lib/components/Modal";
 import {useRef} from "react";
 
 function App() {
-    const modalRef = useRef(undefined);
+    const modalBasicUsageRef = useRef(undefined);
+    const modalSMRef = useRef(undefined);
+    const modalMDRef = useRef(undefined);
+    const modalOpaqueRef = useRef(undefined);
+    const modalBlurRef = useRef(undefined);
+    const modalNonDismissibleRef = useRef(undefined);
     return (
         <>
             <h1>Modal</h1>
-            <button onClick={() => modalRef?.current?.toggle()}>Open modal</button>
-            <Modal ref={modalRef} size="lg:max-w-5xl xl:max-w-7xl">
+            <p>Basic usage</p>
+            <button onClick={() => modalBasicUsageRef?.current?.toggle()}>Open modal</button>
+            <Modal ref={modalBasicUsageRef}>
                 <div className="mx-auto max-w-7xl">
-asdadad
+                    Basic usage modal
+                </div>
+            </Modal>
+            <p>Sizes</p>
+            <button onClick={() => modalSMRef?.current?.toggle()}>Open sm-size modal</button>
+            <Modal ref={modalSMRef} size = "sm">
+                <div className="mx-auto max-w-7xl">
+                    Open sm-size modal
+                </div>
+            </Modal>
+            <button onClick={() => modalMDRef?.current?.toggle()}>Open md-size modal</button>
+            <Modal ref={modalMDRef} size = "md">
+                <div className="mx-auto max-w-7xl">
+                    Open md-size modal
+                </div>
+            </Modal>
+
+            <p>Backdrop</p>
+            <button onClick={() => modalOpaqueRef?.current?.toggle()}>Open opaque modal</button>
+            <Modal ref={modalOpaqueRef} backdrop = "opaque">
+                <div className="mx-auto max-w-7xl">
+                    Open opaque modal
+                </div>
+            </Modal>
+            <button onClick={() => modalBlurRef?.current?.toggle()}>Open blur modal</button>
+            <Modal ref={modalBlurRef} backdrop = "blur">
+                <div className="mx-auto max-w-7xl">
+                    Open blur modal
+                </div>
+            </Modal>
+
+            <p>Backdrop | Non-dismissible</p>
+            <button onClick={() => modalNonDismissibleRef?.current?.toggle()}>Open non-dismissible modal</button>
+            <Modal ref={modalNonDismissibleRef} backdropDismissible = {false}>
+                <div className="mx-auto max-w-7xl">
+                    Open non-dismissible modal
                 </div>
             </Modal>
             <h1>Popover</h1>

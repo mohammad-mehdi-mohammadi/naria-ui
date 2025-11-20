@@ -1,5 +1,5 @@
 .naria-modal__backdrop {
-  background-color: rgba(0, 0, 0, 0.2);
+
   position: fixed;
   align-items: end;
   justify-content: center;
@@ -13,8 +13,43 @@
   opacity: 0;
   overflow: hidden;
   z-index: 999;
+  cursor: pointer;
+
+  &.naria-modal__backdrop--dismissible {
+    cursor: default;
+  }
+  &.naria-modal__backdrop--opaque {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  &.naria-modal__backdrop--blur {
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+  }
 
   &.naria-modal__backdrop--show {
     opacity: 1;
+  }
+
+  .naria-modal {
+    cursor: default;
+    opacity: 0;
+    width: 100%;
+    &.naria-modal--show {
+      opacity: 1;
+    }
+    &.naria-modal--desktop {
+      animation: fadeInTranslateY 0.2s ease-out forwards;
+    }
+    &.naria-modal--mobile {
+      animation: fadeInBottomToTop 0.2s ease-out forwards;
+    }
+  }
+
+}
+
+@media screen and (min-width: 768px) {
+  .naria-modal__backdrop {
+    place-items: center;
   }
 }

@@ -424,7 +424,7 @@ export const Calendar: FC<props> = ({
                                 [...Array(12)].map((_, index) => {
                                     return <button type="button" key={index + 1}
                                                    disabled={(min ? getMinMonthDisable(index) : false) || (max ? getMaxMonthDisable(index) : false)}
-                                                   className={`naria-calendar__month ${selectedDate.year === date.year && selectedDate.month === addZeroToLessTenNumber(index + 1) ? "naria-calendar__month--selected" : ''} ${classNames.month} ${classNames.selectedMonth}`}
+                                                   className={`naria-calendar__month ${classNames.month} ${selectedDate.year === date.year && selectedDate.month === addZeroToLessTenNumber(index + 1) ? `naria-calendar__month--selected ${classNames.selectedMonth}` : ''}`}
                                                    onClick={() => onMonth(index + 1)}
                                                    data-class-prop="month">{convertMonth(index + 1, mode)}</button>
                                 })
@@ -447,7 +447,7 @@ export const Calendar: FC<props> = ({
                                     month.map((item: any, index: number) => {
                                         return <button type="button" key={index}
                                                        disabled={(min ? getMinDayDisable(item) : false) || (max ? getMaxDayDisable(item) : false) || !item.isCurrent}
-                                                       className={`naria-calendar__day ${selectedDate.year === item.year && selectedDate.month === item.month && selectedDate.day === addZeroToLessTenNumber(item.day) ? "naria-calendar__day--selected" : ''} ${classNames.day} ${classNames.selectedDay}`}
+                                                       className={`naria-calendar__day ${classNames.day} ${selectedDate.year === item.year && selectedDate.month === item.month && selectedDate.day === addZeroToLessTenNumber(item.day) ? `naria-calendar__day--selected ${classNames.selectedDay}` : ''}`}
                                                        onClick={() => onDate(item)} data-class-prop="day">{item.day}
                                         </button>
                                     })

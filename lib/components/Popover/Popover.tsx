@@ -7,10 +7,8 @@ import {useWidth} from "../../hooks/use-width";
 export interface props {
     classNames?: {
         root?: string;
-        label?: string;
-        title?: string;
-        input?: string;
-        errorText?: string;
+        backdrop?: string;
+        content?: string;
     };
     placement?: "top-start" | "top" | "top-end" | "bottom-start" | "bottom" | "bottom-end" | "right-start" | "right" | "right-end" | "left-start" | "left" | "left-end";
     isOpen: boolean;
@@ -21,10 +19,8 @@ export interface props {
 export const Popover: FC<props> = ({
                                        classNames = {
                                            root: "",
-                                           label: "",
-                                           title: "",
-                                           input: "",
-                                           errorText: "",
+                                           backdrop: "",
+                                           content: "",
                                        },
                                        placement = "bottom-start",
                                        isOpen = false,
@@ -387,21 +383,20 @@ export const Popover: FC<props> = ({
                             getDeviceWidth < 768 ? (
                                 <div
                                     onClick={onBackdropClick}
-                                    className={`naria-popover__backdrop`}
-                                    data-class-prop="backdrop"
-                                >
-                                    <div className={`naria-popover__content naria-popover__content--mobile`}>
+                                    className={`naria-popover__backdrop ${classNames.backdrop}`}
+                                    data-class-prop="backdrop">
+                                    <div className={`naria-popover__content naria-popover__content--mobile ${classNames.content}`} data-class-prop="content">
                                         {content}
                                     </div>
                                 </div>
                             ) : (
-                                <div className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position}`} ref={rootRef}
+                                <div className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position} ${classNames.content}`} ref={rootRef}
                                      style={{
                                          bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
                                          top: bounds.top !== undefined ? bounds.top : "unset",
                                          left: bounds.left !== undefined ? bounds.left : "unset",
                                          right: bounds.right !== undefined ? bounds.right : "unset",
-                                     }}>
+                                     }} data-class-prop="content">
                                     {content}
                                 </div>
                             )

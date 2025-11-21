@@ -18,20 +18,22 @@ interface Day {
 export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
     mode?: "Gregorian" | "Jalali" | "Hijri";
     classNames?: {
-        root: string;
-        prevYear: string;
-        prevMonth: string;
-        nextYear: string;
-        nextMonth: string;
-        monthYear: string;
-        header: string;
-        body: string;
-        months: string;
-        month: string;
-        weekdays: string;
-        weekday: string;
-        days: string;
-        day: string;
+        root?: string;
+        prevYear?: string;
+        prevMonth?: string;
+        nextYear?: string;
+        nextMonth?: string;
+        monthYear?: string;
+        header?: string;
+        body?: string;
+        months?: string;
+        month?: string;
+        selectedMonth?: string;
+        weekdays?: string;
+        weekday?: string;
+        days?: string;
+        day?: string;
+        selectedDay?: string;
     };
     selected?: Date;
     min?: Date;
@@ -54,10 +56,12 @@ export const Calendar: FC<props> = ({
                                             body: "",
                                             months: "",
                                             month: "",
+                                            selectedMonth: "",
                                             weekdays: "",
                                             weekday: "",
                                             days: "",
                                             day: "",
+                                            selectedDay: "",
                                         },
                                         selected,
                                         min,
@@ -69,7 +73,7 @@ export const Calendar: FC<props> = ({
                                     }) => {
     const m = useRef(mode === "Hijri" ? momentHijri() : momentJalali());
     const moment = useRef<any>(mode === "Hijri" ? momentHijri : momentJalali);
-    const today = useRef(m.current);
+    // const today = useRef(m.current);
     const formatType = useRef({
         day: "DD",
         month: "MM",
@@ -354,7 +358,7 @@ export const Calendar: FC<props> = ({
     */
     const getMinMonthDisable = (index: number) => {
         const diff = moment.current(`${date.year}/${index + 1}`, `${formatType.current.year}/${formatType.current.month}`).diff(min, 'day')
-        if(diff > 0) {
+        if (diff > 0) {
             return !diff;
         }
         return getDayOfMonth(m.current) - Math.abs(diff) < 1;
@@ -374,7 +378,7 @@ export const Calendar: FC<props> = ({
     }
     const getMaxNextMonthYearDisable = () => {
         const diff = moment.current(`${date.year}/${date.month}`, `${formatType.current.year}/${formatType.current.month}`).diff(max, 'day')
-        if(diff > 0) {
+        if (diff > 0) {
             return true
         }
         return getDayOfMonth(m.current) - Math.abs(diff) >= 1;
@@ -385,21 +389,30 @@ export const Calendar: FC<props> = ({
     return (
         <div className={`naria-calendar ${classNames.root}`} data-class-prop="root">
             <div className={`naria-calendar__header ${classNames.header}`} data-class-prop="header">
-                <button type = "button" onClick={onPrevYear} className={`naria-calendar__prev-year ${classNames.prevYear}`} disabled={min ? getMinPrevMonthYearDisable() : false} data-class-prop="prevYear">
+                <button type="button" onClick={onPrevYear}
+                        className={`naria-calendar__prev-year ${classNames.prevYear}`}
+                        disabled={min ? getMinPrevMonthYearDisable() : false} data-class-prop="prevYear">
                     <AnglesRight/>
                 </button>
-                <button type = "button" onClick={onPrevMonth} className={`naria-calendar__prev-month ${classNames.prevMonth}`} disabled={min ? getMinPrevMonthYearDisable() : false} data-class-prop="prevMonth">
+                <button type="button" onClick={onPrevMonth}
+                        className={`naria-calendar__prev-month ${classNames.prevMonth}`}
+                        disabled={min ? getMinPrevMonthYearDisable() : false} data-class-prop="prevMonth">
                     <AngleRight/>
                 </button>
-                <button type = "button" className={`naria-calendar__month-year ${classNames.monthYear}`} data-class-prop="monthYear" onClick={onShowMonths}>
+                <button type="button" className={`naria-calendar__month-year ${classNames.monthYear}`}
+                        data-class-prop="monthYear" onClick={onShowMonths}>
                     {
                         !showMonths && convertMonth(date.month, mode)
                     } {date.year}
                 </button>
-                <button type = "button" onClick={onNextMonth} className={`naria-calendar__next-month ${classNames.nextMonth}`} disabled={max ? getMaxNextMonthYearDisable() : false} data-class-prop="nextMonth">
+                <button type="button" onClick={onNextMonth}
+                        className={`naria-calendar__next-month ${classNames.nextMonth}`}
+                        disabled={max ? getMaxNextMonthYearDisable() : false} data-class-prop="nextMonth">
                     <AngleRight/>
                 </button>
-                <button type = "button" onClick={onNextYear} className={`naria-calendar__next-year ${classNames.nextYear}`} disabled={max ? getMaxNextMonthYearDisable() : false} data-class-prop="nextYear">
+                <button type="button" onClick={onNextYear}
+                        className={`naria-calendar__next-year ${classNames.nextYear}`}
+                        disabled={max ? getMaxNextMonthYearDisable() : false} data-class-prop="nextYear">
                     <AnglesRight/>
                 </button>
             </div>
@@ -409,28 +422,32 @@ export const Calendar: FC<props> = ({
                         <div className={`naria-calendar__months ${classNames.months}`} data-class-prop="months">
                             {
                                 [...Array(12)].map((_, index) => {
-                                    return <button type = "button" key={index + 1}
+                                    return <button type="button" key={index + 1}
                                                    disabled={(min ? getMinMonthDisable(index) : false) || (max ? getMaxMonthDisable(index) : false)}
-                                                   className={`naria-calendar__month ${selectedDate.year === date.year && selectedDate.month === addZeroToLessTenNumber(index + 1) ? "naria-calendar__month--selected" : ''} ${classNames.month}`}
-                                                   onClick={() => onMonth(index + 1)} data-class-prop="month">{convertMonth(index + 1, mode)}</button>
+                                                   className={`naria-calendar__month ${selectedDate.year === date.year && selectedDate.month === addZeroToLessTenNumber(index + 1) ? "naria-calendar__month--selected" : ''} ${classNames.month} ${classNames.selectedMonth}`}
+                                                   onClick={() => onMonth(index + 1)}
+                                                   data-class-prop="month">{convertMonth(index + 1, mode)}</button>
                                 })
                             }
                         </div>
                     ) : (
                         <>
-                            <div className={`naria-calendar__weekdays ${classNames.weekdays}`} data-class-prop="weekdays">
+                            <div className={`naria-calendar__weekdays ${classNames.weekdays}`}
+                                 data-class-prop="weekdays">
                                 {
                                     [...Array(7)].map((_, index) => {
-                                        return <div key={index} className={`naria-calendar__weekday ${classNames.weekday}`} data-class-prop="weekday">{convertWeekDay(index + 1, mode)}</div>
+                                        return <div key={index}
+                                                    className={`naria-calendar__weekday ${classNames.weekday}`}
+                                                    data-class-prop="weekday">{convertWeekDay(index + 1, mode)}</div>
                                     })
                                 }
                             </div>
                             <div className={`naria-calendar__days ${classNames.days}`} data-class-prop="days">
                                 {
                                     month.map((item: any, index: number) => {
-                                        return <button type = "button" key={index}
+                                        return <button type="button" key={index}
                                                        disabled={(min ? getMinDayDisable(item) : false) || (max ? getMaxDayDisable(item) : false) || !item.isCurrent}
-                                                       className={`naria-calendar__day ${selectedDate.year === item.year && selectedDate.month === item.month && selectedDate.day === addZeroToLessTenNumber(item.day) ? "naria-calendar__day--selected" : ''} ${classNames.day}`}
+                                                       className={`naria-calendar__day ${selectedDate.year === item.year && selectedDate.month === item.month && selectedDate.day === addZeroToLessTenNumber(item.day) ? "naria-calendar__day--selected" : ''} ${classNames.day} ${classNames.selectedDay}`}
                                                        onClick={() => onDate(item)} data-class-prop="day">{item.day}
                                         </button>
                                     })

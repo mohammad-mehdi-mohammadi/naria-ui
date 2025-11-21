@@ -23,6 +23,15 @@ export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttribute
         prevMonth: string;
         nextYear: string;
         nextMonth: string;
+        monthYear: string;
+        header: string;
+        body: string;
+        months: string;
+        month: string;
+        weekdays: string;
+        weekday: string;
+        days: string;
+        day: string;
     };
     selected: Date;
     min: Date;
@@ -41,6 +50,15 @@ export const Calendar: FC<props> = ({
                                             prevMonth: "",
                                             nextYear: "",
                                             nextMonth: "",
+                                            monthYear: "",
+                                            header: "",
+                                            body: "",
+                                            months: "",
+                                            month: "",
+                                            weekdays: "",
+                                            weekday: "",
+                                            days: "",
+                                            day: "",
                                         },
                                         selected,
                                         min,
@@ -367,54 +385,54 @@ export const Calendar: FC<props> = ({
         minimum/maximum date of prev/next month/year - END
     */
     return (
-        <div className="naria-calendar" data-class-prop="root">
-            <div className="naria-calendar__header" data-class-prop="header">
+        <div className={`naria-calendar ${classNames.root}`} data-class-prop="root">
+            <div className={`naria-calendar__header ${classNames.header}`} data-class-prop="header">
                 <button type = "button" onClick={onPrevYear} className={`naria-calendar__prev-year ${classNames.prevYear}`} disabled={min ? getMinPrevMonthYearDisable() : false} data-class-prop="prevYear">
                     <AnglesRight/>
                 </button>
-                <button type = "button" onClick={onPrevMonth} className="naria-calendar__prev-month" disabled={min ? getMinPrevMonthYearDisable() : false} data-class-prop="prevMonth">
+                <button type = "button" onClick={onPrevMonth} className={`naria-calendar__prev-month ${classNames.prevMonth}`} disabled={min ? getMinPrevMonthYearDisable() : false} data-class-prop="prevMonth">
                     <AngleRight/>
                 </button>
-                <button type = "button" className="naria-calendar__month-year" onClick={onShowMonths}>
+                <button type = "button" className={`naria-calendar__month-year ${classNames.monthYear}`} data-class-prop="monthYear" onClick={onShowMonths}>
                     {
                         !showMonths && convertMonth(date.month, mode)
                     } {date.year}
                 </button>
-                <button type = "button" onClick={onNextMonth} className="naria-calendar__next-month" disabled={max ? getMaxNextMonthYearDisable() : false} data-class-prop="nextMonth">
+                <button type = "button" onClick={onNextMonth} className={`naria-calendar__next-month ${classNames.nextMonth}`} disabled={max ? getMaxNextMonthYearDisable() : false} data-class-prop="nextMonth">
                     <AngleRight/>
                 </button>
-                <button type = "button" onClick={onNextYear} className="naria-calendar__next-year" disabled={max ? getMaxNextMonthYearDisable() : false} data-class-prop="nextYear">
+                <button type = "button" onClick={onNextYear} className={`naria-calendar__next-year ${classNames.nextYear}`} disabled={max ? getMaxNextMonthYearDisable() : false} data-class-prop="nextYear">
                     <AnglesRight/>
                 </button>
             </div>
-            <div className="naria-calendar__body" data-class-prop="body">
+            <div className={`naria-calendar__body ${classNames.body}`} data-class-prop="body">
                 {
                     showMonths ? (
-                        <div className="naria-calendar__months" data-class-prop="months">
+                        <div className={`naria-calendar__months ${classNames.months}`} data-class-prop="months">
                             {
                                 [...Array(12)].map((_, index) => {
                                     return <button type = "button" key={index + 1}
                                                    disabled={(min ? getMinMonthDisable(index) : false) || (max ? getMaxMonthDisable(index) : false)}
-                                                   className={`naria-calendar__month ${selectedDate.year === date.year && selectedDate.month === addZeroToLessTenNumber(index + 1) ? "naria-calendar__month--selected" : ''}`}
+                                                   className={`naria-calendar__month ${selectedDate.year === date.year && selectedDate.month === addZeroToLessTenNumber(index + 1) ? "naria-calendar__month--selected" : ''} ${classNames.month}`}
                                                    onClick={() => onMonth(index + 1)} data-class-prop="month">{convertMonth(index + 1, mode)}</button>
                                 })
                             }
                         </div>
                     ) : (
                         <>
-                            <div className="naria-calendar__weekdays" data-class-prop="weekdays">
+                            <div className={`naria-calendar__weekdays ${classNames.weekdays}`} data-class-prop="weekdays">
                                 {
                                     [...Array(7)].map((_, index) => {
-                                        return <div key={index} data-class-prop="weekday">{convertWeekDay(index + 1, mode)}</div>
+                                        return <div key={index} className={`naria-calendar__weekday ${classNames.weekday}`} data-class-prop="weekday">{convertWeekDay(index + 1, mode)}</div>
                                     })
                                 }
                             </div>
-                            <div className="naria-calendar__days" data-class-prop="days">
+                            <div className={`naria-calendar__days ${classNames.days}`} data-class-prop="days">
                                 {
                                     month.map((item: any, index: number) => {
                                         return <button type = "button" key={index}
                                                        disabled={(min ? getMinDayDisable(item) : false) || (max ? getMaxDayDisable(item) : false) || !item.isCurrent}
-                                                       className={`naria-calendar__day ${selectedDate.year === item.year && selectedDate.month === item.month && selectedDate.day === addZeroToLessTenNumber(item.day) ? "naria-calendar__day--selected" : ''}`}
+                                                       className={`naria-calendar__day ${selectedDate.year === item.year && selectedDate.month === item.month && selectedDate.day === addZeroToLessTenNumber(item.day) ? "naria-calendar__day--selected" : ''} ${classNames.day}`}
                                                        onClick={() => onDate(item)} data-class-prop="day">{item.day}
                                         </button>
                                     })

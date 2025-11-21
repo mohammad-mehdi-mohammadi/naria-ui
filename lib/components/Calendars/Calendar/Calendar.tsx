@@ -33,11 +33,10 @@ export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttribute
         days: string;
         day: string;
     };
-    selected: Date;
-    min: Date;
-    max: Date;
-    onChange: any;
-    isLoading?: boolean;
+    selected?: Date;
+    min?: Date;
+    max?: Date;
+    onChange?: any;
     isDisabled?: boolean;
     icon?: ReactNode;
 }
@@ -65,7 +64,6 @@ export const Calendar: FC<props> = ({
                                         max,
                                         onChange,
                                         icon = null,
-                                        isLoading = false,
                                         isDisabled = false,
                                         ...otherProps
                                     }) => {

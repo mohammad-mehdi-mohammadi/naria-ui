@@ -306,16 +306,17 @@ export const Popover: FC<props> = ({
                         break;
                     }
                     case placement === "top-start": {
-                        if (handlerRefRect.top - rect.height > 0) {
+                        console.log(handlerRefRect, rect, (window.innerHeight - handlerRefRect.top) - window.scrollY)
+                        if (handlerRefRect.top > rect.height) {
                             setAnimation({
                                 type: animate.type,
                                 position: "transform-origin-bottom-start"
                             });
                             setBounds({
                                 top: undefined,
-                                bottom: handlerRefRect.height,
-                                left: !isRtl ? 0 : undefined,
-                                right: isRtl ? 0 : undefined,
+                                bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
+                                left: !isRtl ? handlerRefRect.left : undefined,
+                                right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                             })
                         } else {
                             setAnimation({
@@ -323,10 +324,10 @@ export const Popover: FC<props> = ({
                                 position: "transform-origin-top-start"
                             });
                             setBounds({
-                                top: handlerRefRect.height,
+                                top: handlerRefRect.bottom + window.scrollY,
                                 bottom: undefined,
-                                left: !isRtl ? 0 : undefined,
-                                right: isRtl ? 0 : undefined,
+                                left: !isRtl ? handlerRefRect.left : undefined,
+                                right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                             })
                         }
 

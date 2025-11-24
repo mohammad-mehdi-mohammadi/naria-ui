@@ -99,13 +99,9 @@ export const Popover: FC<props> = ({
 
 
     useEffect(() => {
-        ["scroll"].forEach(type => {
-            window.addEventListener(type, onClose);
-        });
+        document.addEventListener('scroll', onClose, {capture: true});
         return () => {
-            ["scroll"].forEach(type => {
-                window.removeEventListener(type, onClose);
-            });
+            document.removeEventListener('scroll', onClose, {capture: true});
         };
     }, [])
     const update = () => {
@@ -264,6 +260,7 @@ export const Popover: FC<props> = ({
                             }
                         }
                         if (!isRtl) {
+                            console.log(handlerRefRect.left, rect.width, handlerRefRect.width)
                             if (((rect.width / 2) - (handlerRefRect.width / 2)) < handlerRefRect.left) {
                                 bounds = {
                                     ...bounds,
@@ -378,38 +375,43 @@ export const Popover: FC<props> = ({
     }, [update]);
     return (
         <>
-            {cloneElement((trigger as any), {onClick: () => onToggle(), ref: handlerRef})}
 
+            <div className={`naria-popover ${classNames.root}`} data-class-prop="root">
+                {cloneElement((trigger as any), {onClick: () => onToggle(), ref: handlerRef})}
+            </div>
 
 
             <Portal>
                 {
                     isOpen ? (
-                        <div className={`naria-popover ${classNames.root}`} data-class-prop="root">
+                        <>
                             {
                                 getDeviceWidth < 768 ? (
                                     <div
                                         onClick={onBackdropClick}
                                         className={`naria-popover__backdrop ${classNames.backdrop}`}
                                         data-class-prop="backdrop">
-                                        <div className={`naria-popover__content naria-popover__content--mobile ${classNames.content}`} data-class-prop="content">
+                                        <div
+                                            className={`naria-popover__content naria-popover__content--mobile ${classNames.content}`}
+                                            data-class-prop="content">
                                             {content}
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position} ${classNames.content}`} ref={rootRef}
-                                         style={{
-                                             bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
-                                             top: bounds.top !== undefined ? bounds.top : "unset",
-                                             left: bounds.left !== undefined ? bounds.left : "unset",
-                                             right: bounds.right !== undefined ? bounds.right : "unset",
-                                         }} data-class-prop="content">
+                                    <div
+                                        className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position} ${classNames.content}`}
+                                        ref={rootRef}
+                                        style={{
+                                            bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
+                                            top: bounds.top !== undefined ? bounds.top : "unset",
+                                            left: bounds.left !== undefined ? bounds.left : "unset",
+                                            right: bounds.right !== undefined ? bounds.right : "unset",
+                                        }} data-class-prop="content">
                                         {content}
                                     </div>
                                 )
                             }
-                        </div>
-
+                        </>
                     ) : undefined
                 }
             </Portal>

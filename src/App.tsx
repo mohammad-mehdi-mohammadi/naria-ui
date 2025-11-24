@@ -99,7 +99,6 @@ function App() {
                              onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>
                         <button>Top start</button>
                         <Calendar mode="Gregorian" onChange={() => {
-                            console.log('asd-ad-')
                             setIsOpen({...isOpen, topStartPopover: false})
                         }}/>
                     </Popover>

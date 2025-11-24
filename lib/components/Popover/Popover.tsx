@@ -1,12 +1,10 @@
-import {Children, cloneElement, forwardRef, useEffect, useRef, useState} from "react";
+import {Children, cloneElement, FC, useEffect, useRef, useState} from "react";
 import useClickOutside from "../../hooks/click-outside";
 import './popover.scss';
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 import {useWidth} from "../../hooks/use-width";
-import {createRoot} from "react-dom/client";
 
-
-export interface LibModalProps {
+export interface props {
     classNames?: {
         root?: string;
         backdrop?: string;
@@ -14,32 +12,28 @@ export interface LibModalProps {
     };
     placement?: "top-start" | "top" | "top-end" | "bottom-start" | "bottom" | "bottom-end" | "right-start" | "right" | "right-end" | "left-start" | "left" | "left-end";
     isOpen: boolean;
+    onOpenChange: any;
     children?: any;
 }
 
-export interface LibModalRef {
-    onOpen: () => void;
-    onClose: () => void;
-    onToggle: () => void;
-}
-
-export const Popover = forwardRef<LibModalRef, LibModalProps>(({
-                                                                   classNames = {
-                                                                       root: "",
-                                                                       backdrop: "",
-                                                                       content: "",
-                                                                   },
-                                                                   placement = "bottom-start",
-                                                                   children,
-                                                                   ...otherProps
-                                                               }, ref) => {
+export const Popover: FC<props> = ({
+                                       classNames = {
+                                           root: "",
+                                           backdrop: "",
+                                           content: "",
+                                       },
+                                       placement = "bottom-start",
+                                       isOpen = false,
+                                       onOpenChange,
+                                       children,
+                                       ...otherProps
+                                   }) => {
     const [trigger, content] = Children.toArray(children);
     // const [isShow, setIsShow] = useState(false);
     const [animate, setAnimation] = useState({
         type: "fade-in-scale",
         position: ""
     });
-    const [localIsOpen, setLocalIsOpen] = useState(false);
     const [bounds, setBounds] = useState<{
         top: undefined | number,
         bottom: undefined | number,
@@ -52,120 +46,69 @@ export const Popover = forwardRef<LibModalRef, LibModalProps>(({
         right: undefined,
     });
     const getDeviceWidth = useWidth();
-    const rootRef = useRef<HTMLDivElement | undefined>(undefined);
-    const xRef = useRef<HTMLDivElement | undefined>(undefined);
-    const yRef = useRef<any>(undefined);
+    const rootRef = useRef(undefined);
     const handlerRef = useRef(undefined);
     const randomUUIDRef = useRef(window.crypto.randomUUID());
     const isHashChanged = onHashChanges('#' + randomUUIDRef.current);
     // const onOpen = () => onOpenChange(true);
     const onClose = () => {
-        // if (onOpenChange) onOpenChange(false);
-        setLocalIsOpen(false)
+        if (onOpenChange) onOpenChange(false)
     };
     const onToggle = () => {
-        // if (onOpenChange) {
-        //     onOpenChange(!isOpen)
-        // }
-        setLocalIsOpen(prevState => !prevState)
+        if (onOpenChange) {
+            onOpenChange(!isOpen)
+        }
     };
     useClickOutside(rootRef, handlerRef, onClose);
 
     useEffect(() => {
-        if (isHashChanged) {
-            onClose()
-        }
-    }, [isHashChanged])
-    useEffect(() => {
-        if (getDeviceWidth < 768) {
-            if (localIsOpen) {
-                addNavigation(randomUUIDRef.current);
-                document.body.style.overflow = 'hidden';
-                handlerRef.current?.focus();
-            } else {
-                if (window.location.hash && !document.referrer.includes('#')) {
-                    removeNavigation();
-                }
-                document.body.style.overflow = 'auto';
-            }
-        }
-        if (localIsOpen) {
-            xRef.current = document.createElement("div");
-            document.body.appendChild(xRef.current);
-            yRef.current = createRoot(xRef.current)
-            _renderLayer();
-            update();
-        } else if (xRef.current) {
+        if (!isOpen) {
             setBounds({
                 top: undefined,
                 bottom: undefined,
                 left: undefined,
                 right: undefined,
             })
-            document.body.removeChild(xRef.current);
-            xRef.current = undefined;
-            yRef.current = undefined;
+        } else {
+            update()
         }
-
-    }, [localIsOpen])
-    const _renderLayer = () => {
-
-        if (xRef.current !== undefined) {
-            yRef.current.render(<>
-                {
-                    getDeviceWidth < 768 ? (
-                        <div
-                            onClick={onBackdropClick}
-                            className={`naria-popover__backdrop ${classNames.backdrop}`}
-                            data-class-prop="backdrop">
-                            <div
-                                className={`naria-popover__content naria-popover__content--mobile ${classNames.content}`}
-                                data-class-prop="content">
-                                {content}
-                            </div>
-                        </div>
-                    ) : (
-                        <div
-                            className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position} ${classNames.content}`}
-                            ref={rootRef}
-                            style={{
-                                bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
-                                top: bounds.top !== undefined ? bounds.top : "unset",
-                                left: bounds.left !== undefined ? bounds.left : "unset",
-                                right: bounds.right !== undefined ? bounds.right : "unset",
-                            }} data-class-prop="content">
-                            {content}
-                        </div>
-                    )
+    }, [isOpen])
+    useEffect(() => {
+        if (getDeviceWidth < 768) {
+            if (isOpen) {
+                addNavigation(randomUUIDRef.current);
+                // document.body.style.overflow = 'hidden';
+                handlerRef.current?.focus();
+            } else {
+                if (window.location.hash && !document.referrer.includes('#')) {
+                    removeNavigation();
                 }
-            </>);
+                // document.body.style.overflow = 'auto';
+            }
         }
-    }
+    }, [isOpen]);
+    useEffect(() => {
+        if (isHashChanged) {
+            onClose()
+        }
+    }, [isHashChanged])
+
+
     useEffect(() => {
         ["scroll"].forEach(type => {
             window.addEventListener(type, onClose);
         });
-
         return () => {
             ["scroll"].forEach(type => {
                 window.removeEventListener(type, onClose);
             });
-            if (xRef.current) {
-                document.body.removeChild(xRef.current);
-                yRef.current.unmount();
-                xRef.current = undefined;
-                yRef.current = undefined;
-            }
         };
     }, [])
-    useEffect(() => {
-        _renderLayer();
-    }, [bounds])
     const update = () => {
         setTimeout(() => {
             if (handlerRef?.current && rootRef.current) {
                 const isRtl = document.documentElement?.getAttribute('dir') === 'rtl';
-                const rect = rootRef?.current?.getBoundingClientRect();
+                const rect = rootRef.current.getBoundingClientRect();
                 const handlerRefRect = handlerRef.current.getBoundingClientRect();
                 switch (true) {
                     case placement === "bottom-start": {
@@ -265,6 +208,7 @@ export const Popover = forwardRef<LibModalRef, LibModalProps>(({
                                 }
                             }
                         } else {
+                            console.log()
                             if ((window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right > ((rect.width / 2) - (handlerRefRect.width / 2))) {
                                 bounds = {
                                     ...bounds,
@@ -416,7 +360,6 @@ export const Popover = forwardRef<LibModalRef, LibModalProps>(({
                         break
                     }
                 }
-                _renderLayer();
             }
         }, 0)
     };
@@ -424,17 +367,46 @@ export const Popover = forwardRef<LibModalRef, LibModalProps>(({
         if (e.currentTarget === e.target) onClose();
     };
 
-    // useEffect(() => {
-    //     window.addEventListener("resize", update);
-    //     return () => {
-    //         window.removeEventListener("resize", update);
-    //     };
-    // }, [update]);
+    useEffect(() => {
+        window.addEventListener("resize", update);
+        return () => {
+            window.removeEventListener("resize", update);
+        };
+    }, [update]);
     return (
         <div className={`naria-popover ${classNames.root}`} data-class-prop="root">
             {cloneElement((trigger as any), {onClick: () => onToggle(), ref: handlerRef})}
+            {
+                isOpen && (
+                    <>
+                        {
+                            getDeviceWidth < 768 ? (
+                                <div
+                                    onClick={onBackdropClick}
+                                    className={`naria-popover__backdrop ${classNames.backdrop}`}
+                                    data-class-prop="backdrop">
+                                    <div className={`naria-popover__content naria-popover__content--mobile ${classNames.content}`} data-class-prop="content">
+                                        {content}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position} ${classNames.content}`} ref={rootRef}
+                                     style={{
+                                         bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
+                                         top: bounds.top !== undefined ? bounds.top : "unset",
+                                         left: bounds.left !== undefined ? bounds.left : "unset",
+                                         right: bounds.right !== undefined ? bounds.right : "unset",
+                                     }} data-class-prop="content">
+                                    {content}
+                                </div>
+                            )
+                        }
+                    </>
+
+                )
+            }
         </div>
     );
-});
+};
 
 

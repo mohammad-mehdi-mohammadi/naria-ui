@@ -80,13 +80,13 @@ export const Popover: FC<props> = ({
         if (getDeviceWidth < 768) {
             if (isOpen) {
                 addNavigation(randomUUIDRef.current);
-                // document.body.style.overflow = 'hidden';
+                document.body.style.overflow = 'hidden';
                 handlerRef.current?.focus();
             } else {
                 if (window.location.hash && !document.referrer.includes('#')) {
                     removeNavigation();
                 }
-                // document.body.style.overflow = 'auto';
+                document.body.style.overflow = 'auto';
             }
         }
     }, [isOpen]);
@@ -382,7 +382,7 @@ export const Popover: FC<props> = ({
                 {cloneElement((trigger as any), {onClick: () => onToggle(), ref: handlerRef})}
 
             </div>
-            <Portal>
+            <Portal tagName="rasdad">
                 {
                     isOpen && (
                         <>

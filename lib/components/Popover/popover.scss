@@ -1,34 +1,33 @@
 .naria-popover {
-  position: relative;
 
-  .naria-popover__content {
-    cursor: default;
-    &.naria-popover__content--desktop {
-      position: absolute;
-      z-index: 1;
+}
+.naria-popover__content {
+  cursor: default;
+  &.naria-popover__content--desktop {
+    position: absolute;
+    z-index: 1;
 
-    }
-    &.naria-popover__content--mobile {
-      animation: fadeInBottomToTop 0.2s ease-out forwards;
-    }
   }
-  .naria-popover__backdrop {
-    position: fixed;
-    align-items: end;
-    justify-content: center;
-    display: flex;
-    top: 0;
-    right: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    animation: fadeIn 0.2s ease-out forwards;
-    opacity: 0;
-    overflow: hidden;
-    z-index: 999;
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.3);
+  &.naria-popover__content--mobile {
+    animation: fadeInBottomToTop 0.2s ease-out forwards;
   }
+}
+.naria-popover__backdrop {
+  position: fixed;
+  align-items: end;
+  justify-content: center;
+  display: flex;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 0.2s ease-out forwards;
+  opacity: 0;
+  overflow: hidden;
+  z-index: 999;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .fade-in-scale {
   animation: fadeInScale 0.2s ease-out forwards;

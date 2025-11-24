@@ -3,6 +3,7 @@ import {useWidth} from "../../hooks/use-width";
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 import Close from '../../assets/icons/close.svg?react';
 import './modal.scss';
+import {Portal} from "../Portal";
 
 export interface LibModalProps {
     isOpen: boolean;
@@ -75,7 +76,9 @@ export const Modal: FC<LibModalProps> = ({
         console.log(isOpen)
         if (getDeviceWidth < 768) {
             if (isOpen) {
-                addNavigation(randomUUIDRef.current)
+                setTimeout(() => {
+                    addNavigation(randomUUIDRef.current)
+                }, 30)
             } else {
                 removeNavigation();
             }
@@ -87,51 +90,59 @@ export const Modal: FC<LibModalProps> = ({
 
     }, [isOpen]);
 
-    return isOpen ? (
-        <div
-            className={`naria-modal__backdrop ${backdrop !== 'transparent' ? `naria-modal__backdrop--${backdrop}` : ''} ${!backdropDismissible ? "naria-modal__backdrop--dismissible" : ""} ${
-                isOpen ? "naria-modal__backdrop--show" : ''
-            } ${classNames.backdrop}`}
-            data-class-prop="backdrop"
-            onClick={onBackdropClick}
-        >
-            <div
-                className={`naria-modal ${isOpen ? "naria-modal--show" : ""} ${
-                    getDeviceWidth < 768 ? `naria-modal--mobile ` : `naria-modal--desktop`
-                } ${classNames.root}`}
-                data-class-prop="root"
-            >
-                <header className={`naria-modal__header ${classNames.header}`} data-class-prop="header">
-                    <div className={`naria-modal__title ${classNames.title}`}
-                         data-class-prop="title">{title ?? ""}</div>
-                    {
-                        !hideCloseButton ? (
-                            <>
+    return (
+        <Portal>
+            {
+                isOpen ? (
+                    <div
+                        className={`naria-modal__backdrop ${backdrop !== 'transparent' ? `naria-modal__backdrop--${backdrop}` : ''} ${!backdropDismissible ? "naria-modal__backdrop--dismissible" : ""} ${
+                            isOpen ? "naria-modal__backdrop--show" : ''
+                        } ${classNames.backdrop}`}
+                        data-class-prop="backdrop"
+                        onClick={onBackdropClick}
+                    >
+                        <div
+                            className={`naria-modal ${isOpen ? "naria-modal--show" : ""} ${
+                                getDeviceWidth < 768 ? `naria-modal--mobile ` : `naria-modal--desktop`
+                            } ${classNames.root}`}
+                            data-class-prop="root"
+                        >
+                            <header className={`naria-modal__header ${classNames.header}`} data-class-prop="header">
+                                <div className={`naria-modal__title ${classNames.title}`}
+                                     data-class-prop="title">{title ?? ""}</div>
                                 {
-                                    closeIcon ? cloneElement((closeIcon as any), {onClick: () => onClose()}) : (
-                                        <button className={`naria-modal__close-icon ${classNames.closeIcon}`}
-                                                onClick={onClose} data-class-prop="closeIcon">
-                                            <Close/>
-                                        </button>
-                                    )
+                                    !hideCloseButton ? (
+                                        <>
+                                            {
+                                                closeIcon ? cloneElement((closeIcon as any), {onClick: () => onClose()}) : (
+                                                    <button
+                                                        className={`naria-modal__close-icon ${classNames.closeIcon}`}
+                                                        onClick={onClose} data-class-prop="closeIcon">
+                                                        <Close/>
+                                                    </button>
+                                                )
+                                            }
+                                        </>
+                                    ) : undefined
                                 }
-                            </>
-                        ) : undefined
-                    }
-                </header>
-                <div
-                    className={`naria-modal__body ${classNames.body}`} data-class-prop="body">
-                    {children}
-                </div>
-                {
-                    footer ? (
-                        <footer className={`naria-modal__footer ${classNames.footer}`} data-class-prop="footer">
-                            {footer}
-                        </footer>
-                    ) : undefined
-                }
-            </div>
-        </div>
-    ) : undefined;
+                            </header>
+                            <div
+                                className={`naria-modal__body ${classNames.body}`} data-class-prop="body">
+                                {children}
+                            </div>
+                            {
+                                footer ? (
+                                    <footer className={`naria-modal__footer ${classNames.footer}`}
+                                            data-class-prop="footer">
+                                        {footer}
+                                    </footer>
+                                ) : undefined
+                            }
+                        </div>
+                    </div>
+                ) : undefined
+            }
+        </Portal>
+    )
 };
 

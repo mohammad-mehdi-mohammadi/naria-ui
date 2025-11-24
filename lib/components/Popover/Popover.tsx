@@ -6,7 +6,6 @@ import {useWidth} from "../../hooks/use-width";
 import {Portal} from "../Portal";
 
 
-
 export interface props {
     classNames?: {
         root?: string;
@@ -65,31 +64,33 @@ export const Popover: FC<props> = ({
     useClickOutside(rootRef, handlerRef, onClose);
 
     useEffect(() => {
-        if (!isOpen) {
-            setBounds({
-                top: undefined,
-                bottom: undefined,
-                left: undefined,
-                right: undefined,
-            })
-        } else {
-            update()
-        }
-    }, [isOpen])
-    useEffect(() => {
+
         if (getDeviceWidth < 768) {
             if (isOpen) {
-                addNavigation(randomUUIDRef.current);
                 document.body.style.overflow = 'hidden';
                 handlerRef.current?.focus();
+                setTimeout(() => {
+                    addNavigation(randomUUIDRef.current);
+                }, 30)
             } else {
                 if (window.location.hash && !document.referrer.includes('#')) {
                     removeNavigation();
                 }
                 document.body.style.overflow = 'auto';
             }
+        } else {
+            if (!isOpen) {
+                setBounds({
+                    top: undefined,
+                    bottom: undefined,
+                    left: undefined,
+                    right: undefined,
+                })
+            } else {
+                update()
+            }
         }
-    }, [isOpen]);
+    }, [isOpen])
     useEffect(() => {
         if (isHashChanged) {
             onClose()
@@ -115,16 +116,16 @@ export const Popover: FC<props> = ({
                 const handlerRefRect = handlerRef.current.getBoundingClientRect();
                 switch (true) {
                     case placement === "bottom-start": {
-                        if ((window.innerHeight || document.documentElement.clientHeight) - handlerRefRect.bottom > rect.height) {
+                        if (window.innerHeight - handlerRefRect.bottom > rect.height) {
                             setAnimation({
                                 type: animate.type,
                                 position: "transform-origin-top-start"
                             });
                             setBounds({
-                                top: handlerRefRect.height,
+                                top: handlerRefRect.bottom + window.scrollY,
                                 bottom: undefined,
-                                left: !isRtl ? 0 : undefined,
-                                right: isRtl ? 0 : undefined,
+                                left: !isRtl ? handlerRefRect.left : undefined,
+                                right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                             })
                         } else {
                             setAnimation({
@@ -133,9 +134,9 @@ export const Popover: FC<props> = ({
                             });
                             setBounds({
                                 top: undefined,
-                                bottom: handlerRefRect.height,
-                                left: !isRtl ? 0 : undefined,
-                                right: isRtl ? 0 : undefined,
+                                bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
+                                left: !isRtl ? handlerRefRect.left : undefined,
+                                right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                             })
                         }
                         break;
@@ -147,10 +148,10 @@ export const Popover: FC<props> = ({
                                 position: "transform-origin-top-end"
                             });
                             setBounds({
-                                top: handlerRefRect.height,
+                                top: handlerRefRect.bottom + window.scrollY,
                                 bottom: undefined,
-                                left: !isRtl ? 0 : undefined,
-                                right: isRtl ? 0 : undefined,
+                                left: !isRtl ? handlerRefRect.left : undefined,
+                                right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                             })
                         } else {
                             setAnimation({
@@ -159,9 +160,9 @@ export const Popover: FC<props> = ({
                             });
                             setBounds({
                                 top: undefined,
-                                bottom: handlerRefRect.height,
-                                left: !isRtl ? 0 : undefined,
-                                right: isRtl ? 0 : undefined,
+                                bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
+                                left: !isRtl ? handlerRefRect.left : undefined,
+                                right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                             })
                         }
                         break;
@@ -178,9 +179,9 @@ export const Popover: FC<props> = ({
                             right: undefined | number,
                         } = {
                             top: undefined,
-                            bottom: handlerRefRect.height,
-                            left: !isRtl ? 0 : undefined,
-                            right: isRtl ? 0 : undefined,
+                            bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
+                            left: !isRtl ? handlerRefRect.left : undefined,
+                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                         }
                         if ((window.innerHeight || document.documentElement.clientHeight) - handlerRefRect.bottom > rect.height) {
                             position = {
@@ -189,7 +190,7 @@ export const Popover: FC<props> = ({
                             }
                             bounds = {
                                 ...bounds,
-                                top: handlerRefRect.height,
+                                top: handlerRefRect.bottom + window.scrollY,
                                 bottom: undefined,
                             }
                         }
@@ -197,7 +198,7 @@ export const Popover: FC<props> = ({
                             if (((rect.width / 2) - (handlerRefRect.width / 2)) < handlerRefRect.left) {
                                 bounds = {
                                     ...bounds,
-                                    left: ((rect.width / 2) - (handlerRefRect.width / 2)) * -1,
+                                    left: handlerRefRect.left - ((rect.width / 2) - (handlerRefRect.width / 2)),
                                     right: undefined,
                                 }
                                 position = {
@@ -211,12 +212,11 @@ export const Popover: FC<props> = ({
                                 }
                             }
                         } else {
-                            console.log()
                             if ((window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right > ((rect.width / 2) - (handlerRefRect.width / 2))) {
                                 bounds = {
                                     ...bounds,
                                     left: undefined,
-                                    right: ((rect.width / 2) - (handlerRefRect.width / 2)) * -1,
+                                    right: ((window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right) - ((rect.width / 2) - (handlerRefRect.width / 2)),
                                 }
                                 position = {
                                     ...position,
@@ -247,10 +247,10 @@ export const Popover: FC<props> = ({
                             left: undefined | number,
                             right: undefined | number,
                         } = {
-                            top: handlerRefRect.height,
+                            top: handlerRefRect.bottom + window.scrollY,
                             bottom: undefined,
-                            left: !isRtl ? 0 : undefined,
-                            right: isRtl ? 0 : undefined,
+                            left: !isRtl ? handlerRefRect.left : undefined,
+                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                         }
                         if (handlerRefRect.top - rect.height > 0) {
                             position = {
@@ -260,14 +260,14 @@ export const Popover: FC<props> = ({
                             bounds = {
                                 ...bounds,
                                 top: undefined,
-                                bottom: handlerRefRect.height,
+                                bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
                             }
                         }
                         if (!isRtl) {
                             if (((rect.width / 2) - (handlerRefRect.width / 2)) < handlerRefRect.left) {
                                 bounds = {
                                     ...bounds,
-                                    left: ((rect.width / 2) - (handlerRefRect.width / 2)) * -1,
+                                    left: handlerRefRect.left - ((rect.width / 2) - (handlerRefRect.width / 2)),
                                     right: undefined,
                                 }
                                 position = {
@@ -285,7 +285,7 @@ export const Popover: FC<props> = ({
                                 bounds = {
                                     ...bounds,
                                     left: undefined,
-                                    right: ((rect.width / 2) - (handlerRefRect.width / 2)) * -1,
+                                    right: ((window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right) - ((rect.width / 2) - (handlerRefRect.width / 2)),
                                 }
                                 position = {
                                     ...position,
@@ -306,7 +306,6 @@ export const Popover: FC<props> = ({
                         break;
                     }
                     case placement === "top-start": {
-                        console.log(handlerRefRect, rect, (window.innerHeight - handlerRefRect.top) - window.scrollY)
                         if (handlerRefRect.top > rect.height) {
                             setAnimation({
                                 type: animate.type,
@@ -341,9 +340,9 @@ export const Popover: FC<props> = ({
                             });
                             setBounds({
                                 top: undefined,
-                                bottom: handlerRefRect.height,
-                                left: !isRtl ? 0 : undefined,
-                                right: isRtl ? 0 : undefined,
+                                bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
+                                left: !isRtl ? handlerRefRect.left : undefined,
+                                right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                             })
                         } else {
                             setAnimation({
@@ -351,10 +350,10 @@ export const Popover: FC<props> = ({
                                 position: "transform-origin-top-end"
                             });
                             setBounds({
-                                top: handlerRefRect.height,
+                                top: handlerRefRect.bottom + window.scrollY,
                                 bottom: undefined,
-                                left: !isRtl ? 0 : undefined,
-                                right: isRtl ? 0 : undefined,
+                                left: !isRtl ? handlerRefRect.left : undefined,
+                                right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
                             })
                         }
 
@@ -379,14 +378,14 @@ export const Popover: FC<props> = ({
     }, [update]);
     return (
         <>
-            <div className={`naria-popover ${classNames.root}`} data-class-prop="root">
-                {cloneElement((trigger as any), {onClick: () => onToggle(), ref: handlerRef})}
+            {cloneElement((trigger as any), {onClick: () => onToggle(), ref: handlerRef})}
 
-            </div>
-            <Portal tagName="rasdad">
+
+
+            <Portal>
                 {
-                    isOpen && (
-                        <>
+                    isOpen ? (
+                        <div className={`naria-popover ${classNames.root}`} data-class-prop="root">
                             {
                                 getDeviceWidth < 768 ? (
                                     <div
@@ -409,9 +408,9 @@ export const Popover: FC<props> = ({
                                     </div>
                                 )
                             }
-                        </>
+                        </div>
 
-                    )
+                    ) : undefined
                 }
             </Portal>
         </>

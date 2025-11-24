@@ -1,7 +1,7 @@
 import {ReactNode} from 'react';
 import {createPortal} from 'react-dom';
 
-export type TPortal = {children: ReactNode; tagName: string};
+export type TPortal = {children: ReactNode};
 
 export const Portal = ({children}: TPortal) => {
 

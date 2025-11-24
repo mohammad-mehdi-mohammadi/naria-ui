@@ -15,13 +15,16 @@ function App() {
         topStartPopover: false,
         topPopover: false,
         topEndPopover: false,
+        bottomStartPopover: false,
+        bottomPopover: false,
+        bottomEndPopover: false,
     })
     return (
         <>
             <h1>Modal</h1>
             <p>Basic usage</p>
             <button onClick={() => setIsOpen({...isOpen, basicModal: true})}>Open modal</button>
-            <Modal isOpen={isOpen.basicModal} title = "Modal" onOpenChange = {(e) => setIsOpen({...isOpen, basicModal: e})}>
+            <Modal isOpen={isOpen.basicModal} title="Modal" onOpenChange={(e) => setIsOpen({...isOpen, basicModal: e})} footer = {<>asdadadda</>}>
                 <div className="mx-auto max-w-7xl">
                     Basic usage modal<br/>
                     Basic usage modal<br/>
@@ -58,27 +61,32 @@ function App() {
             </Modal>
             <p>Backdrop</p>
             <button onClick={() => setIsOpen({...isOpen, opaqueModal: true})}>Open opaque modal</button>
-            <Modal isOpen={isOpen.opaqueModal} title = "Modal" backdrop = "opaque" onOpenChange = {(e) => setIsOpen({...isOpen, opaqueModal: e})}>
+            <Modal isOpen={isOpen.opaqueModal} title="Modal" backdrop="opaque"
+                   onOpenChange={(e) => setIsOpen({...isOpen, opaqueModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Open opaque modal
                 </div>
             </Modal>
             <button onClick={() => setIsOpen({...isOpen, blurModal: true})}>Open blur modal</button>
-            <Modal isOpen={isOpen.blurModal} title = "Modal" backdrop = "blur" onOpenChange = {(e) => setIsOpen({...isOpen, blurModal: e})}>
+            <Modal isOpen={isOpen.blurModal} title="Modal" backdrop="blur"
+                   onOpenChange={(e) => setIsOpen({...isOpen, blurModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Open blur modal
                 </div>
             </Modal>
             <button onClick={() => setIsOpen({...isOpen, transparentModal: true})}>Open transparent modal</button>
-            <Modal isOpen={isOpen.transparentModal} title = "Modal" backdrop = "transparent" onOpenChange = {(e) => setIsOpen({...isOpen, transparentModal: e})}>
+            <Modal isOpen={isOpen.transparentModal} title="Modal" backdrop="transparent"
+                   onOpenChange={(e) => setIsOpen({...isOpen, transparentModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Open transparent modal
                 </div>
             </Modal>
 
             <p>Backdrop | Non-dismissible</p>
-            <button onClick={() => setIsOpen({...isOpen, nonDismissibleModal: true})}>Open non-dismissible modal</button>
-            <Modal isOpen={isOpen.nonDismissibleModal} title = "Modal" backdropDismissible = {false} onOpenChange = {(e) => setIsOpen({...isOpen, nonDismissibleModal: e})}>
+            <button onClick={() => setIsOpen({...isOpen, nonDismissibleModal: true})}>Open non-dismissible modal
+            </button>
+            <Modal isOpen={isOpen.nonDismissibleModal} title="Modal" backdropDismissible={false}
+                   onOpenChange={(e) => setIsOpen({...isOpen, nonDismissibleModal: e})}>
                 <div className="mx-auto max-w-7xl">
                     Open non-dismissible modal
                 </div>
@@ -87,76 +95,82 @@ function App() {
             <p>Basic usage</p>
             <div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "top-start" isOpen = {isOpen.topStartPopover} onOpenChange = {(e) => setIsOpen({...isOpen, topStartPopover: e})}>
-                        <button onClick={() => setIsOpen({...isOpen, topStartPopover: true})}>Top start</button>
-                        <Calendar mode="Gregorian" onChange = {() => {
+                    <Popover placement="top-start" isOpen={isOpen.topStartPopover}
+                             onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>
+                        <button>Top start</button>
+                        <Calendar mode="Gregorian" onChange={() => {
                             console.log('asd-ad-')
                             setIsOpen({...isOpen, topStartPopover: false})
                         }}/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "top" isOpen = {isOpen.topPopover} onOpenChange = {(e) => setIsOpen({...isOpen, topPopover: e})}>
-                        <button onClick={() => setIsOpen({...isOpen, topPopover: true})}>Top</button>
+                    <Popover placement="top" isOpen={isOpen.topPopover}
+                             onOpenChange={(e) => setIsOpen({...isOpen, topPopover: e})}>
+                        <button>Top</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "top-end" isOpen = {isOpen.topEndPopover} onOpenChange = {(e) => setIsOpen({...isOpen, topEndPopover: e})}>
-                        <button onClick={() => setIsOpen({...isOpen, topEndPopover: true})}>Top end</button>
+                    <Popover placement="top-end" isOpen={isOpen.topEndPopover}
+                             onOpenChange={(e) => setIsOpen({...isOpen, topEndPopover: e})}>
+                        <button>Top end</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "bottom-start">
+                    <Popover placement="bottom-start" isOpen={isOpen.bottomStartPopover}
+                             onOpenChange={(e) => setIsOpen({...isOpen, bottomStartPopover: e})}>
                         <button>Bottom start</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "bottom">
+                    <Popover placement="bottom" isOpen={isOpen.bottomPopover}
+                             onOpenChange={(e) => setIsOpen({...isOpen, bottomPopover: e})}>
                         <button>Bottom</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "bottom-end">
+                    <Popover placement="bottom-end" isOpen={isOpen.bottomEndPopover}
+                             onOpenChange={(e) => setIsOpen({...isOpen, bottomEndPopover: e})}>
                         <button>Bottom end</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "right-start">
+                    <Popover placement="right-start">
                         <button>Right start</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "right">
+                    <Popover placement="right">
                         <button>Right</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "right-end">
+                    <Popover placement="right-end">
                         <button>Right end</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "left-start">
+                    <Popover placement="left-start">
                         <button>Left start</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "left">
+                    <Popover placement="left">
                         <button>Left</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement = "left-end">
+                    <Popover placement="left-end">
                         <button>Left end</button>
                         <Calendar mode="Gregorian"/>
                     </Popover>

@@ -12,7 +12,7 @@
   animation: fadeIn 0.2s ease-out forwards;
   opacity: 0;
   overflow: hidden;
-  z-index: 999;
+  z-index: 99950;
   cursor: pointer;
 
   &.naria-modal__backdrop--dismissible {
@@ -35,6 +35,9 @@
     cursor: default;
     opacity: 0;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     &.naria-modal--show {
       opacity: 1;
     }

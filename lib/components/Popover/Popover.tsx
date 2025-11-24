@@ -18,9 +18,9 @@ export interface LibModalProps {
 }
 
 export interface LibModalRef {
-    open: () => void;
-    close: () => void;
-    toggle: () => void;
+    onOpen: () => void;
+    onClose: () => void;
+    onToggle: () => void;
 }
 
 export const Popover = forwardRef<LibModalRef, LibModalProps>(({

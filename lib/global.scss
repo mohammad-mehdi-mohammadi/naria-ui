@@ -31,6 +31,19 @@ html[dir="rtl"] {
   }
 }
 
+.backdrop--dismissible {
+  cursor: default;
+}
+
+.backdrop--opaque {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.backdrop--blur {
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;

@@ -91,58 +91,60 @@ export const Modal: FC<LibModalProps> = ({
     }, [isOpen]);
 
     return (
-        <Portal>
+        <>
             {
                 isOpen ? (
-                    <div
-                        className={`naria-modal__backdrop ${backdrop !== 'transparent' ? `naria-modal__backdrop--${backdrop}` : ''} ${!backdropDismissible ? "naria-modal__backdrop--dismissible" : ""} ${
-                            isOpen ? "naria-modal__backdrop--show" : ''
-                        } ${classNames.backdrop}`}
-                        data-class-prop="backdrop"
-                        onClick={onBackdropClick}
-                    >
+                    <Portal>
                         <div
-                            className={`naria-modal ${isOpen ? "naria-modal--show" : ""} ${
-                                getDeviceWidth < 768 ? `naria-modal--mobile ` : `naria-modal--desktop`
-                            } ${classNames.root}`}
-                            data-class-prop="root"
+                            className={`naria-modal__backdrop ${backdrop !== 'transparent' ? `backdrop--${backdrop}` : ''} ${!backdropDismissible ? "backdrop--dismissible" : ""} ${
+                                isOpen ? "naria-modal__backdrop--show" : ''
+                            } ${classNames.backdrop}`}
+                            data-class-prop="backdrop"
+                            onClick={onBackdropClick}
                         >
-                            <header className={`naria-modal__header ${classNames.header}`} data-class-prop="header">
-                                <div className={`naria-modal__title ${classNames.title}`}
-                                     data-class-prop="title">{title ?? ""}</div>
+                            <div
+                                className={`naria-modal ${isOpen ? "naria-modal--show" : ""} ${
+                                    getDeviceWidth < 768 ? `naria-modal--mobile ` : `naria-modal--desktop`
+                                } ${classNames.root}`}
+                                data-class-prop="root"
+                            >
+                                <header className={`naria-modal__header ${classNames.header}`} data-class-prop="header">
+                                    <div className={`naria-modal__title ${classNames.title}`}
+                                         data-class-prop="title">{title ?? ""}</div>
+                                    {
+                                        !hideCloseButton ? (
+                                            <>
+                                                {
+                                                    closeIcon ? cloneElement((closeIcon as any), {onClick: () => onClose()}) : (
+                                                        <button
+                                                            className={`naria-modal__close-icon ${classNames.closeIcon}`}
+                                                            onClick={onClose} data-class-prop="closeIcon">
+                                                            <Close/>
+                                                        </button>
+                                                    )
+                                                }
+                                            </>
+                                        ) : undefined
+                                    }
+                                </header>
+                                <div
+                                    className={`naria-modal__body ${classNames.body}`} data-class-prop="body">
+                                    {children}
+                                </div>
                                 {
-                                    !hideCloseButton ? (
-                                        <>
-                                            {
-                                                closeIcon ? cloneElement((closeIcon as any), {onClick: () => onClose()}) : (
-                                                    <button
-                                                        className={`naria-modal__close-icon ${classNames.closeIcon}`}
-                                                        onClick={onClose} data-class-prop="closeIcon">
-                                                        <Close/>
-                                                    </button>
-                                                )
-                                            }
-                                        </>
+                                    footer ? (
+                                        <footer className={`naria-modal__footer ${classNames.footer}`}
+                                                data-class-prop="footer">
+                                            {footer}
+                                        </footer>
                                     ) : undefined
                                 }
-                            </header>
-                            <div
-                                className={`naria-modal__body ${classNames.body}`} data-class-prop="body">
-                                {children}
                             </div>
-                            {
-                                footer ? (
-                                    <footer className={`naria-modal__footer ${classNames.footer}`}
-                                            data-class-prop="footer">
-                                        {footer}
-                                    </footer>
-                                ) : undefined
-                            }
                         </div>
-                    </div>
+                    </Portal>
                 ) : undefined
             }
-        </Portal>
+        </>
     )
 };
 

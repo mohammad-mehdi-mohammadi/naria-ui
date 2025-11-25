@@ -95,7 +95,7 @@ function App() {
             <p>Basic usage</p>
             <div>
                 <div style={{padding: '100px'}}>
-                    <Popover placement="top-start" isOpen={isOpen.topStartPopover}
+                    <Popover backdrop="blur" backdropDismissible={false} placement="top-start" isOpen={isOpen.topStartPopover}
                              onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>
                         <button>Top start</button>
                         <Calendar mode="Gregorian" onChange={() => {
@@ -103,7 +103,7 @@ function App() {
                         }}/>
                     </Popover>
                 </div>
-                <div style={{padding: '100px'}}>
+                <div style={{padding: '200px'}}>
                     <Popover placement="top" isOpen={isOpen.topPopover}
                              onOpenChange={(e) => setIsOpen({...isOpen, topPopover: e})}>
                         <button>Top</button>
@@ -124,7 +124,7 @@ function App() {
                         <Calendar mode="Gregorian"/>
                     </Popover>
                 </div>
-                <div style={{padding: '100px'}}>
+                <div style={{padding: '200px'}}>
                     <Popover placement="bottom" isOpen={isOpen.bottomPopover}
                              onOpenChange={(e) => setIsOpen({...isOpen, bottomPopover: e})}>
                         <button>Bottom</button>

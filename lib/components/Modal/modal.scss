@@ -15,18 +15,6 @@
   z-index: 99950;
   cursor: pointer;
 
-  &.naria-modal__backdrop--dismissible {
-    cursor: default;
-  }
-  &.naria-modal__backdrop--opaque {
-    background-color: rgba(0, 0, 0, 0.3);
-  }
-
-  &.naria-modal__backdrop--blur {
-    background-color: rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-  }
-
   &.naria-modal__backdrop--show {
     opacity: 1;
   }

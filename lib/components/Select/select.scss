@@ -74,23 +74,32 @@
     input {
       width: 100%;
     }
+  }
 
+  .naria-select__icon-root {
+    position: absolute;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 0;
+    right: 0;
+    width: 12px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .naria-select__arrow-icon, .naria-select__search-icon {
-      position: absolute;
-      bottom: 0;
-      margin-top: auto;
-      margin-bottom: auto;
-      top: 0;
-      right: 0;
-      width: 12px;
-      height: 12px;
-      z-index: 1;
+      display: block;
+      svg {
+        width: 100%;
+        display: block;
+      }
     }
 
   }
 
   .naria-select__handler {
-    position: relative;
+    position: relative !important;
     display: flex;
     gap: 4px;
     width: 100%;
@@ -98,8 +107,6 @@
     justify-content: space-between;
 
     .naria-select__arrow-icon {
-      width: 12px;
-      height: 12px;
       transition: transform 0.4s;
 
       -webkit-transform: rotate(0deg);
@@ -122,7 +129,7 @@
 html[dir="rtl"] {
   .naria-select {
     .naria-select__search-input-root {
-      .naria-select__arrow-icon, .naria-select__search-icon {
+      .naria-select__icon-root {
         left: 0;
         right: auto;
       }

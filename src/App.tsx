@@ -95,7 +95,7 @@ function App() {
             <p>Basic usage</p>
             <div>
                 <div style={{padding: '100px'}}>
-                    <Popover backdrop="blur" backdropDismissible={false} placement="top-start" isOpen={isOpen.topStartPopover}
+                    <Popover backdrop="blur" placement="top-start" isOpen={isOpen.topStartPopover}
                              onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>
                         <button>Top start</button>
                         <Calendar mode="Gregorian" onChange={() => {

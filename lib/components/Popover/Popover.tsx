@@ -12,7 +12,6 @@ export interface props {
         backdrop?: string;
         content?: string;
     };
-    backdropDismissible?: boolean;
     backdrop: "opaque" | "blur" | "transparent";
     placement?: "top-start" | "top" | "top-end" | "bottom-start" | "bottom" | "bottom-end" | "right-start" | "right" | "right-end" | "left-start" | "left" | "left-end";
     isOpen: boolean;
@@ -26,7 +25,6 @@ export const Popover: FC<props> = ({
                                            backdrop: "",
                                            content: "",
                                        },
-                                       backdropDismissible = true,
                                        backdrop = "opaque",
                                        placement = "bottom-start",
                                        isOpen = false,
@@ -265,7 +263,6 @@ export const Popover: FC<props> = ({
                         }
                     }
                     if (!isRtl) {
-                        console.log(handlerRefRect.left, rect.width, handlerRefRect.width)
                         if (((rect.width / 2) - (handlerRefRect.width / 2)) < handlerRefRect.left) {
                             bounds = {
                                 ...bounds,
@@ -389,7 +386,7 @@ export const Popover: FC<props> = ({
                             getDeviceWidth < 768 ? (
                                 <div
                                     onClick={onBackdropClick}
-                                    className={`naria-popover__backdrop ${backdrop !== 'transparent' ? `backdrop--${backdrop}` : ''} ${!backdropDismissible ? "backdrop--dismissible" : ""} ${classNames.backdrop}`}
+                                    className={`naria-popover__backdrop ${backdrop !== 'transparent' ? `backdrop--${backdrop}` : ''} ${classNames.backdrop}`}
                                     data-class-prop="backdrop">
                                     <div
                                         className={`naria-popover__content naria-popover__content--mobile ${classNames.content}`}

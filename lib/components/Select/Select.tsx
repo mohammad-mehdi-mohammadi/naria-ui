@@ -191,6 +191,7 @@ export const Select: FC<props> = ({
             }
         } else if (localSelected !== undefined) {
             setLocalSelected(undefined);
+            setSearchTerm("")
         }
     }, [selected]);
 

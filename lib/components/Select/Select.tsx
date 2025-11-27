@@ -92,8 +92,8 @@ export const Select: FC<props> = ({
     const isHashChanged = onHashChanges('#select');
     const [isShow, setIsShow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [localSelected, setLocalSelected] = useState<string | null>(null);
-    const [localOptions, setLocalOptions] = useState(null);
+    const [localSelected, setLocalSelected] = useState<string | undefined>(undefined);
+    const [localOptions, setLocalOptions] = useState(undefined);
     const [searchTerm, setSearchTerm] = useState("");
     const [localPagination, setLocalPagination] = useState<SDS>({
         page: 1,
@@ -189,6 +189,8 @@ export const Select: FC<props> = ({
             } else {
                 setLocalSelected(selected);
             }
+        } else if (localSelected !== undefined) {
+            setLocalSelected(undefined);
         }
     }, [selected]);
 

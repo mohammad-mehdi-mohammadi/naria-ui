@@ -77,7 +77,7 @@ export const Popover: FC<props> = ({
                 }, 50)
             } else {
                 if (window.location.hash && !document.referrer.includes('#')) {
-                    removeNavigation();
+                    removeNavigation(`popover-` + randomUUIDRef.current);
                 }
                 document.body.style.overflow = 'auto';
             }
@@ -101,7 +101,6 @@ export const Popover: FC<props> = ({
             onClose()
         }
     }, [isHashChanged])
-
 
     useEffect(() => {
         document.addEventListener('scroll', onClose, {capture: true});

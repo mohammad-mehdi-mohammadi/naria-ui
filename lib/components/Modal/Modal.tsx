@@ -61,8 +61,7 @@ export const Modal: FC<LibModalProps> = ({
     };
 
     useEffect(() => {
-        console.log(isHashChanged, 'modal')
-        if (!isHashChanged.includes(`#modal-` + randomUUIDRef.current)) {
+        if (isHashChanged) {
             onClose();
         }
     }, [isHashChanged])
@@ -75,14 +74,13 @@ export const Modal: FC<LibModalProps> = ({
     }, [])
 
     useEffect(() => {
-        console.log(isOpen)
         if (getDeviceWidth < 768) {
             if (isOpen) {
                 setTimeout(() => {
                     addNavigation(`modal-` + randomUUIDRef.current)
                 }, 30)
             } else {
-                removeNavigation();
+                removeNavigation(`modal-` + randomUUIDRef.current);
             }
         }
         document.body.style.overflow = isOpen ? "hidden" : "auto";

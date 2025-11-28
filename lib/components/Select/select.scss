@@ -1,72 +1,6 @@
 .naria-select {
   position: relative;
 
-  .naria-select__list-root {
-    overflow: hidden;
-
-    &.naria-select__list-root--mobile {
-      position: fixed;
-      top: 0;
-      right: 0;
-      height: 100%;
-      width: 100%;
-      z-index: 97;
-    }
-  }
-
-  .naria-select__list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    z-index: 99;
-    position: relative;
-    overflow: auto;
-
-    &.naria-select__list--mobile {
-      position: relative;
-      height: 100%;
-    }
-
-    &.naria-select__list--desktop {
-      position: absolute;
-      animation: fadeInTranslateY 0.3s ease-out forwards;
-      max-height: 150px;
-    }
-
-    .naria-select__loading-root {
-      padding: 24px 0;
-      display: flex;
-      justify-content: center;
-      .naria-select__loading-root {
-        width: 24px;
-        margin: auto;
-      }
-    }
-
-    .naria-select__loading-more-root {
-      position: sticky;
-      bottom: 0;
-      text-align: center;
-      width: 100%;
-      .naria-select__loading-more {
-        width: 24px;
-        margin: auto;
-      }
-    }
-
-    .naria-select__header--mobile {
-      position: sticky;
-      top: 0;
-      justify-content: end;
-      display: flex;
-      gap: 8px;
-
-      .naria-select__search-input-root {
-        flex-grow: 1;
-      }
-    }
-  }
-
   .naria-select__search-input-root {
     position: relative;
     display: flex;
@@ -121,6 +55,72 @@
         -o-transform: rotate(180deg);
         -ms-transform: rotate(180deg);
         transform: rotate(180deg);
+      }
+    }
+  }
+}
+.naria-select__list-root {
+  overflow: hidden;
+
+
+  &.naria-select__list-root--mobile {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 99950;
+  }
+
+  .naria-select__list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    z-index: 99;
+    position: relative;
+    overflow: auto;
+
+    &.naria-select__list--mobile {
+      position: relative;
+      height: 100%;
+    }
+
+    &.naria-select__list--desktop {
+      position: absolute;
+      animation: fadeInTranslateY 0.3s ease-out forwards;
+      max-height: 150px;
+    }
+
+    .naria-select__loading-root {
+      padding: 24px 0;
+      display: flex;
+      justify-content: center;
+      .naria-select__loading-root {
+        width: 24px;
+        margin: auto;
+      }
+    }
+
+    .naria-select__loading-more-root {
+      position: sticky;
+      bottom: 0;
+      text-align: center;
+      width: 100%;
+      .naria-select__loading-more {
+        width: 24px;
+        margin: auto;
+      }
+    }
+
+    .naria-select__header--mobile {
+      position: sticky;
+      top: 0;
+      justify-content: end;
+      display: flex;
+      gap: 8px;
+
+      .naria-select__search-input-root {
+        flex-grow: 1;
       }
     }
   }

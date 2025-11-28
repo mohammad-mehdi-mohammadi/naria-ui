@@ -4,6 +4,7 @@ import {addNavigation, onHashChanges, removeNavigation} from "../../utils/naviga
 import Close from '../../assets/icons/close.svg?react';
 import './modal.scss';
 import {Portal} from "../Portal";
+import {generateRandom} from "../../utils/generate-random";
 
 export interface LibModalProps {
     isOpen: boolean;
@@ -47,8 +48,8 @@ export const Modal: FC<LibModalProps> = ({
                                              children
                                          }) => {
     const getDeviceWidth = useWidth();
-    const randomUUIDRef = useRef(window.crypto.randomUUID());
-    const isHashChanged = onHashChanges('#' + randomUUIDRef.current);
+    const randomUUIDRef = useRef<string>(generateRandom(5));
+    const isHashChanged = onHashChanges(`#modal-` + randomUUIDRef.current);
     // const [isShow, setIsShow] = useState(false);
 
     // const open = () => setIsShow(true);
@@ -77,7 +78,7 @@ export const Modal: FC<LibModalProps> = ({
         if (getDeviceWidth < 768) {
             if (isOpen) {
                 setTimeout(() => {
-                    addNavigation(randomUUIDRef.current)
+                    addNavigation(`modal-` + randomUUIDRef.current)
                 }, 30)
             } else {
                 removeNavigation();

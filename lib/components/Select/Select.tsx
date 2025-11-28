@@ -7,6 +7,7 @@ import useClickOutside from "../../hooks/click-outside";
 import {useWidth} from "../../hooks/use-width";
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 import {Loading} from "../Loading";
+import {generateRandom} from "../../utils/generate-random";
 
 interface Pagination {
     page?: number;
@@ -88,8 +89,8 @@ export const Select: FC<props> = ({
                                   }) => {
     let isSubscribed = true;
     const getDeviceWidth = useWidth();
-
-    const isHashChanged = onHashChanges('#select');
+    const randomUUIDRef = useRef<string>(generateRandom(5));
+    const isHashChanged = onHashChanges(`#select-` + randomUUIDRef.current);
     const [isShow, setIsShow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [localSelected, setLocalSelected] = useState<string | undefined>(undefined);
@@ -170,7 +171,7 @@ export const Select: FC<props> = ({
     useEffect(() => {
         if (getDeviceWidth < 768) {
             if (isShow) {
-                addNavigation('select');
+                addNavigation(`select-` + randomUUIDRef.current);
                 document.body.style.overflow = 'hidden';
                 handlerRef.current?.focus();
             } else {

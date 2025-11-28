@@ -209,7 +209,8 @@ export const Select: FC<props> = ({
     }, [localSelected]);
 
     useEffect(() => {
-        if (isHashChanged) {
+        console.log(isHashChanged, 'select')
+        if (!isHashChanged.includes(`#select-` + randomUUIDRef.current)) {
             setIsShow(false)
         }
     }, [isHashChanged])

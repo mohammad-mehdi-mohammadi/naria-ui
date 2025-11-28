@@ -61,7 +61,8 @@ export const Modal: FC<LibModalProps> = ({
     };
 
     useEffect(() => {
-        if (isHashChanged) {
+        console.log(isHashChanged, 'modal')
+        if (!isHashChanged.includes(`#modal-` + randomUUIDRef.current)) {
             onClose();
         }
     }, [isHashChanged])

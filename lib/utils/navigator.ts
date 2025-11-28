@@ -1,24 +1,31 @@
 import {useEffect, useState} from "react";
 
 export const removeNavigation = () => {
-    const newUrl = `${window.location.pathname}${window.location.search}`;
+    console.log(JSON.stringify(window.location))
+    const x = JSON.parse(JSON.stringify(window.location))
+    const newUrl = `${window.location.pathname}${window.location.search}${x.hash}`;
     window.history.replaceState(null, '', newUrl);
 }
 
 export const addNavigation = (state: string) => {
-    window.location.hash = state;
+    console.log(window.location.hash)
+
+    if(!window.location.hash) {
+        window.location.hash = state;
+    } else {
+        // history.pushState(state, "", window.location.href);
+        window.location.hash = window.location.hash  + "/#"  + state;
+    }
+
 }
 
 
 export const onHashChanges = (state: string) => {
-    const [isHashChanged, setIsHashChanged] = useState(false)
+    const [isHashChanged, setIsHashChanged] = useState("")
     useEffect(() => {
         const handleHashChange = (e) => {
-            if(window.location.hash !== state) {
-                setIsHashChanged(true);
-            } else {
-                setIsHashChanged(false);
-            }
+            setIsHashChanged(window.location.hash);
+
         };
         window.addEventListener('hashchange', handleHashChange);
         return () => {

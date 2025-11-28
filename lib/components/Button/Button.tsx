@@ -6,10 +6,10 @@ import {Loading} from "../Loading";
 export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
     type?: "button" | "submit";
     classNames?: {
-        root: string;
-        loading: {
-            root: string;
-            color: string;
+        root?: string;
+        loading?: {
+            root?: string;
+            color?: string;
         };
     };
     value: string;

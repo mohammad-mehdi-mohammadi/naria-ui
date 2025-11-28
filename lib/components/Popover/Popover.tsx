@@ -4,6 +4,7 @@ import './popover.scss';
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 import {useWidth} from "../../hooks/use-width";
 import {Portal} from "../Portal";
+import {generateRandom} from "../../utils/generate-random";
 
 
 export interface props {
@@ -52,8 +53,8 @@ export const Popover: FC<props> = ({
     const getDeviceWidth = useWidth();
     const rootRef = useRef(undefined);
     const handlerRef = useRef(undefined);
-    const randomUUIDRef = useRef(window.crypto.randomUUID());
-    const isHashChanged = onHashChanges('#' + randomUUIDRef.current);
+    const randomUUIDRef = useRef<string>(generateRandom(5));
+    const isHashChanged = onHashChanges(`#popover-` + randomUUIDRef.current);
     // const onOpen = () => onOpenChange(true);
     const onClose = () => {
         if (onOpenChange) onOpenChange(false)
@@ -72,7 +73,7 @@ export const Popover: FC<props> = ({
                 document.body.style.overflow = 'hidden';
                 handlerRef.current?.focus();
                 setTimeout(() => {
-                    addNavigation(randomUUIDRef.current);
+                    addNavigation(`popover-` + randomUUIDRef.current);
                 }, 50)
             } else {
                 if (window.location.hash && !document.referrer.includes('#')) {

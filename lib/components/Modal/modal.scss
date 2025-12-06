@@ -12,7 +12,7 @@
   animation: fadeIn 0.2s ease-out forwards;
   opacity: 0;
   overflow: hidden;
-  z-index: 99950;
+  z-index: 950;
   cursor: pointer;
 
   &.naria-modal__backdrop--show {

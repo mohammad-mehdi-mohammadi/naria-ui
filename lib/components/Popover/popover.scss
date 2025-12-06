@@ -4,7 +4,7 @@
 .naria-popover__content {
   &.naria-popover__content--desktop {
     position: absolute;
-    z-index: 99951;
+    z-index: 951;
 
   }
   &.naria-popover__content--mobile {
@@ -24,7 +24,7 @@
   animation: fadeIn 0.2s ease-out forwards;
   opacity: 0;
   overflow: hidden;
-  z-index: 99950;
+  z-index: 950;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.3);
 }

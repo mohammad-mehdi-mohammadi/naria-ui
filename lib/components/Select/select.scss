@@ -1,3 +1,4 @@
+
 .naria-select {
   position: relative;
 
@@ -10,27 +11,7 @@
     }
   }
 
-  .naria-select__icon-root {
-    position: absolute;
-    bottom: 0;
-    margin-top: auto;
-    margin-bottom: auto;
-    top: 0;
-    right: 0;
-    width: 12px;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .naria-select__arrow-icon, .naria-select__search-icon {
-      display: block;
-      svg {
-        width: 100%;
-        display: block;
-      }
-    }
 
-  }
 
   .naria-select__handler {
     position: relative !important;
@@ -59,6 +40,27 @@
     }
   }
 }
+.naria-select__icon-root {
+  position: absolute;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  top: 0;
+  right: 0;
+  width: 12px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .naria-select__arrow-icon, .naria-select__search-icon {
+    display: block;
+    svg {
+      width: 100%;
+      display: block;
+    }
+  }
+
+}
 .naria-select__list-root {
   overflow: hidden;
 
@@ -69,7 +71,7 @@
     right: 0;
     height: 100%;
     width: 100%;
-    z-index: 99950;
+    z-index: 950;
   }
 
   .naria-select__list {
@@ -83,6 +85,7 @@
       position: fixed;
       bottom: 0;
       width: 100%;
+      max-height: 100%;
       animation: fadeInBottomToTop 0.2s ease-out forwards;
     }
 
@@ -122,7 +125,11 @@
       gap: 8px;
 
       .naria-select__search-input-root {
+        position: relative;
         flex-grow: 1;
+        .naria-select__search-input {
+          width: 100%;
+        }
       }
     }
   }

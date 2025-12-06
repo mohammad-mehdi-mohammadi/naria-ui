@@ -8,7 +8,8 @@ export const removeNavigation = (state: string) => {
     } else {
         newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`#` + state, '')}`;
     }
-    NARIA_URL = `${window.location.origin}${window.location.pathname}${newUrl}`;
+    NARIA_URL = `${window.location.origin}${newUrl}`;
+    console.log("daasda3", NARIA_URL, newUrl)
     window.history.replaceState(null, '', newUrl);
 }
 
@@ -59,18 +60,19 @@ export const onHashChanges = (state: string) => {
     useEffect(() => {
         NARIA_URL = window.location.href
         const handleHashChange = (e) => {
-            console.log("daasda0", window.location.href, NARIA_URL, window.history)
+
             if (window.location.hash.includes(state)) {
                 if (window.location.hash.length === window.location.hash.indexOf(state) + state.length) {
                     if (window.location.href === NARIA_URL) {
-                        console.log("daasda1", window.location.href, NARIA_URL)
+
                         window.history.replaceState(null, '', `${window.location.origin}${window.location.pathname}`);
                         NARIA_URL = `${window.location.origin}${window.location.pathname}`;
+                        console.log("daasda1", NARIA_URL)
                         setIsHashChanged(true);
                     } else {
-                        console.log("daasda2", window.location.href, NARIA_URL)
                         setIsHashChanged(false);
-                        NARIA_URL = window.location.href;
+                        NARIA_URL = `${window.location.origin}${window.location.pathname}`;
+                        console.log("daasda2", NARIA_URL)
                     }
 
 

@@ -75,17 +75,19 @@
   .naria-select__list {
     display: flex;
     flex-direction: column;
-    width: 100%;
     z-index: 99;
     position: relative;
     overflow: auto;
 
     &.naria-select__list--mobile {
-      position: relative;
-      height: 100%;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      animation: fadeInBottomToTop 0.2s ease-out forwards;
     }
 
     &.naria-select__list--desktop {
+      width: 100%;
       position: absolute;
       animation: fadeInTranslateY 0.3s ease-out forwards;
       max-height: 150px;

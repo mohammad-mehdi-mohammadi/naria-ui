@@ -34,6 +34,7 @@ export interface props {
     pagination?: Pagination;
     optionFilterLabel?: string;
     hasSearch?: boolean;
+    backdrop: "opaque" | "blur" | "transparent";
     classNames?: {
         root: string;
         label?: string;
@@ -51,6 +52,7 @@ export interface props {
         closeIcon?: string;
         arrowIcon?: string;
         searchIcon?: string;
+        backdrop?: string;
     };
     onSelectChange?: any;
 }
@@ -68,6 +70,7 @@ export const Select: FC<props> = ({
                                       pagination,
                                       optionFilterLabel,
                                       hasSearch = false,
+                                      backdrop = "opaque",
                                       classNames = {
                                           root: "",
                                           label: "",
@@ -85,6 +88,7 @@ export const Select: FC<props> = ({
                                           closeIcon: "",
                                           arrowIcon: "",
                                           searchIcon: "",
+                                          backdrop: "",
                                       },
                                       onSelectChange
                                   }) => {
@@ -92,7 +96,7 @@ export const Select: FC<props> = ({
     const getDeviceWidth = useWidth();
     const randomUUIDRef = useRef<string>(generateRandom(5));
     const isHashChanged = onHashChanges(`#select-` + randomUUIDRef.current);
-    const [isShow, setIsShow] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [bounds, setBounds] = useState<{
         top: undefined | number,
         bottom: undefined | number,
@@ -122,7 +126,7 @@ export const Select: FC<props> = ({
         isLoading: false
     });
     const localApi = useRef<string | undefined>(undefined);
-    const rootRef = useRef(undefined);
+    const listRef = useRef(undefined);
     const handlerRef = useRef(undefined);
 
     const getData = async () => {
@@ -188,7 +192,7 @@ export const Select: FC<props> = ({
     }, [localPagination]);
     useEffect(() => {
         if (getDeviceWidth < 768) {
-            if (isShow) {
+            if (isOpen) {
                 addNavigation(`select-` + randomUUIDRef.current);
                 document.body.style.overflow = 'hidden';
                 handlerRef.current?.focus();
@@ -199,7 +203,7 @@ export const Select: FC<props> = ({
                 document.body.style.overflow = 'auto';
             }
         } else {
-            if (!isShow) {
+            if (!isOpen) {
                 setBounds({
                     top: undefined,
                     bottom: undefined,
@@ -215,11 +219,11 @@ export const Select: FC<props> = ({
                 }, 0)
             }
         }
-    }, [isShow]);
+    }, [isOpen]);
     const update = () => {
-        if (handlerRef?.current && rootRef.current) {
+        if (handlerRef?.current && listRef.current) {
             const isRtl = document.documentElement?.getAttribute('dir') === 'rtl';
-            const rect = rootRef.current.getBoundingClientRect();
+            const rect = listRef.current.getBoundingClientRect();
             const handlerRefRect = handlerRef.current.getBoundingClientRect();
             if (window.innerHeight - handlerRefRect.bottom > rect.height) {
                 setBounds({
@@ -256,7 +260,14 @@ export const Select: FC<props> = ({
             setSearchTerm("")
         }
     }, [selected]);
-
+    useEffect(() => {
+        document.addEventListener('scroll', update, {capture: true});
+        window.addEventListener("resize", update);
+        return () => {
+            window.removeEventListener("resize", update);
+            document.removeEventListener('scroll', update, {capture: true});
+        };
+    }, [update]);
     useEffect(() => {
         if (localSelected) {
             if (hasSearch) {
@@ -271,7 +282,7 @@ export const Select: FC<props> = ({
 
     useEffect(() => {
         if (isHashChanged) {
-            setIsShow(false)
+            setIsOpen(false)
         }
     }, [isHashChanged])
 
@@ -286,7 +297,7 @@ export const Select: FC<props> = ({
         if (hasSearch) {
             setLocalOptions(options)
         }
-        setIsShow(prevState => !prevState);
+        setIsOpen(prevState => !prevState);
     }
     const onClose = () => {
         if (hasSearch) {
@@ -297,7 +308,7 @@ export const Select: FC<props> = ({
                 setSearchTerm(localSelected ? localSelected[value] : "")
             }
         }
-        setIsShow(false);
+        setIsOpen(false);
     }
     const onSelect = (item) => {
         if (hasSearch) {
@@ -342,11 +353,11 @@ export const Select: FC<props> = ({
         const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[(optionFilterLabel?.length ? optionFilterLabel : value)].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
         setLocalOptions(tempList)
         setSearchTerm(e?.target?.value)
-        if (!isShow) {
-            setIsShow(true)
+        if (!isOpen) {
+            setIsOpen(true)
         }
     }
-    useClickOutside(rootRef, handlerRef, onClose);
+    useClickOutside(listRef, handlerRef, onClose);
     return (
         <div className={`naria-select ${disabled ? 'naria-select--disabled' : ''} ${classNames?.root}`}
              data-class-prop="root">
@@ -368,14 +379,14 @@ export const Select: FC<props> = ({
                             <div className={`naria-select__icon-root ${classNames?.iconRoot}`}
                                  data-class-prop="iconRoot">
                                 {
-                                    isShow ? (
+                                    isOpen ? (
                                         <div className={`naria-select__search-icon ${classNames?.searchIcon}`}
                                              data-class-prop="searchIcon">
                                             <Search/>
                                         </div>
                                     ) : (
                                         <div
-                                            className={`naria-select__arrow-icon ${classNames?.arrowIcon} ${isShow ? "naria-select__arrow-icon--rotate-180" : ""}`}
+                                            className={`naria-select__arrow-icon ${classNames?.arrowIcon} ${isOpen ? "naria-select__arrow-icon--rotate-180" : ""}`}
                                             data-class-prop="arrowIcon">
                                             <AngleDown/>
                                         </div>
@@ -401,7 +412,7 @@ export const Select: FC<props> = ({
                             <div className={`naria-select__icon-root ${classNames?.iconRoot}`}
                                  data-class-prop="iconRoot">
                                 <div
-                                    className={`naria-select__arrow-icon ${classNames?.arrowIcon} ${isShow ? "naria-select__arrow-icon--rotate-180" : ""}`}
+                                    className={`naria-select__arrow-icon ${classNames?.arrowIcon} ${isOpen ? "naria-select__arrow-icon--rotate-180" : ""}`}
                                     data-class-prop="arrowIcon">
                                     <AngleDown/>
                                 </div>
@@ -412,37 +423,29 @@ export const Select: FC<props> = ({
                 }
 
             </label>
-        {/*    style={{*/}
-        {/*    bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",*/}
-        {/*    top: bounds.top !== undefined ? bounds.top : "unset",*/}
-        {/*    left: bounds.left !== undefined ? bounds.left : "unset",*/}
-        {/*    right: bounds.right !== undefined ? bounds.right : "unset",*/}
-        {/*    maxWidth: bounds.width !== undefined ? bounds.width : "unset",*/}
-        {/*}}*/}
-        {/*    ${bounds.type} ${bounds.position}*/}
-            {
-                isShow ? (
-                    <Portal>
-                        <div
 
-                            className={`naria-select__list-root ${getDeviceWidth < 768 ? "naria-select__list-root--mobile" : ""} ${classNames?.listRoot} `}
-                            data-class-prop="listRoot"
-                            ref={rootRef}>
-                            <div
-                                className={`naria-select__list ${getDeviceWidth < 768 ? "naria-select__list--mobile" : `naria-select__list--desktop`} ${classNames?.list}`}
-                                data-class-prop="input"
-                                onScroll={onScroll}>
-                                {
-                                    api && isLoading ? (
-                                        <div className="naria-select__loading-root">
-                                            <div className="naria-select__loading">
-                                                <Loading/>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            {
-                                                getDeviceWidth < 768 ? (
+            {
+                isOpen ? (
+                    <Portal>
+                        {
+                            getDeviceWidth < 768 ? (
+                                <div
+                                    className={`naria-select__list-root naria-select__list-root--mobile ${classNames?.listRoot} ${backdrop !== 'transparent' ? `backdrop--${backdrop}` : ''}`}
+                                    data-class-prop="listRoot">
+                                    <div
+                                        className={`naria-select__list naria-select__list--mobile ${classNames?.list}`}
+                                        data-class-prop="input"
+                                        ref={listRef}
+                                        onScroll={onScroll}>
+                                        {
+                                            api && isLoading ? (
+                                                <div className="naria-select__loading-root">
+                                                    <div className="naria-select__loading">
+                                                        <Loading/>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <>
                                                     <div
                                                         className={`naria-select__header--mobile ${classNames?.mobileHeader}`}
                                                         data-class-prop="mobileHeader">
@@ -477,48 +480,112 @@ export const Select: FC<props> = ({
                                                             <Close/>
                                                         </button>
                                                     </div>
-                                                ) : undefined
-                                            }
-                                            {
-                                                localOptions?.length ? (
-                                                    <>
-                                                        {
-                                                            localOptions?.map((item, index) => {
-                                                                return (
-                                                                    <button type="button" onClick={() => onSelect(item)}
-                                                                            disabled={disabled}
-                                                                            key={index.toString()}
-                                                                            className={`naria-select__option ${classNames?.option} ${getActiveClass(item)}`}
-                                                                            data-class-prop="option"
-                                                                            data-class-prop-active="optionActive">
-                                                                        {value?.length ? item[value] : item}
-                                                                    </button>
-                                                                )
-                                                            })
-                                                        }
-                                                    </>
-                                                ) : (
-                                                    <div>
-                                                        No Data
-                                                    </div>
-                                                )
-                                            }
+                                                    {
+                                                        localOptions?.length ? (
+                                                            <>
+                                                                {
+                                                                    localOptions?.map((item, index) => {
+                                                                        return (
+                                                                            <button type="button" onClick={() => onSelect(item)}
+                                                                                    disabled={disabled}
+                                                                                    key={index.toString()}
+                                                                                    className={`naria-select__option ${classNames?.option} ${getActiveClass(item)}`}
+                                                                                    data-class-prop="option"
+                                                                                    data-class-prop-active="optionActive">
+                                                                                {value?.length ? item[value] : item}
+                                                                            </button>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </>
+                                                        ) : (
+                                                            <div>
+                                                                No Data
+                                                            </div>
+                                                        )
+                                                    }
 
 
-                                            {
-                                                localPagination.isLoading ? (
-                                                    <div className="naria-select__loading-more-root">
-                                                        <div className="naria-select__loading-more">
-                                                            <Loading/>
-                                                        </div>
+                                                    {
+                                                        localPagination.isLoading ? (
+                                                            <div className="naria-select__loading-more-root">
+                                                                <div className="naria-select__loading-more">
+                                                                    <Loading/>
+                                                                </div>
+                                                            </div>
+                                                        ) : undefined
+                                                    }
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                            ) : (
+                                <div
+
+                                    className={`naria-select__list-root ${classNames?.listRoot}`}
+                                    data-class-prop="listRoot">
+                                    <div
+                                        className={`naria-select__list naria-select__list--desktop ${classNames?.list} ${bounds.type} ${bounds.position}`}
+                                        data-class-prop="input"
+                                        style={{
+                                            bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
+                                            top: bounds.top !== undefined ? bounds.top : "unset",
+                                            left: bounds.left !== undefined ? bounds.left : "unset",
+                                            right: bounds.right !== undefined ? bounds.right : "unset",
+                                            maxWidth: bounds.width !== undefined ? bounds.width : "unset",
+                                        }}
+                                        ref={listRef}
+                                        onScroll={onScroll}>
+                                        {
+                                            api && isLoading ? (
+                                                <div className="naria-select__loading-root">
+                                                    <div className="naria-select__loading">
+                                                        <Loading/>
                                                     </div>
-                                                ) : undefined
-                                            }
-                                        </>
-                                    )
-                                }
-                            </div>
-                        </div>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {
+                                                        localOptions?.length ? (
+                                                            <>
+                                                                {
+                                                                    localOptions?.map((item, index) => {
+                                                                        return (
+                                                                            <button type="button" onClick={() => onSelect(item)}
+                                                                                    disabled={disabled}
+                                                                                    key={index.toString()}
+                                                                                    className={`naria-select__option ${classNames?.option} ${getActiveClass(item)}`}
+                                                                                    data-class-prop="option"
+                                                                                    data-class-prop-active="optionActive">
+                                                                                {value?.length ? item[value] : item}
+                                                                            </button>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </>
+                                                        ) : (
+                                                            <div>
+                                                                No Data
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {
+                                                        localPagination.isLoading ? (
+                                                            <div className="naria-select__loading-more-root">
+                                                                <div className="naria-select__loading-more">
+                                                                    <Loading/>
+                                                                </div>
+                                                            </div>
+                                                        ) : undefined
+                                                    }
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                            )
+                        }
                     </Portal>
                 ) : undefined
             }
@@ -531,3 +598,101 @@ export const Select: FC<props> = ({
         </div>
     );
 };
+
+
+// <div
+//
+//     className={`naria-select__list-root ${getDeviceWidth < 768 ? "naria-select__list-root--mobile" : ""} ${classNames?.listRoot} `}
+//     data-class-prop="listRoot"
+//     ref={rootRef}>
+//     <div
+//         className={`naria-select__list ${getDeviceWidth < 768 ? "naria-select__list--mobile" : `naria-select__list--desktop`} ${classNames?.list}`}
+//         data-class-prop="input"
+//         onScroll={onScroll}>
+//         {
+//             api && isLoading ? (
+//                 <div className="naria-select__loading-root">
+//                     <div className="naria-select__loading">
+//                         <Loading/>
+//                     </div>
+//                 </div>
+//             ) : (
+//                 <>
+//                     {
+//                         getDeviceWidth < 768 ? (
+//                             <div
+//                                 className={`naria-select__header--mobile ${classNames?.mobileHeader}`}
+//                                 data-class-prop="mobileHeader">
+//                                 {
+//                                     hasSearch ? (
+//                                         <div
+//                                             className={`naria-select__search-input-root ${classNames.searchInputRoot}`}
+//                                             data-class-prop="searchInputRoot">
+//                                             <input ref={handlerRef}
+//                                                    placeholder={placeholder?.length ? placeholder : "Select"}
+//                                                    className={`naria-select__search-input ${localSelected ? "naria-select__search-input--selected" : ""}
+//                                                                        ${classNames?.searchInput} ${hasError && "naria-select__search-input--error"}`}
+//                                                    data-class-prop="input"
+//                                                    value={searchTerm}
+//                                                    disabled={disabled} type="text"
+//                                                    onChange={onSearch}/>
+//                                             <div
+//                                                 className={`naria-select__icon-root ${classNames?.iconRoot}`}
+//                                                 data-class-prop="iconRoot">
+//                                                 <div className="naria-select__search-icon"
+//                                                      data-class-prop="searchIcon">
+//                                                     <Search/>
+//                                                 </div>
+//                                             </div>
+//                                         </div>
+//                                     ) : undefined
+//                                 }
+//                                 <button
+//                                     className={`naria-select__close-icon ${classNames?.closeIcon}`}
+//                                     onClick={onClose} disabled={disabled}
+//                                     data-class-prop="closeIcon">
+//                                     <Close/>
+//                                 </button>
+//                             </div>
+//                         ) : undefined
+//                     }
+//                     {
+//                         localOptions?.length ? (
+//                             <>
+//                                 {
+//                                     localOptions?.map((item, index) => {
+//                                         return (
+//                                             <button type="button" onClick={() => onSelect(item)}
+//                                                     disabled={disabled}
+//                                                     key={index.toString()}
+//                                                     className={`naria-select__option ${classNames?.option} ${getActiveClass(item)}`}
+//                                                     data-class-prop="option"
+//                                                     data-class-prop-active="optionActive">
+//                                                 {value?.length ? item[value] : item}
+//                                             </button>
+//                                         )
+//                                     })
+//                                 }
+//                             </>
+//                         ) : (
+//                             <div>
+//                                 No Data
+//                             </div>
+//                         )
+//                     }
+//
+//
+//                     {
+//                         localPagination.isLoading ? (
+//                             <div className="naria-select__loading-more-root">
+//                                 <div className="naria-select__loading-more">
+//                                     <Loading/>
+//                                 </div>
+//                             </div>
+//                         ) : undefined
+//                     }
+//                 </>
+//             )
+//         }
+//     </div>
+// </div>

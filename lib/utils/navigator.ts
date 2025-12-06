@@ -9,7 +9,7 @@ export const removeNavigation = (state: string) => {
     } else {
         newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`#` + state, '')}`;
     }
-    NARIA_URL = `${window.location.origin}${newUrl}`;
+    NARIA_URL = `${window.location.origin}${window.location.pathname}${newUrl}`;
     window.history.replaceState(null, '', newUrl);
 }
 
@@ -66,7 +66,7 @@ export const onHashChanges = (state: string) => {
                     if (window.location.href === NARIA_URL) {
                         // console.log("daasda1", window.location.href, NARIA_URL)
                         window.history.replaceState(null, '', "/");
-                        NARIA_URL = `${window.location.origin}/`;
+                        NARIA_URL = `${window.location.origin}${window.location.pathname}/`;
                         setIsHashChanged(true);
                     } else {
                         // console.log("daasda2", window.location.href, NARIA_URL)

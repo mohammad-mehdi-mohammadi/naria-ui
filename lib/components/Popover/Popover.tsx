@@ -79,7 +79,7 @@ export const Popover: FC<props> = ({
                 if (window.location.hash && !document.referrer.includes('#')) {
                     removeNavigation(`popover-` + randomUUIDRef.current);
                 }
-                if((window.location.hash.match(/#/g) || []).length > 1) {
+                if((window.location.hash.match(/#/g) || []).length === 0) {
                     document.body.style.overflow = 'auto';
                 }
             }

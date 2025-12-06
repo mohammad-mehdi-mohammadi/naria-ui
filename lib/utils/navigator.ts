@@ -1,9 +1,8 @@
 import {useEffect, useState} from "react";
 
-let NARIA_URL = window.location.href
+let NARIA_URL = undefined
 export const removeNavigation = (state: string) => {
     let newUrl;
-
     if (window.location.hash.includes("/")) {
         newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`/#` + state, '')}`;
     } else {
@@ -14,7 +13,7 @@ export const removeNavigation = (state: string) => {
 }
 
 export const addNavigation = (state: string) => {
-
+    console.log('as3')
     if (!window.location.hash) {
         window.location.hash = state;
     } else {
@@ -59,6 +58,7 @@ export const addNavigation = (state: string) => {
 export const onHashChanges = (state: string) => {
     const [isHashChanged, setIsHashChanged] = useState(false)
     useEffect(() => {
+        NARIA_URL = window.location.href
         const handleHashChange = (e) => {
             // console.log("daasda0", window.location.href, NARIA_URL, window.history)
             if (window.location.hash.includes(state)) {
@@ -95,9 +95,8 @@ export const onHashChanges = (state: string) => {
                 // }
                 setIsHashChanged(true);
             }
-
-
         };
+
         window.addEventListener('popstate', handleHashChange);
         return () => {
             window.removeEventListener('popstate', handleHashChange);

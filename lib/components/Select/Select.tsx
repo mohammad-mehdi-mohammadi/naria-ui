@@ -200,7 +200,9 @@ export const Select: FC<props> = ({
                 if (window.location.hash && !document.referrer.includes('#')) {
                     removeNavigation(`select-` + randomUUIDRef.current);
                 }
-                document.body.style.overflow = 'auto';
+                if((window.location.hash.match(/#/g) || []).length > 1) {
+                    document.body.style.overflow = 'auto';
+                }
             }
         } else {
             if (!isOpen) {

@@ -79,7 +79,9 @@ export const Popover: FC<props> = ({
                 if (window.location.hash && !document.referrer.includes('#')) {
                     removeNavigation(`popover-` + randomUUIDRef.current);
                 }
-                document.body.style.overflow = 'auto';
+                if((window.location.hash.match(/#/g) || []).length > 1) {
+                    document.body.style.overflow = 'auto';
+                }
             }
         } else {
             if (!isOpen) {
@@ -106,6 +108,7 @@ export const Popover: FC<props> = ({
         document.addEventListener('scroll', onClose, {capture: true});
         return () => {
             document.removeEventListener('scroll', onClose, {capture: true});
+            document.body.style.overflow = "auto";
         };
     }, [])
     const update = () => {

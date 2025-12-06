@@ -434,7 +434,7 @@ export const Select: FC<props> = ({
                                     data-class-prop="listRoot">
                                     <div
                                         className={`naria-select__list naria-select__list--mobile ${classNames?.list}`}
-                                        data-class-prop="input"
+                                        data-class-prop="list"
                                         ref={listRef}
                                         onScroll={onScroll}>
                                         {
@@ -527,7 +527,7 @@ export const Select: FC<props> = ({
                                     data-class-prop="listRoot">
                                     <div
                                         className={`naria-select__list naria-select__list--desktop ${classNames?.list} ${bounds.type} ${bounds.position}`}
-                                        data-class-prop="input"
+                                        data-class-prop="list"
                                         style={{
                                             bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
                                             top: bounds.top !== undefined ? bounds.top : "unset",

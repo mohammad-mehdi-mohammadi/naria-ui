@@ -1,39 +1,106 @@
 import {useEffect, useState} from "react";
 
+let NARIA_URL = window.location.href
 export const removeNavigation = (state: string) => {
     let newUrl;
 
-    if(window.location.hash.includes("/")) {
+    if (window.location.hash.includes("/")) {
         newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`/#` + state, '')}`;
     } else {
         newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`#` + state, '')}`;
     }
+    NARIA_URL = `${window.location.origin}${newUrl}`;
     window.history.replaceState(null, '', newUrl);
 }
 
 export const addNavigation = (state: string) => {
-    if(!window.location.hash) {
+
+    if (!window.location.hash) {
         window.location.hash = state;
     } else {
-        window.location.hash = window.location.hash  + "/#"  + state;
+        window.location.hash = window.location.hash + "/#" + state;
     }
-
+    // let newUrl;
+    // let hash;
+    // if(!window.location.hash) {
+    //     hash = "#" + state;
+    // } else {
+    //     hash = window.location.hash  + "/#" + state;
+    // }
+    // if(window.location.hash.includes("/")) {
+    //     newUrl = `${window.location.pathname}${window.location.search}${hash}`;
+    // } else {
+    //     newUrl = `${window.location.pathname}${window.location.search}${hash}`;
+    // }
+    // console.log("addNavigation", state, newUrl, window.location.pathname, window.location.hash)
+    // // window.history.replaceState(null, '', newUrl);
+    // window.history.replaceState( null , "", newUrl );
 }
 
 
+// export const onHashChanges = (state: string) => {
+//     const [isHashChanged, setIsHashChanged] = useState(false)
+//     useEffect(() => {
+//         const handleHashChange = (e) => {
+//             if(!window.location.hash.includes(state)) {
+//                 setIsHashChanged(true);
+//             } else {
+//                 setIsHashChanged(false);
+//             }
+//             console.log("onHashChanges", state, window.location.hash)
+//         };
+//         window.addEventListener('hashchange', handleHashChange);
+//         return () => {
+//             window.removeEventListener('hashchange', handleHashChange);
+//         };
+//     }, [])
+//     return isHashChanged
+// };
 export const onHashChanges = (state: string) => {
     const [isHashChanged, setIsHashChanged] = useState(false)
     useEffect(() => {
         const handleHashChange = (e) => {
-            if(!window.location.hash.includes(state)) {
-                setIsHashChanged(true);
+            // console.log("daasda0", window.location.href, NARIA_URL, window.history)
+            if (window.location.hash.includes(state)) {
+                if (window.location.hash.length === window.location.hash.indexOf(state) + state.length) {
+                    if (window.location.href === NARIA_URL) {
+                        // console.log("daasda1", window.location.href, NARIA_URL)
+                        window.history.replaceState(null, '', "/");
+                        NARIA_URL = `${window.location.origin}/`;
+                        setIsHashChanged(true);
+                    } else {
+                        // console.log("daasda2", window.location.href, NARIA_URL)
+                        setIsHashChanged(false);
+                        NARIA_URL = window.location.href;
+                    }
+
+
+                }
+
+
+                // if (!window.location.hash.includes(state)) {
+                //     setIsHashChanged(true);
+                // } else {
+                //     setIsHashChanged(false);
+                // }
+
+                // else {
+                //     window.history.replaceState(null, '', "/");
+                //     setIsHashChanged(true);
+                // }
             } else {
-                setIsHashChanged(false);
+                // console.log("daasda2", window.location.href, x)
+                // if(window.location.href === x) {
+                //     x = window.location.href;
+                // }
+                setIsHashChanged(true);
             }
+
+
         };
-        window.addEventListener('hashchange', handleHashChange);
+        window.addEventListener('popstate', handleHashChange);
         return () => {
-            window.removeEventListener('hashchange', handleHashChange);
+            window.removeEventListener('popstate', handleHashChange);
         };
     }, [])
     return isHashChanged

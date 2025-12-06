@@ -5,7 +5,7 @@
     "name": "",
     "url": ""
   },
-  "version": "0.3.26",
+  "version": "0.3.27",
   "type": "module",
   "main": "dist/naria-ui.cjs.js",
   "module": "dist/naria-ui.es.js",

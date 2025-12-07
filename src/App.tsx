@@ -39,7 +39,7 @@ function App() {
             </Modal>
             <p>Basic usage</p>
             <button onClick={() => setIsOpen({...isOpen, basicModal: true})}>Open modal</button>
-
+            
             <Modal isOpen={isOpen.basicModal} title="Modal" onOpenChange={(e) => setIsOpen({...isOpen, basicModal: e})}
                    footer={<>asdadadda</>}>
                 <div className="mx-auto max-w-7xl">
@@ -98,7 +98,7 @@ function App() {
                     Open transparent modal
                 </div>
             </Modal>
-
+            
             <p>Backdrop | Non-dismissible</p>
             <button onClick={() => setIsOpen({...isOpen, nonDismissibleModal: true})}>Open non-dismissible modal
             </button>
@@ -112,7 +112,7 @@ function App() {
             <p>Basic usage</p>
             <div>
                 <div style={{padding: '100px'}}>
-                    <Popover backdrop="blur" placement="top-start" isOpen={isOpen.topStartPopover}
+                    <Popover placement="top-start" isOpen={isOpen.topStartPopover}
                              onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>
                         <button>Top start</button>
                         <Calendar mode="Gregorian" onChange={() => {
@@ -284,13 +284,13 @@ function App() {
             <p>Basic usage</p>
             <Select api={"https://jsonplaceholder.typicode.com/users"} label="id" value="name"/>
             <p>Pagination</p>
-            <Select api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=3"} label="id" value="title"
+            <Select closeIcon = {false} api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=3"} label="id" value="title"
                     pagination={{
                         pageLabel: 'offset',
                         sizeLabel: 'limit'
                     }}/>
             <p>Pagination | Custom page and size</p>
-            <Select api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=20"} label="id" value="title"
+            <Select closeIcon = {<div>CLOSE</div>} api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=20"} label="id" value="title"
                     pagination={{
                         page: 5,
                         pageLabel: 'offset',

@@ -13,7 +13,7 @@ export interface props {
         backdrop?: string;
         content?: string;
     };
-    backdrop: "opaque" | "blur" | "transparent";
+    backdrop?: "opaque" | "blur" | "transparent";
     placement?: "top-start" | "top" | "top-end" | "bottom-start" | "bottom" | "bottom-end" | "right-start" | "right" | "right-end" | "left-start" | "left" | "left-end";
     isOpen: boolean;
     onOpenChange: any;
@@ -57,8 +57,11 @@ export const Popover: FC<props> = ({
     const isHashChanged = onHashChanges(`#popover-` + randomUUIDRef.current);
     // const onOpen = () => onOpenChange(true);
     const onClose = () => {
-        if (onOpenChange) onOpenChange(false)
+        if (onOpenChange) {
+            // onOpenChange(false)
+        }
     };
+
     const onToggle = () => {
         if (onOpenChange) {
             onOpenChange(!isOpen)
@@ -105,9 +108,9 @@ export const Popover: FC<props> = ({
     }, [isHashChanged])
 
     useEffect(() => {
-        document.addEventListener('scroll', onClose);
+        document.addEventListener('scroll', onClose, {capture: true});
         return () => {
-            document.removeEventListener('scroll', onClose);
+            document.removeEventListener('scroll', onClose, {capture: true});
             document.body.style.overflow = "auto";
         };
     }, [])

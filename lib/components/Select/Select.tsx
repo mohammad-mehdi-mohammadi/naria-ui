@@ -36,7 +36,7 @@ export interface props {
     pagination?: Pagination;
     optionFilterLabel?: string;
     hasSearch?: boolean;
-    backdrop: "opaque" | "blur" | "transparent";
+    backdrop?: "opaque" | "blur" | "transparent";
     closeIcon?: ReactNode | boolean;
     classNames?: {
         root: string;
@@ -160,6 +160,7 @@ export const Select: FC<props> = ({
         };
     }, [])
     useEffect(() => {
+        console.log(api, pagination)
         if (api?.length) {
             localApi.current = api;
             if (localApi.current.includes(pagination?.pageLabel || 'page')) {
@@ -267,17 +268,23 @@ export const Select: FC<props> = ({
             } else {
                 setLocalSelected(selected);
             }
+        } else if (selected && api?.length && localOptions?.length) {
+            if (localOptions?.find(item => item[label] === selected)) {
+                setLocalSelected(localOptions?.find(item => item[label] === selected));
+            } else {
+                setLocalSelected(selected);
+            }
         } else if (localSelected !== undefined) {
             setLocalSelected(undefined);
             setSearchTerm("")
         }
     }, [selected]);
     useEffect(() => {
-        document.addEventListener('scroll', update);
+        document.addEventListener('scroll', update, {capture: true});
         window.addEventListener("resize", update);
         return () => {
             window.removeEventListener("resize", update);
-            document.removeEventListener('scroll', update);
+            document.removeEventListener('scroll', update, {capture: true});
         };
     }, [update]);
     useEffect(() => {
@@ -304,6 +311,16 @@ export const Select: FC<props> = ({
             setLocalOptions(options)
         }
     }, [options]);
+
+    useEffect(() => {
+        if (localOptions?.length) {
+            if (localOptions?.find(item => item[label] === selected)) {
+                setLocalSelected(localOptions?.find(item => item[label] === selected));
+            } else {
+                setLocalSelected(selected);
+            }
+        }
+    }, [localOptions]);
 
     const onToggle = () => {
         if (hasSearch && options) {

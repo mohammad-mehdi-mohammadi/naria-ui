@@ -71,7 +71,7 @@ No configuration or environment variables are required.
 ## 🤝 Contributing & Support
 
 Maintained by [phoneticem](phoneticem)  
-Email: jpethani11@gmail.com  
+Email: phoneticem@gmail.com  
 GitHub: [phoneticem/naria](https://github.com/phoneticem/naria)
 
 Feel free to open issues or pull requests!

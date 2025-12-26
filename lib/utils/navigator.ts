@@ -67,12 +67,10 @@ export const onHashChanges = (state: string) => {
 
                         window.history.replaceState(null, '', `${window.location.origin}${window.location.pathname}`);
                         NARIA_URL = `${window.location.origin}${window.location.pathname}`;
-                        console.log("daasda1", NARIA_URL)
                         setIsHashChanged(true);
                     } else {
                         setIsHashChanged(false);
                         NARIA_URL = `${window.location.origin}${window.location.pathname}`;
-                        console.log("daasda2", NARIA_URL)
                     }
 
 

@@ -284,25 +284,25 @@ function App() {
                     selected={2}/>
             <hr/>
             <h1>Call api</h1>
-            {/*<p>Basic usage</p>*/}
-            {/*<Select api={"https://jsonplaceholder.typicode.com/users"} label="id" value="name"/>*/}
-            {/*<p>Pagination</p>*/}
-            {/*<Select closeIcon={false} api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=3"} label="id"*/}
-            {/*        value="title"*/}
-            {/*        pagination={{*/}
-            {/*            pageLabel: 'offset',*/}
-            {/*            sizeLabel: 'limit'*/}
-            {/*        }}/>*/}
-            {/*<p>Pagination | Custom page and size</p>*/}
-            {/*<Select closeIcon={<div>CLOSE</div>} api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=20"}*/}
-            {/*        label="id" value="title"*/}
-            {/*        pagination={{*/}
-            {/*            page: 5,*/}
-            {/*            pageLabel: 'offset',*/}
-            {/*            size: 10,*/}
-            {/*            sizeLabel: 'limit'*/}
-            {/*        }}/>*/}
-            {/*<p>Pagination | api + has search + set api header</p>*/}
+            <p>Basic usage</p>
+            <Select api={"https://jsonplaceholder.typicode.com/users"} label="id" value="name"/>
+            <p>Pagination</p>
+            <Select closeIcon={false} api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=3"} label="id"
+                    value="title"
+                    pagination={{
+                        pageLabel: 'offset',
+                        sizeLabel: 'limit'
+                    }}/>
+            <p>Pagination | Custom page and size</p>
+            <Select closeIcon={<div>CLOSE</div>} api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=20"}
+                    label="id" value="title"
+                    pagination={{
+                        page: 5,
+                        pageLabel: 'offset',
+                        size: 10,
+                        sizeLabel: 'limit'
+                    }}/>
+            <p>Pagination | api + has search + set api header</p>
             <Select api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=20"} label="id" value="title"
                     hasSearch={true}
                     apiHeaders={
@@ -313,26 +313,8 @@ function App() {
                     }
                     onSelectChange = {(e) => console.log(e)}
                     selected = {{
-                        "id": 15,
+                        "id": 20,
                         "title": "Classic White Crew Neck T-Shirt",
-                        "slug": "classic-white-crew-neck-t-shirt",
-                        "price": 39,
-                        "description": "Elevate your basics with this versatile white crew neck tee. Made from a soft, breathable cotton blend, it offers both comfort and durability. Its sleek, timeless design ensures it pairs well with virtually any outfit. Ideal for layering or wearing on its own, this t-shirt is a must-have staple for every wardrobe.",
-                        "category": {
-                            "id": 1,
-                            "name": "Clothes",
-                            "slug": "clothes",
-                            "image": "https://i.imgur.com/QkIa5tT.jpeg",
-                            "creationAt": "2025-12-26T12:11:22.000Z",
-                            "updatedAt": "2025-12-26T12:11:22.000Z"
-                        },
-                        "images": [
-                            "https://i.imgur.com/axsyGpD.jpeg",
-                            "https://i.imgur.com/T8oq9X2.jpeg",
-                            "https://i.imgur.com/J6MinJn.jpeg"
-                        ],
-                        "creationAt": "2025-12-26T12:11:22.000Z",
-                        "updatedAt": "2025-12-26T12:11:22.000Z"
                     }}
                     pagination={{
                         page: 1,

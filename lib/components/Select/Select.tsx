@@ -71,7 +71,13 @@ export const Select: FC<props> = ({
                                       selected,
                                       placeholder,
                                       disabled = false,
-                                      pagination,
+                                      pagination = {
+                                          page: 1,
+                                          pageLabel: 'page',
+                                          size: 20,
+                                          sizeLabel: 'size',
+                                          searchLabel: undefined
+                                      },
                                       optionFilterLabel,
                                       hasSearch = false,
                                       backdrop = "opaque",
@@ -160,7 +166,6 @@ export const Select: FC<props> = ({
         };
     }, [])
     useEffect(() => {
-        console.log(api, pagination)
         if (api?.length) {
             localApi.current = api;
             if (localApi.current.includes(pagination?.pageLabel || 'page')) {
@@ -177,7 +182,7 @@ export const Select: FC<props> = ({
                 }
             })
         }
-    }, [api, pagination]);
+    }, [api, pagination.page, pagination.pageLabel, pagination.size, pagination.sizeLabel, pagination.searchLabel]);
 
     useEffect(() => {
         if (localPagination.isLoading) {
@@ -290,11 +295,20 @@ export const Select: FC<props> = ({
     useEffect(() => {
         if (localSelected) {
             if (hasSearch) {
-                if (value?.length && localOptions?.find(item => item[label] === localSelected[label])) {
-                    setSearchTerm(localOptions?.find(item => item[label] === localSelected[label])[value] || '');
+                if (api?.length) {
+                    if (value?.length) {
+                        setSearchTerm(localSelected[value] || '');
+                    } else {
+                        setSearchTerm(localSelected);
+                    }
                 } else {
-                    setSearchTerm(localSelected);
+                    if (value?.length && localOptions?.find(item => item[label] === localSelected[label])) {
+                        setSearchTerm(localOptions?.find(item => item[label] === localSelected[label])[value] || '');
+                    } else {
+                        setSearchTerm(localSelected);
+                    }
                 }
+
             }
         }
     }, [localSelected]);
@@ -329,8 +343,12 @@ export const Select: FC<props> = ({
         setIsOpen(prevState => !prevState);
     }
     const onClose = () => {
-        if (hasSearch && options) {
+        if (hasSearch && api?.length) {
+            setLocalOptions(localOptions)
+        } else if (hasSearch && options) {
             setLocalOptions(options)
+        }
+        if (hasSearch) {
             if (typeof localSelected === "string") {
                 setSearchTerm(localSelected);
             } else {
@@ -379,9 +397,9 @@ export const Select: FC<props> = ({
 
     }
     const onSearch = (e) => {
-        if(api?.length) {
+        if (api?.length) {
             setSearchTerm(e?.target?.value);
-            if(debounceTime?.current) {
+            if (debounceTime?.current) {
                 clearTimeout(debounceTime.current);
                 debounceTime.current = undefined;
             }

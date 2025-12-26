@@ -11,7 +11,6 @@ export const useOutOfBounds = (ref: RefObject<Element>) => {
         if (ref.current) {
             setTimeout(() => {
                 const rect = ref.current.getBoundingClientRect();
-                console.log(rect)
                 setOutOfBounds({
                     top: rect.top - rect.height,
                     bottom: (window.innerHeight || document.documentElement.clientHeight) - rect.bottom,

@@ -58,7 +58,7 @@ export const Popover: FC<props> = ({
     // const onOpen = () => onOpenChange(true);
     const onClose = () => {
         if (onOpenChange) {
-            // onOpenChange(false)
+            onOpenChange(false)
         }
     };
 

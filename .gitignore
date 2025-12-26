@@ -29,3 +29,6 @@ storybook-static
 # Storybook (local demo only)
 .storybook/
 storybook-static/
+
+
+.npmrc

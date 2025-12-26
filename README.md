@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/naria-ui?style=flat-square)](https://www.npmjs.com/package/naria-ui)
 [![npm downloads](https://img.shields.io/npm/dm/naria-ui?style=flat-square)](https://www.npmjs.com/package/naria-ui)
-[![GitHub](https://img.shields.io/badge/github-JanardanPethani%2Fnaria-blue?logo=github&style=flat-square)](https://github.com/JanardanPethani/naria)
+[![GitHub](https://img.shields.io/badge/github-Phoneticem%2Fnaria-blue?logo=github&style=flat-square)](https://github.com/Phoneticem/naria)
 
 <!-- Add a license badge if you add a LICENSE file, e.g. MIT:
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

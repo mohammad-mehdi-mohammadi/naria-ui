@@ -105,9 +105,9 @@ export const Popover: FC<props> = ({
     }, [isHashChanged])
 
     useEffect(() => {
-        document.addEventListener('scroll', onClose, {capture: true});
+        document.addEventListener('scroll', onClose);
         return () => {
-            document.removeEventListener('scroll', onClose, {capture: true});
+            document.removeEventListener('scroll', onClose);
             document.body.style.overflow = "auto";
         };
     }, [])

@@ -15,6 +15,7 @@ interface Pagination {
     pageLabel?: string;
     size?: number;
     sizeLabel?: string;
+    searchLabel?: string;
 }
 
 interface SDS extends Pagination {
@@ -27,6 +28,7 @@ export interface props {
     title: string;
     value?: string;
     api?: string;
+    apiHeaders?: Headers;
     hasError?: string | null;
     selected?: any;
     placeholder?: string;
@@ -65,6 +67,7 @@ export const Select: FC<props> = ({
                                       title,
                                       value,
                                       api,
+                                      apiHeaders,
                                       selected,
                                       placeholder,
                                       disabled = false,
@@ -97,6 +100,7 @@ export const Select: FC<props> = ({
     let isSubscribed = true;
     const getDeviceWidth = useWidth();
     const randomUUIDRef = useRef<string>(generateRandom(5));
+    const debounceTime = useRef<any>(undefined);
     const isHashChanged = onHashChanges(`#select-` + randomUUIDRef.current);
     const [isOpen, setIsOpen] = useState(false);
     const [bounds, setBounds] = useState<{
@@ -134,7 +138,11 @@ export const Select: FC<props> = ({
     const getData = async () => {
         if (localApi?.current) {
             try {
-                const response = await fetch(localApi?.current);
+                const response = await fetch(localApi?.current, {
+                    headers: {
+                        ...apiHeaders
+                    },
+                });
                 if (!response.ok) {
                     throw new Error(`Response status: ${response.status}`);
                 }
@@ -265,11 +273,11 @@ export const Select: FC<props> = ({
         }
     }, [selected]);
     useEffect(() => {
-        document.addEventListener('scroll', update, {capture: true});
+        document.addEventListener('scroll', update);
         window.addEventListener("resize", update);
         return () => {
             window.removeEventListener("resize", update);
-            document.removeEventListener('scroll', update, {capture: true});
+            document.removeEventListener('scroll', update);
         };
     }, [update]);
     useEffect(() => {
@@ -298,13 +306,13 @@ export const Select: FC<props> = ({
     }, [options]);
 
     const onToggle = () => {
-        if (hasSearch) {
+        if (hasSearch && options) {
             setLocalOptions(options)
         }
         setIsOpen(prevState => !prevState);
     }
     const onClose = () => {
-        if (hasSearch) {
+        if (hasSearch && options) {
             setLocalOptions(options)
             if (typeof localSelected === "string") {
                 setSearchTerm(localSelected);
@@ -354,9 +362,34 @@ export const Select: FC<props> = ({
 
     }
     const onSearch = (e) => {
-        const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[(optionFilterLabel?.length ? optionFilterLabel : value)].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
-        setLocalOptions(tempList)
-        setSearchTerm(e?.target?.value)
+        if(api?.length) {
+            setSearchTerm(e?.target?.value);
+            if(debounceTime?.current) {
+                clearTimeout(debounceTime.current);
+                debounceTime.current = undefined;
+            }
+            debounceTime.current = setTimeout(() => {
+                if (localApi.current.includes(pagination?.pageLabel || 'page')) {
+                    const url = new URL(api);
+                    url.searchParams.set(pagination?.pageLabel || 'page', (pagination?.page || localPagination.page).toString());
+                    url.searchParams.set(pagination?.sizeLabel || 'size', (pagination?.size || localPagination.size).toString());
+                    url.searchParams.set(pagination?.searchLabel || 'search', e?.target?.value.toString());
+                    localApi.current = url.href;
+                }
+                setIsLoading(true);
+                getData().then((res) => {
+                    if (isSubscribed) {
+                        setIsLoading(false);
+                        setLocalOptions(res);
+                    }
+                })
+            }, 500)
+
+        } else {
+            const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[(optionFilterLabel?.length ? optionFilterLabel : value)].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
+            setLocalOptions(tempList)
+            setSearchTerm(e?.target?.value)
+        }
         if (!isOpen) {
             setIsOpen(true)
         }

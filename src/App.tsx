@@ -26,7 +26,8 @@ function App() {
             <h1>Modal</h1>
             <p>Nested</p>
             <button onClick={() => setIsOpen({...isOpen, nested: true})}>Open modal</button>
-            <Modal isOpen={isOpen.nested} title="Modal" onOpenChange={(e) => setIsOpen({...isOpen, nested: e})} footer = {<>asdadadda</>}>
+            <Modal isOpen={isOpen.nested} title="Modal" onOpenChange={(e) => setIsOpen({...isOpen, nested: e})}
+                   footer={<>asdadadda</>}>
                 <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
                         value="name"/>
                 <Popover backdrop="blur" placement="top-start" isOpen={isOpen.nestedPopover}
@@ -39,7 +40,7 @@ function App() {
             </Modal>
             <p>Basic usage</p>
             <button onClick={() => setIsOpen({...isOpen, basicModal: true})}>Open modal</button>
-            
+
             <Modal isOpen={isOpen.basicModal} title="Modal" onOpenChange={(e) => setIsOpen({...isOpen, basicModal: e})}
                    footer={<>asdadadda</>}>
                 <div className="mx-auto max-w-7xl">
@@ -98,7 +99,7 @@ function App() {
                     Open transparent modal
                 </div>
             </Modal>
-            
+
             <p>Backdrop | Non-dismissible</p>
             <button onClick={() => setIsOpen({...isOpen, nonDismissibleModal: true})}>Open non-dismissible modal
             </button>
@@ -265,7 +266,9 @@ function App() {
             <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
                     value="name" selected={3}/>
             <p>Search with search field | Primitive</p>
-            <Select options={["Yellow", "Red", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"]} hasSearch={true}/>
+            <Select
+                options={["Yellow", "Red", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"]}
+                hasSearch={true}/>
             <p>Search with search field | Non-primitive</p>
             <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
                     value="name" hasSearch={true}/>
@@ -297,7 +300,22 @@ function App() {
                         size: 10,
                         sizeLabel: 'limit'
                     }}/>
-
+            <p>Pagination | api + has search + set api header</p>
+            <Select api={"https://api.escuelajs.co/api/v1/products?offset=1&limit=20"} label="id" value="name"
+                    hasSearch={true}
+                    apiHeaders={
+                        {
+                            'Authorization': 'asda',
+                            'Cache-Control': 'no-cache, must-revalidate, max-age=300'
+                        }
+                    }
+                    pagination={{
+                        page: 1,
+                        pageLabel: 'offset',
+                        size: 10,
+                        sizeLabel: 'limit',
+                        searchLabel: 'title',
+                    }}/>
         </>
     )
 }

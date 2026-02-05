@@ -27,12 +27,11 @@ export interface props {
     label?: string;
     title: string;
     value?: string;
-    api?: string;
-    apiHeaders?: Headers;
     hasError?: string | null;
     selected?: any;
     placeholder?: string;
     disabled?: boolean;
+    fetch?: any;
     pagination?: Pagination;
     optionFilterLabel?: string;
     hasSearch?: boolean;
@@ -66,8 +65,7 @@ export const Select: FC<props> = ({
                                       hasError,
                                       title,
                                       value,
-                                      api,
-                                      apiHeaders,
+                                      fetch,
                                       selected,
                                       placeholder,
                                       disabled = false,
@@ -130,6 +128,7 @@ export const Select: FC<props> = ({
     const [localSelected, setLocalSelected] = useState<string | undefined>(undefined);
     const [localOptions, setLocalOptions] = useState(undefined);
     const [searchTerm, setSearchTerm] = useState("");
+    const [inputValue, setInputValue] = useState("");
     const [localPagination, setLocalPagination] = useState<SDS>({
         page: 1,
         pageLabel: 'page',
@@ -137,28 +136,8 @@ export const Select: FC<props> = ({
         sizeLabel: 'size',
         isLoading: false
     });
-    const localApi = useRef<string | undefined>(undefined);
     const listRef = useRef(undefined);
     const handlerRef = useRef(undefined);
-
-    const getData = async () => {
-        if (localApi?.current) {
-            try {
-                const response = await fetch(localApi?.current, {
-                    headers: {
-                        ...apiHeaders
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`Response status: ${response.status}`);
-                }
-                return await response.json();
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-    }
 
     useEffect(() => {
         return () => {
@@ -166,46 +145,52 @@ export const Select: FC<props> = ({
         };
     }, [])
     useEffect(() => {
-        if (api?.length) {
-            localApi.current = api;
-            if (localApi.current.includes(pagination?.pageLabel || 'page')) {
-                const url = new URL(api);
-                url.searchParams.set(pagination?.pageLabel || 'page', (pagination?.page || localPagination.page).toString());
-                url.searchParams.set(pagination?.sizeLabel || 'size', (pagination?.size || localPagination.size).toString());
-                localApi.current = url.href;
+        if (fetch) {
+            const params: any = {
+                [pagination?.pageLabel || 'page']: (pagination?.page || localPagination.page),
+                [pagination?.sizeLabel || 'size']: (pagination?.size || localPagination.size),
+            }
+            if (searchTerm?.length) {
+                params[pagination?.searchLabel || 'search'] = searchTerm;
             }
             setIsLoading(true);
-            getData().then((res) => {
+            fetch(params).then(res => {
                 if (isSubscribed) {
                     setIsLoading(false);
                     setLocalOptions(res);
                 }
             })
         }
-    }, [api, pagination.page, pagination.pageLabel, pagination.size, pagination.sizeLabel, pagination.searchLabel]);
+    }, [fetch, pagination.page, pagination.pageLabel, pagination.size, pagination.sizeLabel, pagination.searchLabel]);
 
     useEffect(() => {
         if (localPagination.isLoading) {
-            if (localApi.current.includes(pagination?.pageLabel || 'page')) {
-                const url = new URL(localApi.current);
-                url.searchParams.set(pagination?.pageLabel || 'page', (localPagination.page).toString());
-                localApi.current = url.href;
+            const params: any = {
+                [pagination?.pageLabel || 'page']: (localPagination.page),
+                [pagination?.sizeLabel || 'size']: (localPagination.size),
             }
-            getData().then((res) => {
+            if (searchTerm?.length) {
+                params[pagination?.searchLabel || 'search'] = searchTerm;
+            }
+            fetch(params).then(res => {
                 if (isSubscribed) {
                     setIsLoading(false);
                     setLocalPagination({
                         ...localPagination,
                         isLoading: false
                     })
-                    setLocalOptions([
-                        ...localOptions,
-                        ...res
-                    ]);
+                    if(localPagination.page === 1) {
+                        setLocalOptions(res);
+                    } else {
+                        setLocalOptions([
+                            ...localOptions,
+                            ...res
+                        ]);
+                    }
                 }
             })
         }
-    }, [localPagination]);
+    }, [localPagination, searchTerm]);
     useEffect(() => {
         if (getDeviceWidth < 768) {
             if (isOpen) {
@@ -273,7 +258,7 @@ export const Select: FC<props> = ({
             } else {
                 setLocalSelected(selected);
             }
-        } else if (selected && api?.length && localOptions?.length) {
+        } else if (selected && fetch && localOptions?.length) {
             if (localOptions?.find(item => item[label] === selected)) {
                 setLocalSelected(localOptions?.find(item => item[label] === selected));
             } else {
@@ -281,7 +266,8 @@ export const Select: FC<props> = ({
             }
         } else if (localSelected !== undefined) {
             setLocalSelected(undefined);
-            setSearchTerm("")
+            setSearchTerm("");
+            setInputValue("");
         }
     }, [selected]);
     useEffect(() => {
@@ -293,22 +279,19 @@ export const Select: FC<props> = ({
         };
     }, [update]);
     useEffect(() => {
-        if (localSelected) {
-            if (hasSearch) {
-                if (api?.length) {
-                    if (value?.length) {
-                        setSearchTerm(localSelected[value] || '');
-                    } else {
-                        setSearchTerm(localSelected);
-                    }
+        if (localSelected && hasSearch) {
+            if (fetch) {
+                if (value?.length) {
+                    setInputValue(localSelected[value] || '');
                 } else {
-                    if (value?.length && localOptions?.find(item => item[label] === localSelected[label])) {
-                        setSearchTerm(localOptions?.find(item => item[label] === localSelected[label])[value] || '');
-                    } else {
-                        setSearchTerm(localSelected);
-                    }
+                    setInputValue(localSelected);
                 }
-
+            } else {
+                if (value?.length && localOptions?.find(item => item[label] === localSelected[label])) {
+                    setInputValue(localOptions?.find(item => item[label] === localSelected[label])[value] || '');
+                } else {
+                    setInputValue(localSelected);
+                }
             }
         }
     }, [localSelected]);
@@ -343,16 +326,16 @@ export const Select: FC<props> = ({
         setIsOpen(prevState => !prevState);
     }
     const onClose = () => {
-        if (hasSearch && api?.length) {
+        if (hasSearch && fetch) {
             setLocalOptions(localOptions)
         } else if (hasSearch && options) {
             setLocalOptions(options)
         }
         if (hasSearch) {
             if (typeof localSelected === "string") {
-                setSearchTerm(localSelected);
+                setInputValue(localSelected);
             } else {
-                setSearchTerm(localSelected ? localSelected[value] : "")
+                setInputValue(localSelected ? localSelected[value] : "")
             }
         }
         setIsOpen(false);
@@ -360,9 +343,9 @@ export const Select: FC<props> = ({
     const onSelect = (item) => {
         if (hasSearch) {
             if (value?.length) {
-                setSearchTerm(item[value]);
+                setInputValue(item[value]);
             } else {
-                setSearchTerm(item);
+                setInputValue(item);
             }
         }
         setLocalSelected(item);
@@ -384,11 +367,12 @@ export const Select: FC<props> = ({
         }
     }
     const onScroll = (e) => {
-        if (api?.length && localOptions?.length && !localPagination.isLoading) {
+        if (fetch && localOptions?.length && !localPagination.isLoading) {
             const bottom = e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - 100;
 
             if (bottom) {
                 setLocalPagination({
+                    ...localPagination,
                     page: localPagination.page + 1,
                     isLoading: true
                 })
@@ -397,33 +381,27 @@ export const Select: FC<props> = ({
 
     }
     const onSearch = (e) => {
-        if (api?.length) {
-            setSearchTerm(e?.target?.value);
+        if (fetch) {
+            setInputValue(e?.target?.value);
             if (debounceTime?.current) {
                 clearTimeout(debounceTime.current);
                 debounceTime.current = undefined;
             }
             debounceTime.current = setTimeout(() => {
-                if (localApi.current.includes(pagination?.pageLabel || 'page')) {
-                    const url = new URL(api);
-                    url.searchParams.set(pagination?.pageLabel || 'page', (pagination?.page || localPagination.page).toString());
-                    url.searchParams.set(pagination?.sizeLabel || 'size', (pagination?.size || localPagination.size).toString());
-                    url.searchParams.set(pagination?.searchLabel || 'search', e?.target?.value.toString());
-                    localApi.current = url.href;
-                }
+
+                setSearchTerm(e?.target?.value.toString());
                 setIsLoading(true);
-                getData().then((res) => {
-                    if (isSubscribed) {
-                        setIsLoading(false);
-                        setLocalOptions(res);
-                    }
+                setLocalPagination({
+                    ...localPagination,
+                    page: 1,
+                    isLoading: true
                 })
             }, 500)
 
         } else {
             const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[(optionFilterLabel?.length ? optionFilterLabel : value)].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
             setLocalOptions(tempList)
-            setSearchTerm(e?.target?.value)
+            setInputValue(e?.target?.value)
         }
         if (!isOpen) {
             setIsOpen(true)
@@ -445,7 +423,7 @@ export const Select: FC<props> = ({
                                    placeholder={placeholder?.length ? placeholder : "Select"}
                                    className={`naria-select__search-input ${localSelected ? "naria-select__search-input--selected" : ""}
                                    ${hasError && "naria-select__search-input--error"} ${classNames?.searchInput}`}
-                                   value={searchTerm}
+                                   value={inputValue}
                                    disabled={disabled} type="text" onClick={onToggle} onChange={onSearch}
                                    data-class-prop="searchInput"/>
                             <div className={`naria-select__icon-root ${classNames?.iconRoot}`}
@@ -510,7 +488,7 @@ export const Select: FC<props> = ({
                                         ref={listRef}
                                         onScroll={onScroll}>
                                         {
-                                            api && isLoading ? (
+                                            fetch && isLoading ? (
                                                 <div className="naria-select__loading-root">
                                                     <div className="naria-select__loading">
                                                         <Loading/>
@@ -531,7 +509,7 @@ export const Select: FC<props> = ({
                                                                            className={`naria-select__search-input ${localSelected ? "naria-select__search-input--selected" : ""} 
                                                                        ${classNames?.searchInput} ${hasError && "naria-select__search-input--error"}`}
                                                                            data-class-prop="input"
-                                                                           value={searchTerm}
+                                                                           value={inputValue}
                                                                            disabled={disabled} type="text"
                                                                            onChange={onSearch}/>
                                                                     <div
@@ -628,7 +606,7 @@ export const Select: FC<props> = ({
                                         ref={listRef}
                                         onScroll={onScroll}>
                                         {
-                                            api && isLoading ? (
+                                            fetch && isLoading ? (
                                                 <div className="naria-select__loading-root">
                                                     <div className="naria-select__loading">
                                                         <Loading/>

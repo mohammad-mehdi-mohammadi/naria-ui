@@ -124,6 +124,7 @@ export const Select: FC<props> = ({
         type: "fade-in-scale",
         position: ""
     });
+    const hasFetched = useRef(false);
     const [isLoading, setIsLoading] = useState(true);
     const [localSelected, setLocalSelected] = useState<string | undefined>(undefined);
     const [localOptions, setLocalOptions] = useState(undefined);
@@ -146,7 +147,8 @@ export const Select: FC<props> = ({
     }, [])
     useEffect(() => {
         if (fetch) {
-            console.log(fetch, pagination)
+            if (!fetch || hasFetched.current) return;
+            hasFetched.current = true;
             const params: any = {
                 [pagination?.pageLabel || 'page']: (pagination?.page || localPagination.page),
                 [pagination?.sizeLabel || 'size']: (pagination?.size || localPagination.size),
@@ -159,6 +161,7 @@ export const Select: FC<props> = ({
                 if (isSubscribed) {
                     setIsLoading(false);
                     setLocalOptions(res);
+                    hasFetched.current = false;
                 }
             })
         }

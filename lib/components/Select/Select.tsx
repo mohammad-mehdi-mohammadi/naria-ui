@@ -146,6 +146,7 @@ export const Select: FC<props> = ({
     }, [])
     useEffect(() => {
         if (fetch) {
+            console.log(fetch, pagination)
             const params: any = {
                 [pagination?.pageLabel || 'page']: (pagination?.page || localPagination.page),
                 [pagination?.sizeLabel || 'size']: (pagination?.size || localPagination.size),

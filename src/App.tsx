@@ -23,9 +23,9 @@ function App() {
     })
 
     const fetchApi = () => {
-        return async (params = {offset: '1', limit: '20'}) => {
+        return async (params = {page: '1', size: '20'}) => {
             const queryString = new URLSearchParams(params).toString();
-            const response = await fetch(`https://api.escuelajs.co/api/v1/products?${queryString}`, {
+            const response = await fetch(`http://localhost:3232/api/public/game?${queryString}`, {
             });
             return response.json();
         };
@@ -254,77 +254,76 @@ function App() {
             {/*<Input placeholder="Placeholder" title="Placeholder"/>*/}
             {/*<p>Disabled</p>*/}
             {/*<Input disabled={true} placeholder="Placeholder" title="Disabled"/>*/}
-            <hr/>
-            <h1>Select</h1>
-            <p>Primitive list</p>
-            <Select options={["Yellow", "Red", "Blue"]} classNames={
-                {
-                    input: "input input-bordered w-full",
-                    title: "text-[var(--primary-800)] font-bold text-xs mr-2 mb-1.5",
-                }
-            }/>
-            <p>Non-primitive list</p>
-            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
-                    value="name"/>
-            <p>Disabled</p>
-            <Select disabled={true} options={["Yellow", "Red", "Blue"]}/>
-            <p>Placeholder</p>
-            <Select options={["Yellow", "Red", "Blue"]} placeholder="Custom placeholder"/>
-            <p>Selected | Primitive</p>
-            <Select options={["Yellow", "Red", "Blue"]} selected="Yellow"/>
-            <p>Selected | Non-primitive list</p>
-            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
-                    value="name" selected={3}/>
-            <p>Search with search field | Primitive</p>
-            <Select
-                options={["Yellow", "Red", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"]}
-                hasSearch={true}/>
-            <p>Search with search field | Non-primitive</p>
-            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
-                    value="name" hasSearch={true}/>
-            <p>Search with search field | Non-primitive | Custom filter prop</p>
-            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
-                    value="name" hasSearch={true} optionFilterLabel="name"/>
-            <p>Search with search field | primitive | Selected</p>
-            <Select options={["Yellow", "Red", "Blue"]} selected={"Red"} hasSearch={true}/>
-            <p>Search with search field | Non-primitive | Selected</p>
-            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]}
-                    label="id" value="name"
-                    hasSearch={true}
-                    selected={2}/>
-            <hr/>
-            <h1>Call api</h1>
-            <p>Basic usage</p>
-            <Select fetch={fetchApi()} label="id" value="title"/>
-            <p>Pagination</p>
-            <Select closeIcon={false} fetch={fetchApi()} label="id"
-                    value="title"
-                    pagination={{
-                        pageLabel: 'offset',
-                        sizeLabel: 'limit'
-                    }}/>
-            <p>Pagination | Custom page and size</p>
-            <Select closeIcon={<div>CLOSE</div>} fetch={fetchApi()}
-                    label="id" value="title"
-                    pagination={{
-                        page: 5,
-                        pageLabel: 'offset',
-                        size: 10,
-                        sizeLabel: 'limit'
-                    }}/>
+            {/*<hr/>*/}
+            {/*<h1>Select</h1>*/}
+            {/*<p>Primitive list</p>*/}
+            {/*<Select options={["Yellow", "Red", "Blue"]} classNames={*/}
+            {/*    {*/}
+            {/*        input: "input input-bordered w-full",*/}
+            {/*        title: "text-[var(--primary-800)] font-bold text-xs mr-2 mb-1.5",*/}
+            {/*    }*/}
+            {/*}/>*/}
+            {/*<p>Non-primitive list</p>*/}
+            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
+            {/*        value="name"/>*/}
+            {/*<p>Disabled</p>*/}
+            {/*<Select disabled={true} options={["Yellow", "Red", "Blue"]}/>*/}
+            {/*<p>Placeholder</p>*/}
+            {/*<Select options={["Yellow", "Red", "Blue"]} placeholder="Custom placeholder"/>*/}
+            {/*<p>Selected | Primitive</p>*/}
+            {/*<Select options={["Yellow", "Red", "Blue"]} selected="Yellow"/>*/}
+            {/*<p>Selected | Non-primitive list</p>*/}
+            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
+            {/*        value="name" selected={3}/>*/}
+            {/*<p>Search with search field | Primitive</p>*/}
+            {/*<Select*/}
+            {/*    options={["Yellow", "Red", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"]}*/}
+            {/*    hasSearch={true}/>*/}
+            {/*<p>Search with search field | Non-primitive</p>*/}
+            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
+            {/*        value="name" hasSearch={true}/>*/}
+            {/*<p>Search with search field | Non-primitive | Custom filter prop</p>*/}
+            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
+            {/*        value="name" hasSearch={true} optionFilterLabel="name"/>*/}
+            {/*<p>Search with search field | primitive | Selected</p>*/}
+            {/*<Select options={["Yellow", "Red", "Blue"]} selected={"Red"} hasSearch={true}/>*/}
+            {/*<p>Search with search field | Non-primitive | Selected</p>*/}
+            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]}*/}
+            {/*        label="id" value="name"*/}
+            {/*        hasSearch={true}*/}
+            {/*        selected={2}/>*/}
+            {/*<hr/>*/}
+            {/*<h1>Call api</h1>*/}
+            {/*<p>Basic usage</p>*/}
+            {/*<Select fetch={fetchApi()} label="id" value="title"/>*/}
+            {/*<p>Pagination</p>*/}
+            {/*<Select closeIcon={false} fetch={fetchApi()} label="id"*/}
+            {/*        value="title"*/}
+            {/*        pagination={{*/}
+            {/*            pageLabel: 'offset',*/}
+            {/*            sizeLabel: 'limit'*/}
+            {/*        }}/>*/}
+            {/*<p>Pagination | Custom page and size</p>*/}
+            {/*<Select closeIcon={<div>CLOSE</div>} fetch={fetchApi()}*/}
+            {/*        label="id" value="title"*/}
+            {/*        pagination={{*/}
+            {/*            page: 5,*/}
+            {/*            pageLabel: 'offset',*/}
+            {/*            size: 10,*/}
+            {/*            sizeLabel: 'limit'*/}
+            {/*        }}/>*/}
             <p>Pagination | api + has search + set api header</p>
-            <Select fetch={fetchApi()} label="id" value="title"
-                    hasSearch={true}
+            <Select fetch={fetchApi()} label="id" value="name"
                     onSelectChange = {(e) => console.log(e)}
                     selected = {{
-                        "id": 20,
-                        "title": "Classic White Crew Neck T-Shirt",
+                        "id": 1,
+                        "name": "Classic White Crew Neck T-Shirt",
                     }}
                     pagination={{
                         page: 1,
-                        pageLabel: 'offset',
+                        pageLabel: 'page',
                         size: 10,
-                        sizeLabel: 'limit',
+                        sizeLabel: 'size',
                         searchLabel: 'title',
                     }}/>
         </>

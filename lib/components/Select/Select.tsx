@@ -107,6 +107,7 @@ export const Select: FC<props> = ({
     const debounceTime = useRef<any>(undefined);
     const isHashChanged = onHashChanges(`#select-` + randomUUIDRef.current);
     const [isOpen, setIsOpen] = useState(false);
+    const [preventLoadMore, setPreventLoadMore] = useState(false);
     const [bounds, setBounds] = useState<{
         top: undefined | number,
         bottom: undefined | number,
@@ -124,7 +125,6 @@ export const Select: FC<props> = ({
         type: "fade-in-scale",
         position: ""
     });
-    const hasFetched = useRef(false);
     const [isLoading, setIsLoading] = useState(true);
     const [localSelected, setLocalSelected] = useState<string | undefined>(undefined);
     const [localOptions, setLocalOptions] = useState(undefined);
@@ -147,8 +147,10 @@ export const Select: FC<props> = ({
     }, [])
     useEffect(() => {
         if (fetch) {
-            if (!fetch || hasFetched.current) return;
-            hasFetched.current = true;
+            setLocalPagination({
+                ...localPagination,
+                ...pagination
+            })
             const params: any = {
                 [pagination?.pageLabel || 'page']: (pagination?.page || localPagination.page),
                 [pagination?.sizeLabel || 'size']: (pagination?.size || localPagination.size),
@@ -161,7 +163,6 @@ export const Select: FC<props> = ({
                 if (isSubscribed) {
                     setIsLoading(false);
                     setLocalOptions(res);
-                    hasFetched.current = false;
                 }
             })
         }
@@ -186,6 +187,9 @@ export const Select: FC<props> = ({
                     if(localPagination.page === 1) {
                         setLocalOptions(res);
                     } else {
+                        if(res.length < localPagination.size) {
+                            setPreventLoadMore(true)
+                        }
                         setLocalOptions([
                             ...localOptions,
                             ...res
@@ -194,7 +198,7 @@ export const Select: FC<props> = ({
                 }
             })
         }
-    }, [localPagination, searchTerm]);
+    }, [localPagination.isLoading, searchTerm]);
     useEffect(() => {
         if (getDeviceWidth < 768) {
             if (isOpen) {
@@ -371,8 +375,8 @@ export const Select: FC<props> = ({
         }
     }
     const onScroll = (e) => {
-        if (fetch && localOptions?.length && !localPagination.isLoading) {
-            const bottom = e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - 100;
+        if (fetch && localOptions?.length && !localPagination.isLoading && !preventLoadMore) {
+            const bottom = e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - 20;
 
             if (bottom) {
                 setLocalPagination({
@@ -400,6 +404,7 @@ export const Select: FC<props> = ({
                     page: 1,
                     isLoading: true
                 })
+                setPreventLoadMore(false);
             }, 500)
 
         } else {

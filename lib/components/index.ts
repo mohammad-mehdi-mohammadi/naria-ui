@@ -6,3 +6,4 @@ export * from './Loading';
 export * from './Popover';
 export * from './Calendars/Calendar';
 export * from './Modal';
+export * from './Tabs';

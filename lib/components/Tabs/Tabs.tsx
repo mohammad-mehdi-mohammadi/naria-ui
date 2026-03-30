@@ -1,5 +1,5 @@
 import React, {FC, ReactNode} from "react";
-import './button.scss';
+import './tabs.scss';
 import {Loading} from "../Loading";
 
 
@@ -18,7 +18,7 @@ export interface props extends React.DetailedHTMLProps<React.ButtonHTMLAttribute
     icon?: ReactNode;
 }
 
-export const Button: FC<props> = ({
+export const Tabs: FC<props> = ({
                                       type = "button",
                                       classNames = {
                                           root: "",
@@ -35,13 +35,9 @@ export const Button: FC<props> = ({
                                   }) => {
 
     return (
-        <button type={type} disabled={isDisabled} {...otherProps}
-                className={`naria-button ${isDisabled ? "naria-button--disabled" : ""} ${classNames?.root}`}
-                data-class-prop="root"
-        >{isLoading ? <Loading classNames={{
-            root: classNames?.loading?.root,
-            color: classNames?.loading?.color
-        }} data-class-prop="root" data-class-prop-color="color"/> : icon}{value}</button>
+        <div>
+            
+        </div>
     );
 };
 

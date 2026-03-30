@@ -1,0 +1,63 @@
+.naria-checkbox {
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+
+
+  input {
+    display: none;
+  }
+
+  .naria-checkbox__indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid black;
+    border-radius: 6px;
+    position: relative;
+    transition: all 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    span {
+      width: 100%;
+      height: 100%;
+      transform: scale(0);
+      transition: transform 0.1s ease;
+    }
+    svg polyline {
+      stroke-dasharray: 22;
+      stroke-dashoffset: 22;
+      transition: stroke-dashoffset 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  input:checked + .naria-checkbox__indicator {
+    background-color: white;
+    border-color: black;
+  }
+
+  input:checked + .naria-checkbox__indicator {
+    span {
+      transform: scale(1);
+    }
+    svg polyline {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  &:not(.disabled):hover .naria-checkbox__indicator {
+    border-color: red;
+  }
+
+  &:not(.disabled):focus .naria-checkbox__indicator {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+}

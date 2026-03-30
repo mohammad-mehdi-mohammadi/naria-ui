@@ -11,7 +11,7 @@ export interface LibModalProps {
     title?: string;
     children?: React.ReactNode;
     backdropDismissible?: boolean;
-    backdrop: "opaque" | "blur" | "transparent";
+    backdrop?: "opaque" | "blur" | "transparent";
     hideCloseButton?: boolean;
     footer?: React.ReactNode;
     closeIcon?: React.ReactNode;

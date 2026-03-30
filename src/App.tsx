@@ -3,9 +3,42 @@ import {Button, Calendar, Input, Popover, Select} from "../lib";
 import momentJalali from "jalali-moment";
 import momentHijri from "moment-hijri";
 import {Modal} from "../lib/components/Modal";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {Checkbox} from "../lib/components/Checkbox/Checkbox";
+import {Radio} from "../lib/components/Radio/Radio";
+import CheckIcon from '../lib/assets/icons/check.svg?react';
 
 function App() {
+
+    // _________________BEGIN______________
+    const [isCheck, setIsCheck] = useState({
+        default: false,
+        selected: true,
+        customIcon: false,
+        customContent: false,
+        className: false,
+    })
+    // _________________END______________
+
+    // _________________BEGIN______________
+    const [isRadio, setIsRadio] = useState({
+        default: "test2",
+        selected: "test1",
+        customIcon: "",
+        customContent: "",
+        customClass: "",
+    })
+    useEffect(() => {
+        setTimeout(() => {
+            setIsRadio({
+                ...isRadio,
+                selected: "test2"
+            })
+        }, 1000)
+    }, [])
+    // _________________END______________
+
+    // _________________BEGIN______________
     const [isOpen, setIsOpen] = useState({
         basicModal: false,
         opaqueModal: false,
@@ -18,10 +51,15 @@ function App() {
         bottomStartPopover: false,
         bottomPopover: false,
         bottomEndPopover: false,
+        rightStartPopover: false,
+        rightPopover: false,
+        rightEndPopover: false,
+        leftStartPopover: false,
+        leftPopover: false,
+        leftEndPopover: false,
         nested: false,
         nestedPopover: false,
     })
-
     const fetchApi = () => {
         return async (params = {page: '1', size: '20'}) => {
             const queryString = new URLSearchParams(params).toString();
@@ -30,7 +68,7 @@ function App() {
             return response.json();
         };
     }
-
+    // _________________END______________
     return (
         <>
             {/*<h1>Modal</h1>*/}
@@ -122,7 +160,7 @@ function App() {
             {/*<h1>Popover</h1>*/}
             {/*<p>Basic usage</p>*/}
             {/*<div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
+            {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="top-start" isOpen={isOpen.topStartPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>*/}
             {/*            <button>Top start</button>*/}
@@ -131,73 +169,79 @@ function App() {
             {/*            }}/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '200px'}}>*/}
+            {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="top" isOpen={isOpen.topPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topPopover: e})}>*/}
             {/*            <button>Top</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
+            {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="top-end" isOpen={isOpen.topEndPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topEndPopover: e})}>*/}
             {/*            <button>Top end</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
+            {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="bottom-start" isOpen={isOpen.bottomStartPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, bottomStartPopover: e})}>*/}
             {/*            <button>Bottom start</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '200px'}}>*/}
+            {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="bottom" isOpen={isOpen.bottomPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, bottomPopover: e})}>*/}
             {/*            <button>Bottom</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
+            {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="bottom-end" isOpen={isOpen.bottomEndPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, bottomEndPopover: e})}>*/}
             {/*            <button>Bottom end</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
-            {/*        <Popover placement="right-start">*/}
+            {/*    <div style={{padding: '300px'}}>*/}
+            {/*        <Popover placement="right-start" isOpen={isOpen.rightStartPopover}*/}
+            {/*                 onOpenChange={(e) => setIsOpen({...isOpen, rightStartPopover: e})}>*/}
             {/*            <button>Right start</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
-            {/*        <Popover placement="right">*/}
+            {/*    <div style={{padding: '300px'}}>*/}
+            {/*        <Popover placement="right" isOpen={isOpen.rightPopover}*/}
+            {/*                 onOpenChange={(e) => setIsOpen({...isOpen, rightPopover: e})}>*/}
             {/*            <button>Right</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
-            {/*        <Popover placement="right-end">*/}
+            {/*    <div style={{padding: '300px'}}>*/}
+            {/*        <Popover placement="right-end" isOpen={isOpen.rightEndPopover}*/}
+            {/*                 onOpenChange={(e) => setIsOpen({...isOpen, rightEndPopover: e})}>*/}
             {/*            <button>Right end</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
-            {/*        <Popover placement="left-start">*/}
+            {/*    <div style={{padding: '300px'}}>*/}
+            {/*        <Popover placement="left-start" isOpen={isOpen.leftStartPopover}*/}
+            {/*                 onOpenChange={(e) => setIsOpen({...isOpen, leftStartPopover: e})}>*/}
             {/*            <button>Left start</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
-            {/*        <Popover placement="left">*/}
+            {/*    <div style={{padding: '300px'}}>*/}
+            {/*        <Popover placement="left" isOpen={isOpen.leftPopover}*/}
+            {/*                 onOpenChange={(e) => setIsOpen({...isOpen, leftPopover: e})}>*/}
             {/*            <button>Left</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
-            {/*    <div style={{padding: '100px'}}>*/}
-            {/*        <Popover placement="left-end">*/}
+            {/*    <div style={{padding: '300px'}}>*/}
+            {/*        <Popover placement="left-end" isOpen={isOpen.leftEndPopover}*/}
+            {/*                 onOpenChange={(e) => setIsOpen({...isOpen, leftEndPopover: e})}>*/}
             {/*            <button>Left end</button>*/}
             {/*            <Calendar mode="Gregorian"/>*/}
             {/*        </Popover>*/}
@@ -312,22 +356,254 @@ function App() {
             {/*            size: 10,*/}
             {/*            sizeLabel: 'limit'*/}
             {/*        }}/>*/}
-            <p>Pagination | api + has search + set api header</p>
-            <Select fetch={fetchApi()} label="id" value="name"
-                    onSelectChange = {(e) => console.log(e)}
-                    selected = {{
-                        "id": 1,
-                        "name": "Classic White Crew Neck T-Shirt",
-                    }}
-                    pagination={{
-                        page: 1,
-                        pageLabel: 'page',
-                        size: 10,
-                        sizeLabel: 'size',
-                        searchLabel: 'title',
-                    }}/>
+            {/*<p>Pagination | api + has search + set api header</p>*/}
+            {/*<Select fetch={fetchApi()} label="id" value="name"*/}
+            {/*        onSelectChange = {(e) => console.log(e)}*/}
+            {/*        selected = {{*/}
+            {/*            "id": 1,*/}
+            {/*            "name": "Classic White Crew Neck T-Shirt",*/}
+            {/*        }}*/}
+            {/*        pagination={{*/}
+            {/*            page: 1,*/}
+            {/*            pageLabel: 'page',*/}
+            {/*            size: 10,*/}
+            {/*            sizeLabel: 'size',*/}
+            {/*            searchLabel: 'title',*/}
+            {/*        }}/>*/}
+            {/*<hr/>*/}
+            {/*<h1>Checkbox</h1>*/}
+            {/*<p>Default</p>*/}
+            {/*<Checkbox checked={isCheck.default} onChange={(e) => {*/}
+            {/*    setIsCheck({*/}
+            {/*        ...isCheck,*/}
+            {/*        default: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Checkbox.Content>*/}
+            {/*        Default*/}
+            {/*    </Checkbox.Content>*/}
+            {/*</Checkbox>*/}
+
+            {/*<p>Custom Classes</p>*/}
+            {/*<Checkbox checked={isCheck.customClass} classNames={{*/}
+            {/*    root: "root-custom-class"*/}
+            {/*}} onChange={(e) => {*/}
+            {/*    setIsCheck({*/}
+            {/*        ...isCheck,*/}
+            {/*        customClass: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Checkbox.Indicator classNames={*/}
+            {/*        {*/}
+            {/*            indicator: "indicator-custom-class",*/}
+            {/*            icon: "icon-custom-class"*/}
+            {/*        }*/}
+            {/*    } />*/}
+            {/*    <Checkbox.Content className="content-custom-class">*/}
+            {/*        Custom Classes*/}
+            {/*    </Checkbox.Content>*/}
+            {/*</Checkbox>*/}
+
+            {/*<p>Selected</p>*/}
+            {/*<Checkbox checked={isCheck.selected} onChange={(e) => {*/}
+            {/*    setIsCheck({*/}
+            {/*        ...isCheck,*/}
+            {/*        selected: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Checkbox.Content>*/}
+            {/*        Selected*/}
+            {/*    </Checkbox.Content>*/}
+            {/*</Checkbox>*/}
+
+            {/*<p>Custom Indicator</p>*/}
+            {/*<Checkbox checked={isCheck.customIcon} onChange={(e) => {*/}
+            {/*    console.log(e)*/}
+            {/*    setIsCheck({*/}
+            {/*        ...isCheck,*/}
+            {/*        customIcon: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Checkbox.Indicator>*/}
+            {/*        <svg fill="currentColor" viewBox="0 0 24 24">*/}
+            {/*            <path*/}
+            {/*                d="M12.62 20.81c-.34.12-.9.12-1.24 0C8.48 19.82 2 15.69 2 8.69 2 5.6 4.49 3.1 7.56 3.1c1.82 0 3.43.88 4.44 2.24a5.53 5.53 0 0 1 4.44-2.24C19.51 3.1 22 5.6 22 8.69c0 7-6.48 11.13-9.38 12.12Z"*/}
+            {/*                fill="currentColor"*/}
+            {/*            />*/}
+            {/*        </svg>*/}
+            {/*    </Checkbox.Indicator>*/}
+            {/*    <Checkbox.Content>*/}
+            {/*        Custom Indicator*/}
+            {/*    </Checkbox.Content>*/}
+            {/*</Checkbox>*/}
+
+            {/*<p>Custom Content | With Description</p>*/}
+            {/*<Checkbox checked={isCheck.customContent} onChange={(e) => {*/}
+            {/*    console.log(e)*/}
+            {/*    setIsCheck({*/}
+            {/*        ...isCheck,*/}
+            {/*        customContent: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Checkbox.Content>*/}
+            {/*        <p>Title</p>*/}
+            {/*        <p style={{fontWeight: "bold"}}>Description</p>*/}
+            {/*    </Checkbox.Content>*/}
+            {/*</Checkbox>*/}
+            <hr/>
+            <h1>Radio</h1>
+            <p>Default</p>
+            <div>
+                <Radio value="test2" selected = {isRadio.default}  name = "default-radio" onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        default: e
+                    })
+                }}>
+                    <Radio.Content>
+                        Default
+                    </Radio.Content>
+                </Radio>
+                <Radio value="test1" selected = {isRadio.default} name = "default-radio" onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        default: e
+                    })
+                }}>
+                    <Radio.Content>
+                        Default
+                    </Radio.Content>
+                </Radio>
+            </div>
+            <p>Custom Class</p>
+            <div>
+                <Radio value="test2" name = "custom-class-radio" classNames={{
+                    root: "root-custom-class"
+                }} onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        customClass: e
+                    })
+                }}>
+                    <Radio.Indicator classNames={
+                        {
+                            indicator: "indicator-custom-class",
+                            icon: "icon-custom-class"
+                        }
+                    } />
+                    <Radio.Content className="content-custom-class">
+                        Custom Class
+                    </Radio.Content>
+                </Radio>
+                <Radio value="test1" name = "custom-class-radio" classNames={{
+                    root: "root-custom-class"
+                }} onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        customClass: e
+                    })
+                }}>
+                    <Radio.Indicator classNames={
+                        {
+                            indicator: "indicator-custom-class",
+                            icon: "icon-custom-class"
+                        }
+                    } />
+                    <Radio.Content className="content-custom-class">
+                        Custom Class
+                    </Radio.Content>
+                </Radio>
+            </div>
+            <p>Selected</p>
+            <div>
+                <Radio value="test2" selected = {isRadio.selected} name = "selected-radio" onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        selected: e
+                    })
+                }}>
+                    <Radio.Content>
+                        Selected
+                    </Radio.Content>
+                </Radio>
+                <Radio value="test1" selected = {isRadio.selected} name = "selected-radio" onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        selected: e
+                    })
+                }}>
+                    <Radio.Content>
+                        Selected
+                    </Radio.Content>
+                </Radio>
+            </div>
+            <p>Custom Indicator</p>
+            <div>
+                <Radio value="test3" name = "custom-icon-radio" onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        customIcon: e
+                    })
+                }}>
+                    <Radio.Indicator>
+                        <CheckIcon />
+                    </Radio.Indicator>
+                    <Radio.Content>
+                        Custom Indicator
+                    </Radio.Content>
+                </Radio>
+                <Radio value="test4" name = "custom-icon-radio" onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        customIcon: e
+                    })
+                }}>
+                    <Radio.Indicator>
+                        <CheckIcon />
+                    </Radio.Indicator>
+                    <Radio.Content>
+                        Custom Indicator
+                    </Radio.Content>
+                </Radio>
+            </div>
+
+            <p>Custom Content | With Description</p>
+            <div>
+                <Radio value="test4" name = "custom-content-radio" onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        customContent: e
+                    })
+                }}>
+                    <Radio.Content>
+                        <p>Title</p>
+                        <p style={{fontWeight: "bold"}}>Description</p>
+                    </Radio.Content>
+                </Radio>
+                <Radio value="test5" name = "custom-content-radio" onChange={(e) => {
+                    console.log(e)
+                    setIsRadio({
+                        ...isRadio,
+                        customContent: e
+                    })
+                }}>
+                    <Radio.Content>
+                        <p>Title</p>
+                        <p style={{fontWeight: "bold"}}>Description</p>
+                    </Radio.Content>
+                </Radio>
+            </div>
         </>
     )
 }
 
-export default App
+export default App;

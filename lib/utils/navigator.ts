@@ -9,7 +9,6 @@ export const removeNavigation = (state: string) => {
         newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`#` + state, '')}`;
     }
     NARIA_URL = `${window.location.origin}${newUrl}`;
-    console.log("daasda3", NARIA_URL, newUrl)
     window.history.replaceState(null, '', newUrl);
 }
 
@@ -19,42 +18,9 @@ export const addNavigation = (state: string) => {
     } else {
         window.location.hash = window.location.hash + "/#" + state;
     }
-    // let newUrl;
-    // let hash;
-    // if(!window.location.hash) {
-    //     hash = "#" + state;
-    // } else {
-    //     hash = window.location.hash  + "/#" + state;
-    // }
-    // if(window.location.hash.includes("/")) {
-    //     newUrl = `${window.location.pathname}${window.location.search}${hash}`;
-    // } else {
-    //     newUrl = `${window.location.pathname}${window.location.search}${hash}`;
-    // }
-    // console.log("addNavigation", state, newUrl, window.location.pathname, window.location.hash)
-    // // window.history.replaceState(null, '', newUrl);
-    // window.history.replaceState( null , "", newUrl );
 }
 
 
-// export const onHashChanges = (state: string) => {
-//     const [isHashChanged, setIsHashChanged] = useState(false)
-//     useEffect(() => {
-//         const handleHashChange = (e) => {
-//             if(!window.location.hash.includes(state)) {
-//                 setIsHashChanged(true);
-//             } else {
-//                 setIsHashChanged(false);
-//             }
-//             console.log("onHashChanges", state, window.location.hash)
-//         };
-//         window.addEventListener('hashchange', handleHashChange);
-//         return () => {
-//             window.removeEventListener('hashchange', handleHashChange);
-//         };
-//     }, [])
-//     return isHashChanged
-// };
 export const onHashChanges = (state: string) => {
     const [isHashChanged, setIsHashChanged] = useState(false)
     useEffect(() => {
@@ -75,23 +41,7 @@ export const onHashChanges = (state: string) => {
 
 
                 }
-
-
-                // if (!window.location.hash.includes(state)) {
-                //     setIsHashChanged(true);
-                // } else {
-                //     setIsHashChanged(false);
-                // }
-
-                // else {
-                //     window.history.replaceState(null, '', "/");
-                //     setIsHashChanged(true);
-                // }
             } else {
-                // console.log("daasda2", window.location.href, x)
-                // if(window.location.href === x) {
-                //     x = window.location.href;
-                // }
                 setIsHashChanged(true);
             }
         };

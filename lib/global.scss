@@ -16,6 +16,24 @@
 .transform-origin-bottom-end {
   transform-origin: bottom right;
 }
+.transform-origin-right-start {
+  transform-origin: top left;
+}
+.transform-origin-left-start {
+  transform-origin: top right;
+}
+.transform-origin-left-center {
+  transform-origin: left center;
+}
+.transform-origin-right-center {
+  transform-origin: right center;
+}
+.transform-origin-right-bottom {
+  transform-origin: right bottom;
+}
+.transform-origin-left-bottom {
+  transform-origin: left bottom;
+}
 html[dir="rtl"] {
   .transform-origin-top-start {
     transform-origin: top right;
@@ -29,6 +47,7 @@ html[dir="rtl"] {
   .transform-origin-bottom-end {
     transform-origin: bottom left;
   }
+
 }
 
 .backdrop--dismissible {

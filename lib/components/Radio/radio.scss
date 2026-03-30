@@ -1,0 +1,66 @@
+.naria-radio {
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+
+
+  input {
+    display: none;
+  }
+
+  .naria-radio__indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid black;
+    border-radius: 9999px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s ease;
+    & > div {
+      width: 14px;
+      height: 14px;
+      transform: scale(0);
+      transition: transform 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        border-radius: 9999px;
+        width: 100%;
+        height: 100%;
+        background-color: red;
+      }
+    }
+
+  }
+
+  input:checked + .naria-radio__indicator {
+    background-color: white;
+    border-color: black;
+  }
+
+  input:checked + .naria-radio__indicator {
+    & > div {
+      transform: scale(1);
+    }
+
+  }
+
+  &:not(.disabled):hover .naria-radio__indicator {
+    border-color: red;
+  }
+
+  &:not(.disabled):focus .naria-radio__indicator {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+}

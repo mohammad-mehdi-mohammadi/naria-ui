@@ -34,28 +34,21 @@ export const Popover: FC<props> = ({
                                        ...otherProps
                                    }) => {
     const [trigger, content] = Children.toArray(children);
-    // const [isShow, setIsShow] = useState(false);
     const [animate, setAnimation] = useState({
         type: "fade-in-scale",
         position: ""
     });
     const [bounds, setBounds] = useState<{
-        top: undefined | number,
-        bottom: undefined | number,
-        left: undefined | number,
-        right: undefined | number,
-    }>({
-        top: undefined,
-        bottom: undefined,
-        left: undefined,
-        right: undefined,
-    });
+        top?: number;
+        bottom?: number;
+        left?: number;
+        right?: number;
+    }>({});
     const getDeviceWidth = useWidth();
     const rootRef = useRef(undefined);
     const handlerRef = useRef(undefined);
     const randomUUIDRef = useRef<string>(generateRandom(5));
     const isHashChanged = onHashChanges(`#popover-` + randomUUIDRef.current);
-    // const onOpen = () => onOpenChange(true);
     const onClose = () => {
         if (onOpenChange) {
             onOpenChange(false)
@@ -117,259 +110,364 @@ export const Popover: FC<props> = ({
     const update = () => {
         if (handlerRef?.current && rootRef.current) {
             const isRtl = document.documentElement?.getAttribute('dir') === 'rtl';
-            const rect = rootRef.current.getBoundingClientRect();
-            const handlerRefRect = handlerRef.current.getBoundingClientRect();
-            switch (true) {
-                case placement === "bottom-start": {
-                    if (window.innerHeight - handlerRefRect.bottom > rect.height) {
-                        setAnimation({
-                            type: animate.type,
-                            position: "transform-origin-top-start"
-                        });
-                        setBounds({
-                            top: handlerRefRect.bottom + window.scrollY,
-                            bottom: undefined,
-                            left: !isRtl ? handlerRefRect.left : undefined,
-                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                        })
-                    } else {
-                        setAnimation({
-                            type: animate.type,
-                            position: "transform-origin-bottom-start"
-                        });
-                        setBounds({
-                            top: undefined,
-                            bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
-                            left: !isRtl ? handlerRefRect.left : undefined,
-                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                        })
-                    }
-                    break;
-                }
-                case placement === "bottom-end": {
-                    if ((window.innerHeight || document.documentElement.clientHeight) - handlerRefRect.bottom > rect.height) {
-                        setAnimation({
-                            type: animate.type,
-                            position: "transform-origin-top-end"
-                        });
-                        setBounds({
-                            top: handlerRefRect.bottom + window.scrollY,
-                            bottom: undefined,
-                            left: !isRtl ? handlerRefRect.left : undefined,
-                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                        })
-                    } else {
-                        setAnimation({
-                            type: animate.type,
-                            position: "transform-origin-bottom-end"
-                        });
-                        setBounds({
-                            top: undefined,
-                            bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
-                            left: !isRtl ? handlerRefRect.left : undefined,
-                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                        })
-                    }
-                    break;
-                }
-                case placement === "bottom": {
-                    let position = {
-                        y: "bottom",
-                        x: "center"
-                    }
-                    let bounds: {
-                        top: undefined | number,
-                        bottom: undefined | number,
-                        left: undefined | number,
-                        right: undefined | number,
-                    } = {
-                        top: undefined,
-                        bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
-                        left: !isRtl ? handlerRefRect.left : undefined,
-                        right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                    }
-                    if ((window.innerHeight || document.documentElement.clientHeight) - handlerRefRect.bottom > rect.height) {
-                        position = {
-                            ...position,
-                            y: 'top'
-                        }
-                        bounds = {
-                            ...bounds,
-                            top: handlerRefRect.bottom + window.scrollY,
-                            bottom: undefined,
-                        }
-                    }
-                    if (!isRtl) {
-                        if (((rect.width / 2) - (handlerRefRect.width / 2)) < handlerRefRect.left) {
-                            bounds = {
-                                ...bounds,
-                                left: handlerRefRect.left - ((rect.width / 2) - (handlerRefRect.width / 2)),
-                                right: undefined,
-                            }
-                            position = {
-                                ...position,
-                                x: 'center'
-                            }
-                        } else {
-                            position = {
-                                ...position,
-                                x: 'start'
-                            }
-                        }
-                    } else {
-                        if ((window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right > ((rect.width / 2) - (handlerRefRect.width / 2))) {
-                            bounds = {
-                                ...bounds,
-                                left: undefined,
-                                right: ((window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right) - ((rect.width / 2) - (handlerRefRect.width / 2)),
-                            }
-                            position = {
-                                ...position,
-                                x: 'center'
-                            }
-                        } else {
-                            position = {
-                                ...position,
-                                x: 'start'
-                            }
-                        }
-                    }
-                    setAnimation({
-                        type: animate.type,
-                        position: `transform-origin-${position.y}-${position.x}`
-                    });
-                    setBounds(bounds)
-                    break;
-                }
-                case placement === "top": {
-                    let position = {
-                        y: "top",
-                        x: "center"
-                    }
-                    let bounds: {
-                        top: undefined | number,
-                        bottom: undefined | number,
-                        left: undefined | number,
-                        right: undefined | number,
-                    } = {
-                        top: handlerRefRect.bottom + window.scrollY,
-                        bottom: undefined,
-                        left: !isRtl ? handlerRefRect.left : undefined,
-                        right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                    }
-                    if (handlerRefRect.top - rect.height > 0) {
-                        position = {
-                            ...position,
-                            y: 'bottom'
-                        }
-                        bounds = {
-                            ...bounds,
-                            top: undefined,
-                            bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
-                        }
-                    }
-                    if (!isRtl) {
-                        if (((rect.width / 2) - (handlerRefRect.width / 2)) < handlerRefRect.left) {
-                            bounds = {
-                                ...bounds,
-                                left: handlerRefRect.left - ((rect.width / 2) - (handlerRefRect.width / 2)),
-                                right: undefined,
-                            }
-                            position = {
-                                ...position,
-                                x: 'center'
-                            }
-                        } else {
-                            position = {
-                                ...position,
-                                x: 'start'
-                            }
-                        }
-                    } else {
-                        if ((window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right > ((rect.width / 2) - (handlerRefRect.width / 2))) {
-                            bounds = {
-                                ...bounds,
-                                left: undefined,
-                                right: ((window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right) - ((rect.width / 2) - (handlerRefRect.width / 2)),
-                            }
-                            position = {
-                                ...position,
-                                x: 'center'
-                            }
-                        } else {
-                            position = {
-                                ...position,
-                                x: 'start'
-                            }
-                        }
-                    }
-                    setAnimation({
-                        type: animate.type,
-                        position: `transform-origin-${position.y}-${position.x}`
-                    });
-                    setBounds(bounds)
-                    break;
-                }
-                case placement === "top-start": {
-                    if (handlerRefRect.top > rect.height) {
-                        setAnimation({
-                            type: animate.type,
-                            position: "transform-origin-bottom-start"
-                        });
-                        setBounds({
-                            top: undefined,
-                            bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
-                            left: !isRtl ? handlerRefRect.left : undefined,
-                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                        })
-                    } else {
-                        setAnimation({
-                            type: animate.type,
-                            position: "transform-origin-top-start"
-                        });
-                        setBounds({
-                            top: handlerRefRect.bottom + window.scrollY,
-                            bottom: undefined,
-                            left: !isRtl ? handlerRefRect.left : undefined,
-                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                        })
-                    }
+            const handlerRect = handlerRef.current.getBoundingClientRect();
+            const popoverRect = rootRef.current.getBoundingClientRect();
+            console.log(placement)
+            const { bounds, animationPosition } = getPopoverBoundsAndAnimation(
+                placement,
+                handlerRect,
+                popoverRect,
+                isRtl,
+                animate.type
+            );
 
-                    break;
-                }
-                case placement === "top-end": {
-                    if (handlerRefRect.top - rect.height > 0) {
-                        setAnimation({
-                            type: animate.type,
-                            position: "transform-origin-bottom-end"
-                        });
-                        setBounds({
-                            top: undefined,
-                            bottom: window.innerHeight - handlerRefRect.top - window.scrollY,
-                            left: !isRtl ? handlerRefRect.left : undefined,
-                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                        })
-                    } else {
-                        setAnimation({
-                            type: animate.type,
-                            position: "transform-origin-top-end"
-                        });
-                        setBounds({
-                            top: handlerRefRect.bottom + window.scrollY,
-                            bottom: undefined,
-                            left: !isRtl ? handlerRefRect.left : undefined,
-                            right: isRtl ? (window.innerWidth || document.documentElement.clientWidth) - handlerRefRect.right : undefined,
-                        })
-                    }
-
-                    break;
-                }
-                default: {
-                    break
-                }
-            }
+            setBounds(bounds);
+            setAnimation(animationPosition);
         }
     };
+    const getPopoverBoundsAndAnimation = (
+        placement: string,
+        handlerRect: DOMRect,
+        popoverRect: DOMRect,
+        isRtl: boolean,
+        animateType: string
+    ) => {
+        const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        let bounds: { top?: number; bottom?: number; left?: number; right?: number } = {};
+        let animationPosition = "";
+
+        const fitsBelow = windowHeight - handlerRect.bottom > popoverRect.height;
+        const fitsAbove = handlerRect.top > popoverRect.height;
+
+        const horizontalCenterOffset = (popoverRect.width - handlerRect.width) / 2;
+
+        switch (placement) {
+            case "bottom-start": {
+                if (fitsBelow) {
+                    animationPosition = "transform-origin-top-start";
+                    bounds.top = handlerRect.bottom + window.scrollY;
+                } else {
+                    animationPosition = "transform-origin-bottom-start";
+                    bounds.bottom = windowHeight - handlerRect.top - window.scrollY;
+                }
+                bounds.left = !isRtl ? handlerRect.left : undefined;
+                bounds.right = isRtl ? windowWidth - handlerRect.right : undefined;
+                break;
+            }
+
+            case "bottom-end": {
+                if (fitsBelow) {
+                    animationPosition = "transform-origin-top-end";
+                    bounds.top = handlerRect.bottom + window.scrollY;
+                    bounds.left = !isRtl ? handlerRect.right - popoverRect.width : undefined;
+                    bounds.right = isRtl ? windowWidth - handlerRect.right - (popoverRect.width - handlerRect.width) : undefined;
+                } else {
+                    animationPosition = "transform-origin-bottom-end";
+                    bounds.bottom = windowHeight - handlerRect.top - window.scrollY;
+                    bounds.left = !isRtl ? handlerRect.left : undefined;
+                    bounds.right = isRtl ? windowWidth - handlerRect.right : undefined;
+                }
+                break;
+            }
+
+            case "bottom":
+            case "top": {
+                const isTop = placement === "top";
+                const fitsPreferred = isTop ? fitsAbove : fitsBelow;
+                animationPosition = `transform-origin-${fitsPreferred ? (isTop ? 'bottom' : 'top') : (isTop ? 'top' : 'bottom')}-center`;
+
+                if (fitsPreferred) {
+                    bounds.top = !isTop ? handlerRect.bottom + window.scrollY : undefined;
+                    bounds.bottom = isTop ? windowHeight - handlerRect.top - window.scrollY : undefined;
+                } else {
+                    bounds.top = !isTop ? undefined : handlerRect.bottom + window.scrollY;
+                    bounds.bottom = isTop ? undefined : windowHeight - handlerRect.top - window.scrollY;
+                }
+
+                if (!isRtl) {
+                    bounds.left = Math.max(handlerRect.left - horizontalCenterOffset, 0);
+                } else {
+                    bounds.right = Math.max(windowWidth - handlerRect.right - horizontalCenterOffset, 0);
+                }
+                break;
+            }
+
+            case "top-start": {
+                if (fitsAbove) {
+                    animationPosition = "transform-origin-bottom-start";
+                    bounds.bottom = windowHeight - handlerRect.top - window.scrollY;
+                } else {
+                    animationPosition = "transform-origin-top-start";
+                    bounds.top = handlerRect.bottom + window.scrollY;
+                }
+                bounds.left = !isRtl ? handlerRect.left : undefined;
+                bounds.right = isRtl ? windowWidth - handlerRect.right : undefined;
+                break;
+            }
+
+            case "top-end": {
+                if (fitsAbove) {
+                    animationPosition = "transform-origin-bottom-end";
+                    bounds.bottom = windowHeight - handlerRect.top - window.scrollY;
+                    bounds.top = undefined;
+                } else {
+                    animationPosition = "transform-origin-top-end";
+                    bounds.top = handlerRect.bottom + window.scrollY;
+                    bounds.bottom = undefined;
+                }
+
+                if (!isRtl) {
+                    bounds.left = handlerRect.right - popoverRect.width;
+                    bounds.right = undefined;
+                } else {
+                    bounds.left = undefined;
+                    bounds.right = windowWidth - handlerRect.left - popoverRect.width;
+                }
+                break;
+            }
+
+            case "right-start": {
+                const fitsRight = windowWidth - handlerRect.right > popoverRect.width;
+                const fitsLeft = handlerRect.left > popoverRect.width;
+
+                if (!isRtl) {
+                    if (fitsRight) {
+                        animationPosition = "transform-origin-right-start";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else if (fitsLeft) {
+                        animationPosition = "transform-origin-left-start";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else {
+                        animationPosition = "transform-origin-right-start";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    }
+                } else {
+                    if (fitsLeft) {
+                        animationPosition = "transform-origin-left-start";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else if (fitsRight) {
+                        animationPosition = "transform-origin-right-start";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else {
+                        animationPosition = "transform-origin-left-start";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    }
+                }
+
+                bounds.top = handlerRect.top + window.scrollY;
+                bounds.bottom = undefined;
+
+                break;
+            }
+
+            case "right": {
+                const fitsRight = windowWidth - handlerRect.right > popoverRect.width;
+                const fitsLeft = handlerRect.left > popoverRect.width;
+
+                if (!isRtl) {
+                    if (fitsRight) {
+                        animationPosition = "transform-origin-left-center";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else if (fitsLeft) {
+                        animationPosition = "transform-origin-right-center";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else {
+                        animationPosition = "transform-origin-left-center";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    }
+                } else {
+                    if (fitsLeft) {
+                        animationPosition = "transform-origin-right-center";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else if (fitsRight) {
+                        animationPosition = "transform-origin-left-center";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else {
+                        animationPosition = "transform-origin-right-center";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    }
+                }
+
+                bounds.top = handlerRect.top + (handlerRect.height / 2) - (popoverRect.height / 2) + window.scrollY;
+                bounds.bottom = undefined;
+
+                break;
+            }
+
+            case "right-end": {
+                const fitsRight = windowWidth - handlerRect.right > popoverRect.width;
+                const fitsLeft = handlerRect.left > popoverRect.width;
+
+                if (!isRtl) {
+                    if (fitsRight) {
+                        animationPosition = "transform-origin-left-bottom";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else if (fitsLeft) {
+                        animationPosition = "transform-origin-right-bottom";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else {
+                        animationPosition = "transform-origin-left-bottom";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    }
+                } else {
+                    if (fitsLeft) {
+                        animationPosition = "transform-origin-right-bottom";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else if (fitsRight) {
+                        animationPosition = "transform-origin-left-bottom";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else {
+                        animationPosition = "transform-origin-right-bottom";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    }
+                }
+
+                bounds.top = handlerRect.bottom - popoverRect.height + window.scrollY;
+                bounds.bottom = undefined;
+
+                break;
+            }
+            case "left-start": {
+                const fitsLeft = handlerRect.left > popoverRect.width;
+                const fitsRight = windowWidth - handlerRect.right > popoverRect.width;
+
+                if (!isRtl) {
+                    if (fitsLeft) {
+                        animationPosition = "transform-origin-left-start";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else if (fitsRight) {
+                        animationPosition = "transform-origin-right-start";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else {
+                        animationPosition = "transform-origin-left-start";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    }
+                } else {
+                    if (fitsRight) {
+                        animationPosition = "transform-origin-right-start";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else if (fitsLeft) {
+                        animationPosition = "transform-origin-left-start";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else {
+                        animationPosition = "transform-origin-right-start";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    }
+                }
+
+                bounds.top = handlerRect.top + window.scrollY;
+                bounds.bottom = undefined;
+
+                break;
+            }
+            case "left": {
+                const fitsLeft = handlerRect.left > popoverRect.width;
+                const fitsRight = windowWidth - handlerRect.right > popoverRect.width;
+
+                if (!isRtl) {
+                    if (fitsLeft) {
+                        animationPosition = "transform-origin-right-center";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else if (fitsRight) {
+                        animationPosition = "transform-origin-left-center";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else {
+                        animationPosition = "transform-origin-right-center";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    }
+                } else {
+                    if (fitsRight) {
+                        animationPosition = "transform-origin-left-center";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else if (fitsLeft) {
+                        animationPosition = "transform-origin-right-center";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else {
+                        animationPosition = "transform-origin-left-center";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    }
+                }
+                bounds.top = handlerRect.top + (handlerRect.height / 2) - (popoverRect.height / 2) + window.scrollY;
+                bounds.bottom = undefined;
+
+                break;
+            }
+            case "left-end": {
+                const fitsLeft = handlerRect.left > popoverRect.width;
+                const fitsRight = windowWidth - handlerRect.right > popoverRect.width;
+
+                if (!isRtl) {
+                    if (fitsLeft) {
+                        animationPosition = "transform-origin-right-bottom";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else if (fitsRight) {
+                        animationPosition = "transform-origin-left-bottom";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else {
+                        animationPosition = "transform-origin-right-bottom";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    }
+                } else {
+                    if (fitsRight) {
+                        animationPosition = "transform-origin-left-bottom";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    } else if (fitsLeft) {
+                        animationPosition = "transform-origin-right-bottom";
+                        bounds.left = undefined;
+                        bounds.right = windowWidth - handlerRect.left - window.scrollX;
+                    } else {
+                        animationPosition = "transform-origin-left-bottom";
+                        bounds.left = handlerRect.right + window.scrollX;
+                        bounds.right = undefined;
+                    }
+                }
+                bounds.top = handlerRect.bottom - popoverRect.height + window.scrollY;
+                bounds.bottom = undefined;
+
+                break;
+            }
+            default:
+                break;
+        }
+
+        return { bounds, animationPosition: { type: animateType, position: animationPosition } };
+    }
+
     const onBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.currentTarget === e.target) onClose();
     };

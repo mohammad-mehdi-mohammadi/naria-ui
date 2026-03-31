@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import {Checkbox} from "../lib/components/Checkbox/Checkbox";
 import {Radio} from "../lib/components/Radio/Radio";
 import CheckIcon from '../lib/assets/icons/check.svg?react';
+import {Pagination} from "../lib/components/Pagination";
 
 function App() {
 
@@ -16,7 +17,7 @@ function App() {
         selected: true,
         customIcon: false,
         customContent: false,
-        className: false,
+        customClass: false,
     })
     // _________________END______________
 
@@ -63,11 +64,18 @@ function App() {
     const fetchApi = () => {
         return async (params = {page: '1', size: '20'}) => {
             const queryString = new URLSearchParams(params).toString();
-            const response = await fetch(`http://localhost:3232/api/public/game?${queryString}`, {
-            });
+            const response = await fetch(`http://localhost:3232/api/public/game?${queryString}`, {});
             return response.json();
         };
     }
+    // _________________END______________
+    // _________________BEGIN______________
+    const [page, setPage] = useState({
+        default: 1,
+        selected: 5,
+        customSeparator: 1,
+        customClass: 1,
+    });
     // _________________END______________
     return (
         <>
@@ -399,7 +407,9 @@ function App() {
             {/*            icon: "icon-custom-class"*/}
             {/*        }*/}
             {/*    } />*/}
-            {/*    <Checkbox.Content className="content-custom-class">*/}
+            {/*    <Checkbox.Content classNames={{*/}
+            {/*        content: "content-custom-class"*/}
+            {/*    }}>*/}
             {/*        Custom Classes*/}
             {/*    </Checkbox.Content>*/}
             {/*</Checkbox>*/}
@@ -450,158 +460,240 @@ function App() {
             {/*        <p style={{fontWeight: "bold"}}>Description</p>*/}
             {/*    </Checkbox.Content>*/}
             {/*</Checkbox>*/}
-            <hr/>
-            <h1>Radio</h1>
-            <p>Default</p>
-            <div>
-                <Radio value="test2" selected = {isRadio.default}  name = "default-radio" onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        default: e
-                    })
-                }}>
-                    <Radio.Content>
-                        Default
-                    </Radio.Content>
-                </Radio>
-                <Radio value="test1" selected = {isRadio.default} name = "default-radio" onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        default: e
-                    })
-                }}>
-                    <Radio.Content>
-                        Default
-                    </Radio.Content>
-                </Radio>
-            </div>
-            <p>Custom Class</p>
-            <div>
-                <Radio value="test2" name = "custom-class-radio" classNames={{
-                    root: "root-custom-class"
-                }} onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        customClass: e
-                    })
-                }}>
-                    <Radio.Indicator classNames={
-                        {
-                            indicator: "indicator-custom-class",
-                            icon: "icon-custom-class"
-                        }
-                    } />
-                    <Radio.Content className="content-custom-class">
-                        Custom Class
-                    </Radio.Content>
-                </Radio>
-                <Radio value="test1" name = "custom-class-radio" classNames={{
-                    root: "root-custom-class"
-                }} onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        customClass: e
-                    })
-                }}>
-                    <Radio.Indicator classNames={
-                        {
-                            indicator: "indicator-custom-class",
-                            icon: "icon-custom-class"
-                        }
-                    } />
-                    <Radio.Content className="content-custom-class">
-                        Custom Class
-                    </Radio.Content>
-                </Radio>
-            </div>
-            <p>Selected</p>
-            <div>
-                <Radio value="test2" selected = {isRadio.selected} name = "selected-radio" onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        selected: e
-                    })
-                }}>
-                    <Radio.Content>
-                        Selected
-                    </Radio.Content>
-                </Radio>
-                <Radio value="test1" selected = {isRadio.selected} name = "selected-radio" onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        selected: e
-                    })
-                }}>
-                    <Radio.Content>
-                        Selected
-                    </Radio.Content>
-                </Radio>
-            </div>
-            <p>Custom Indicator</p>
-            <div>
-                <Radio value="test3" name = "custom-icon-radio" onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        customIcon: e
-                    })
-                }}>
-                    <Radio.Indicator>
-                        <CheckIcon />
-                    </Radio.Indicator>
-                    <Radio.Content>
-                        Custom Indicator
-                    </Radio.Content>
-                </Radio>
-                <Radio value="test4" name = "custom-icon-radio" onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        customIcon: e
-                    })
-                }}>
-                    <Radio.Indicator>
-                        <CheckIcon />
-                    </Radio.Indicator>
-                    <Radio.Content>
-                        Custom Indicator
-                    </Radio.Content>
-                </Radio>
-            </div>
+            {/*<hr/>*/}
+            {/*<h1>Radio</h1>*/}
+            {/*<p>Default</p>*/}
+            {/*<div>*/}
+            {/*    <Radio value="test2" selected = {isRadio.default}  name = "default-radio" onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            default: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Content>*/}
+            {/*            Default*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*    <Radio value="test1" selected = {isRadio.default} name = "default-radio" onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            default: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Content>*/}
+            {/*            Default*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*</div>*/}
+            {/*<p>Custom Class</p>*/}
+            {/*<div>*/}
+            {/*    <Radio value="test2" name = "custom-class-radio" classNames={{*/}
+            {/*        root: "root-custom-class"*/}
+            {/*    }} onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            customClass: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Indicator classNames={*/}
+            {/*            {*/}
+            {/*                indicator: "indicator-custom-class",*/}
+            {/*                icon: "icon-custom-class"*/}
+            {/*            }*/}
+            {/*        } />*/}
+            {/*        <Radio.Content className="content-custom-class">*/}
+            {/*            Custom Class*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*<Radio value="test1" name="custom-class-radio" classNames={{*/}
+            {/*    root: "root-custom-class"*/}
+            {/*}} onChange={(e) => {*/}
+            {/*    console.log(e)*/}
+            {/*    setIsRadio({*/}
+            {/*        ...isRadio,*/}
+            {/*        customClass: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Radio.Indicator classNames={{*/}
+            {/*            indicator: "indicator-custom-class",*/}
+            {/*            icon: "icon-custom-class"*/}
+            {/*        }}/>*/}
+            {/*    <Radio.Content classNames={{*/}
+            {/*            content: "content-custom-class"*/}
+            {/*        }}>*/}
+            {/*        Custom Class*/}
+            {/*    </Radio.Content>*/}
+            {/*</Radio>*/}
+            {/*</div>*/}
+            {/*<p>Selected</p>*/}
+            {/*<div>*/}
+            {/*    <Radio value="test2" selected = {isRadio.selected} name = "selected-radio" onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            selected: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Content>*/}
+            {/*            Selected*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*    <Radio value="test1" selected = {isRadio.selected} name = "selected-radio" onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            selected: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Content>*/}
+            {/*            Selected*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*</div>*/}
+            {/*<p>Custom Indicator</p>*/}
+            {/*<div>*/}
+            {/*    <Radio value="test3" name = "custom-icon-radio" onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            customIcon: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Indicator>*/}
+            {/*            <CheckIcon />*/}
+            {/*        </Radio.Indicator>*/}
+            {/*        <Radio.Content>*/}
+            {/*            Custom Indicator*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*    <Radio value="test4" name = "custom-icon-radio" onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            customIcon: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Indicator>*/}
+            {/*            <CheckIcon />*/}
+            {/*        </Radio.Indicator>*/}
+            {/*        <Radio.Content>*/}
+            {/*            Custom Indicator*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*</div>*/}
 
-            <p>Custom Content | With Description</p>
-            <div>
-                <Radio value="test4" name = "custom-content-radio" onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        customContent: e
-                    })
-                }}>
-                    <Radio.Content>
-                        <p>Title</p>
-                        <p style={{fontWeight: "bold"}}>Description</p>
-                    </Radio.Content>
-                </Radio>
-                <Radio value="test5" name = "custom-content-radio" onChange={(e) => {
-                    console.log(e)
-                    setIsRadio({
-                        ...isRadio,
-                        customContent: e
-                    })
-                }}>
-                    <Radio.Content>
-                        <p>Title</p>
-                        <p style={{fontWeight: "bold"}}>Description</p>
-                    </Radio.Content>
-                </Radio>
-            </div>
+            {/*<p>Custom Content | With Description</p>*/}
+            {/*<div>*/}
+            {/*    <Radio value="test4" name = "custom-content-radio" onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            customContent: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Content>*/}
+            {/*            <p>Title</p>*/}
+            {/*            <p style={{fontWeight: "bold"}}>Description</p>*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*    <Radio value="test5" name = "custom-content-radio" onChange={(e) => {*/}
+            {/*        console.log(e)*/}
+            {/*        setIsRadio({*/}
+            {/*            ...isRadio,*/}
+            {/*            customContent: e*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        <Radio.Content>*/}
+            {/*            <p>Title</p>*/}
+            {/*            <p style={{fontWeight: "bold"}}>Description</p>*/}
+            {/*        </Radio.Content>*/}
+            {/*    </Radio>*/}
+            {/*</div>*/}
+            {/*<hr/>*/}
+            {/*<h1>Pagination</h1>*/}
+            {/*<p>Default</p>*/}
+            {/*<Pagination page={page.default} size={10} total={1000} onPageChange={(e) => {*/}
+            {/*    setPage({*/}
+            {/*        ...page,*/}
+            {/*        default: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Pagination.Prev/>*/}
+            {/*    <Pagination.Pages/>*/}
+            {/*    <Pagination.Next/>*/}
+            {/*    <Pagination.Content>*/}
+            {/*        {({page, totalPages}) => (*/}
+            {/*            <span style={{marginLeft: "10px"}}>*/}
+            {/*  صفحه {page} از {totalPages}*/}
+            {/*</span>*/}
+            {/*        )}*/}
+            {/*    </Pagination.Content>*/}
+            {/*</Pagination>*/}
+            {/*<p>Selected</p>*/}
+            {/*<Pagination page={page.selected} size={10} total={100} onPageChange={(e) => {*/}
+            {/*    setPage({*/}
+            {/*        ...page,*/}
+            {/*        selected: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Pagination.Prev/>*/}
+            {/*    <Pagination.Pages/>*/}
+            {/*    <Pagination.Next/>*/}
+            {/*    <Pagination.Content>*/}
+            {/*        {({page, totalPages}) => (*/}
+            {/*            <span style={{marginLeft: "10px"}}>*/}
+            {/*  صفحه {page} از {totalPages}*/}
+            {/*</span>*/}
+            {/*        )}*/}
+            {/*    </Pagination.Content>*/}
+            {/*</Pagination>*/}
+            {/*<p>Custom Separator, Next, Prev</p>*/}
+            {/*<Pagination page={page.customSeparator} size={10} total={100} onPageChange={(e) => {*/}
+            {/*    setPage({*/}
+            {/*        ...page,*/}
+            {/*        customSeparator: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Pagination.Prev>*/}
+            {/*        <>{"<-"}</>*/}
+            {/*    </Pagination.Prev>*/}
+            {/*    <Pagination.Pages separator={<>***</>}/>*/}
+            {/*    <Pagination.Next>*/}
+            {/*        <>{"->"}</>*/}
+            {/*    </Pagination.Next>*/}
+            {/*    <Pagination.Content>*/}
+            {/*        {({page, totalPages}) => (*/}
+            {/*            <span style={{marginLeft: "10px"}}>*/}
+            {/*  صفحه {page} از {totalPages}*/}
+            {/*</span>*/}
+            {/*        )}*/}
+            {/*    </Pagination.Content>*/}
+            {/*</Pagination>*/}
+            {/*<p>Custom Class</p>*/}
+            {/*<Pagination page={page.customClass} classNames={{*/}
+            {/*    root: "custom-class"*/}
+            {/*}} size={10} total={100} onPageChange={(e) => {*/}
+            {/*    setPage({*/}
+            {/*        ...page,*/}
+            {/*        customClass: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Pagination.Prev classNames={{*/}
+            {/*        prev: "prev-custom-class"*/}
+            {/*    }}/>*/}
+            {/*    <Pagination.Pages separator={<>***</>}/>*/}
+            {/*    <Pagination.Next/>*/}
+            {/*    <Pagination.Content>*/}
+            {/*        {({page, totalPages}) => (*/}
+            {/*            <span style={{marginLeft: "10px"}}>*/}
+            {/*  صفحه {page} از {totalPages}*/}
+            {/*</span>*/}
+            {/*        )}*/}
+            {/*    </Pagination.Content>*/}
+            {/*</Pagination>*/}
         </>
     )
 }

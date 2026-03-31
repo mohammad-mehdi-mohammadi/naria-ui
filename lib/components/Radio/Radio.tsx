@@ -60,6 +60,9 @@ Radio.Indicator = ({children, classNames}: {
     );
 };
 
-Radio.Content = ({children, className}: { children?: React.ReactNode, className?: string }) => {
-    return <div className={`naria-radio__content ${className || ''}`} data-class-prop="content">{children}</div>;
+Radio.Content = ({children, classNames}: { children?: React.ReactNode, classNames?: {
+        content?: string;
+    }
+}) => {
+    return <div className={`naria-radio__content ${classNames.content || ''}`} data-class-prop="content">{children}</div>;
 };

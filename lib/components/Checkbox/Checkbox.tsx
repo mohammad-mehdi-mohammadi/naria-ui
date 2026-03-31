@@ -57,6 +57,9 @@ Checkbox.Indicator = ({children, classNames}: {
     );
 };
 
-Checkbox.Content = ({children, className}: { children?: React.ReactNode, className?: string }) => {
-    return <div className={`naria-checkbox__content ${className || ''}`} data-class-prop="content">{children}</div>;
+Checkbox.Content = ({children, classNames}: { children?: React.ReactNode, classNames?: {
+        content?: string;
+    }
+}) => {
+    return <div className={`naria-checkbox__content ${classNames?.content || ''}`} data-class-prop="content">{children}</div>;
 };

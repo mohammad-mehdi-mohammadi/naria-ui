@@ -87,7 +87,7 @@ function App() {
     ];
     // _________________END______________
     // _________________BEGIN______________
-    const [value, setValue] = useState(5);
+    const [value, setValue] = useState(4);
 
     const handleChange = (newValue) => {
         console.log(newValue)

@@ -1,10 +1,15 @@
-import React, { Children, cloneElement, FC, ReactElement, useEffect, useRef, useState } from "react";
+import React, {Children, cloneElement, FC, ReactElement, useEffect, useRef, useState} from "react";
 import './tabs.scss';
 
 export interface props {
     value: number;
     onChange: (index: number) => void;
     children: ReactElement[];
+    classNames?: {
+        root?: string;
+        disabled?: string;
+        input?: string;
+    };
 }
 
 export const Tabs: FC<props> = ({
@@ -13,11 +18,12 @@ export const Tabs: FC<props> = ({
                                     children,
                                 }) => {
     const tabsRef = useRef<HTMLDivElement>(null);
-    const [canScrollLeft, setCanScrollLeft] = useState(false);
-    const [canScrollRight, setCanScrollRight] = useState(false);
+    const [canScrollPrev, setCanScrollPrev] = useState(false);
+    const [canScrollNext, setCanScrollNext] = useState(false);
+    const [showScrollButtons, setShowScrollButtons] = useState(false);
     const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const [isRTL, setIsRTL] = useState(false);
 
-    // جدا کردن Tab ها و TabContent ها از children
     const tabs = Children.toArray(children).filter(
         (child) => React.isValidElement(child) && child.type === Tab
     );
@@ -26,11 +32,43 @@ export const Tabs: FC<props> = ({
         (child) => React.isValidElement(child) && child.type === TabContent
     );
 
+    // تشخیص RTL
+    const checkRTL = () => {
+        const dir = document.documentElement.getAttribute('dir') ||
+            document.body.getAttribute('dir');
+        setIsRTL(dir === 'rtl');
+    };
+
+    // دریافت مقدار اسکرول فعلی به صورت نرمال شده
+    const getNormalizedScrollLeft = () => {
+        if (!tabsRef.current) return 0;
+
+        if (isRTL) {
+            // در RTL، scrollLeft می‌تواند منفی باشد
+            // ما آن را به مقدار مثبت تبدیل می‌کنیم
+            const { scrollLeft, scrollWidth, clientWidth } = tabsRef.current;
+            return Math.abs(scrollLeft);
+        }
+        return tabsRef.current.scrollLeft;
+    };
+
     const checkScroll = () => {
         if (!tabsRef.current) return;
-        const { scrollLeft, scrollWidth, clientWidth } = tabsRef.current;
-        setCanScrollLeft(scrollLeft > 0);
-        setCanScrollRight(scrollLeft + clientWidth < scrollWidth);
+        const { scrollWidth, clientWidth } = tabsRef.current;
+        const hasScroll = scrollWidth > clientWidth;
+
+        setShowScrollButtons(hasScroll);
+
+        if (hasScroll) {
+            const currentScroll = getNormalizedScrollLeft();
+            const maxScroll = scrollWidth - clientWidth;
+
+            setCanScrollPrev(currentScroll > 0);
+            setCanScrollNext(currentScroll < maxScroll - 1);
+        } else {
+            setCanScrollPrev(false);
+            setCanScrollNext(false);
+        }
     };
 
     const scrollToSelectedTab = () => {
@@ -38,18 +76,27 @@ export const Tabs: FC<props> = ({
 
         const container = tabsRef.current;
         const selectedTab = tabRefs.current[value];
-
+        console.log("targetScroll")
         if (!selectedTab) return;
 
         const containerRect = container.getBoundingClientRect();
         const tabRect = selectedTab.getBoundingClientRect();
 
-        const scrollLeft = tabRect.left - containerRect.left + container.scrollLeft;
+        let targetScroll;
 
-        const targetScroll = scrollLeft - (container.clientWidth / 2) + (selectedTab.clientWidth / 2);
+        if (isRTL) {
+            const scrollDistance = containerRect.right - tabRect.right;
+            targetScroll = scrollDistance + getNormalizedScrollLeft();
+        } else {
+            const scrollDistance = tabRect.left - containerRect.left;
+            targetScroll = scrollDistance + container.scrollLeft;
+        }
+
+        targetScroll = targetScroll - (container.clientWidth / 2) + (selectedTab.clientWidth / 2);
+        targetScroll = Math.max(0, Math.min(targetScroll, container.scrollWidth - container.clientWidth));
 
         container.scrollTo({
-            left: Math.max(0, targetScroll),
+            left: isRTL ? -targetScroll : targetScroll,
             behavior: "smooth",
         });
     };
@@ -65,9 +112,15 @@ export const Tabs: FC<props> = ({
         const containerRect = container.getBoundingClientRect();
         const tabRect = selectedTab.getBoundingClientRect();
 
-        const isTabVisible =
-            tabRect.left >= containerRect.left &&
-            tabRect.right <= containerRect.right;
+        let isTabVisible;
+
+        if (isRTL) {
+            isTabVisible = tabRect.right <= containerRect.right &&
+                tabRect.left >= containerRect.left;
+        } else {
+            isTabVisible = tabRect.left >= containerRect.left &&
+                tabRect.right <= containerRect.right;
+        }
 
         if (!isTabVisible) {
             scrollToSelectedTab();
@@ -75,53 +128,90 @@ export const Tabs: FC<props> = ({
     };
 
     useEffect(() => {
+        checkRTL();
+
+        const observer = new MutationObserver(() => {
+            checkRTL();
+            setTimeout(() => {
+                checkScroll();
+                checkIfTabNeedsScroll();
+            }, 0);
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['dir']
+        });
+
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['dir']
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
         const timeoutId = setTimeout(() => {
             checkIfTabNeedsScroll();
         }, 100);
 
         return () => clearTimeout(timeoutId);
-    }, [value]);
+    }, [value, isRTL]);
 
     useEffect(() => {
-        checkScroll();
-        window.addEventListener("resize", checkScroll);
-
         const handleResize = () => {
-            checkIfTabNeedsScroll();
+            checkScroll();
+            requestAnimationFrame(() => {
+                checkIfTabNeedsScroll();
+            });
         };
+
         window.addEventListener("resize", handleResize);
 
-        return () => {
-            window.removeEventListener("resize", checkScroll);
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [isRTL, value]);
 
-    const scroll = (direction: "left" | "right") => {
+    const scrollPrev = () => {
         if (!tabsRef.current) return;
         const scrollAmount = tabsRef.current.clientWidth / 2;
-        tabsRef.current.scrollBy({
-            left: direction === "left" ? -scrollAmount : scrollAmount,
+        const currentScroll = getNormalizedScrollLeft();
+        const newScroll = Math.max(0, currentScroll - scrollAmount);
+
+        tabsRef.current.scrollTo({
+            left: isRTL ? -newScroll : newScroll,
             behavior: "smooth",
         });
+    };
 
-        setTimeout(checkIfTabNeedsScroll, 300);
+    const scrollNext = () => {
+        if (!tabsRef.current) return;
+        const scrollAmount = tabsRef.current.clientWidth / 2;
+        const currentScroll = getNormalizedScrollLeft();
+        const maxScroll = tabsRef.current.scrollWidth - tabsRef.current.clientWidth;
+        const newScroll = Math.min(maxScroll, currentScroll + scrollAmount);
+
+        tabsRef.current.scrollTo({
+            left: isRTL ? -newScroll : newScroll,
+            behavior: "smooth",
+        });
     };
 
     return (
-        <div className="naria-tabs-container">
-            <div className="naria-tabs">
-                <button
-                    type="button"
-                    className="scroll-btn left"
-                    disabled={!canScrollLeft}
-                    onClick={() => scroll("left")}
-                >
-                    ◀
-                </button>
-
+        <div className="naria-tabs" dir={isRTL ? "rtl" : "ltr"}>
+            <div className="naria-tabs__container">
+                {showScrollButtons && (
+                    <button
+                        type="button"
+                        className="naria-tabs__scroll-btn naria-tabs__scroll-btn--prev"
+                        disabled={!canScrollPrev}
+                        onClick={scrollPrev}
+                    >
+                        {isRTL ? '▶' : '◀'}
+                    </button>
+                )}
                 <div
-                    className="tabs-wrapper"
+                    className="naria-tabs__wrapper"
                     ref={tabsRef}
                     onScroll={checkScroll}
                     onTouchMove={checkScroll}
@@ -139,19 +229,19 @@ export const Tabs: FC<props> = ({
                         return child;
                     })}
                 </div>
-
-                <button
-                    type="button"
-                    className="scroll-btn right"
-                    disabled={!canScrollRight}
-                    onClick={() => scroll("right")}
-                >
-                    ▶
-                </button>
+                {showScrollButtons && (
+                    <button
+                        type="button"
+                        className="naria-tabs__scroll-btn naria-tabs__scroll-btn--next"
+                        disabled={!canScrollNext}
+                        onClick={scrollNext}
+                    >
+                        {isRTL ? '◀' : '▶'}
+                    </button>
+                )}
             </div>
 
-            {/* نمایش محتوای تب انتخاب شده */}
-            <div className="tab-contents">
+            <div className="naria-tabs__contents">
                 {contents.map((content, index) => {
                     if (React.isValidElement(content)) {
                         return cloneElement(content, {
@@ -174,11 +264,11 @@ interface TabProps {
 }
 
 export const Tab = React.forwardRef<HTMLDivElement, TabProps>(
-    ({ label, selected, onClick }, ref) => {
+    ({label, selected, onClick}, ref) => {
         return (
             <div
                 ref={ref}
-                className={`tab ${selected ? "active" : ""}`}
+                className={`naria-tabs__tab ${selected ? "naria-tabs__tab--active" : ""}`}
                 onClick={onClick}
             >
                 {label}
@@ -188,27 +278,24 @@ export const Tab = React.forwardRef<HTMLDivElement, TabProps>(
 );
 
 interface TabContentProps {
-    label: string;
     index: number;
     value?: number;
     children: React.ReactNode;
 }
 
 export const TabContent: FC<TabContentProps> = ({
-                                                    label,
                                                     index,
                                                     value,
                                                     children
                                                 }) => {
     return (
         <div
-            className={`tab-content ${value === index ? "active" : ""}`}
+            className="naria-tabs__content"
             role="tabpanel"
             hidden={value !== index}
-            aria-labelledby={`tab-${index}`}
         >
             {value === index && (
-                <div className="tab-content-inner">
+                <div className="naria-tabs__content__inner">
                     {children}
                 </div>
             )}
@@ -216,4 +303,6 @@ export const TabContent: FC<TabContentProps> = ({
     );
 };
 
+Tabs.Tab = Tab;
+Tabs.TabContent = TabContent;
 Tabs.displayName = 'Tabs';

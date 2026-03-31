@@ -1,5 +1,6 @@
 import {FC} from "react";
 import './loading.scss';
+
 export interface props {
     classNames?: {
         root: string;
@@ -31,3 +32,4 @@ export const Loading: FC<props> = ({
 
     );
 };
+Loading.displayName = 'Loading';

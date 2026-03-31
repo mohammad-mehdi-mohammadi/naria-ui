@@ -62,5 +62,5 @@ export const Input: FC<props> = ({
         </div>
     );
 };
-
+Input.displayName = 'Input';
 

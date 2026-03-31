@@ -42,7 +42,7 @@ export const Checkbox: FC<Props> = ({checked, onChange, disabled, children, clas
     );
 };
 
-Checkbox.Indicator = ({children, classNames}: {
+export const CheckboxIndicator = ({children, classNames}: {
     children?: React.ReactNode, classNames?: {
         indicator?: string;
         icon?: string;
@@ -57,9 +57,13 @@ Checkbox.Indicator = ({children, classNames}: {
     );
 };
 
-Checkbox.Content = ({children, classNames}: { children?: React.ReactNode, classNames?: {
+export const CheckboxContent = ({children, classNames}: { children?: React.ReactNode, classNames?: {
         content?: string;
     }
 }) => {
     return <div className={`naria-checkbox__content ${classNames?.content || ''}`} data-class-prop="content">{children}</div>;
 };
+
+Checkbox.Indicator = CheckboxIndicator;
+Checkbox.Content = CheckboxContent;
+Checkbox.displayName = 'Checkbox';

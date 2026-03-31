@@ -535,6 +535,7 @@ export const Select: FC<props> = ({
                                                         {
                                                             typeof closeIcon === 'object' ? (
                                                                 <button
+                                                                    type="button"
                                                                     className={`naria-select__close-icon ${classNames?.closeIcon}`}
                                                                     onClick={onClose} disabled={disabled}
                                                                     data-class-prop="closeIcon">
@@ -545,6 +546,7 @@ export const Select: FC<props> = ({
                                                                     {
                                                                         closeIcon ? (
                                                                             <button
+                                                                                type="button"
                                                                                 className={`naria-select__close-icon ${classNames?.closeIcon}`}
                                                                                 onClick={onClose} disabled={disabled}
                                                                                 data-class-prop="closeIcon">
@@ -676,3 +678,4 @@ export const Select: FC<props> = ({
         </div>
     );
 };
+Select.displayName = 'Select';

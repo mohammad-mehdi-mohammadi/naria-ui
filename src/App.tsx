@@ -1,5 +1,5 @@
 import './App.css'
-import {Button, Calendar, Input, Popover, Select} from "../lib";
+import {Button, Calendar, Input, Popover, Select, Tabs, Table} from "../lib";
 import momentJalali from "jalali-moment";
 import momentHijri from "moment-hijri";
 import {Modal} from "../lib/components/Modal";
@@ -8,6 +8,8 @@ import {Checkbox} from "../lib/components/Checkbox/Checkbox";
 import {Radio} from "../lib/components/Radio/Radio";
 import CheckIcon from '../lib/assets/icons/check.svg?react';
 import {Pagination} from "../lib/components/Pagination";
+import {TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow} from "../lib/components/Table/Table";
+import {Tab, TabContent} from "../lib/components/Tabs/Tabs";
 
 function App() {
 
@@ -75,7 +77,22 @@ function App() {
         selected: 5,
         customSeparator: 1,
         customClass: 1,
+        positions: 1,
     });
+    // _________________END______________
+    // _________________BEGIN______________
+    const invoices = [
+        { invoice: "INV-001", paymentStatus: "Paid", paymentMethod: "Credit Card", totalAmount: "$500.00" },
+        { invoice: "INV-002", paymentStatus: "Pending", paymentMethod: "PayPal", totalAmount: "$2,000.00" },
+    ];
+    // _________________END______________
+    // _________________BEGIN______________
+    const [value, setValue] = useState(5);
+
+    const handleChange = (newValue) => {
+        console.log(newValue)
+        setValue(newValue);
+    };
     // _________________END______________
     return (
         <>
@@ -88,10 +105,14 @@ function App() {
             {/*            value="name"/>*/}
             {/*    <Popover backdrop="blur" placement="top-start" isOpen={isOpen.nestedPopover}*/}
             {/*             onOpenChange={(e) => setIsOpen({...isOpen, nestedPopover: e})}>*/}
-            {/*        <button>Top start</button>*/}
-            {/*        <Calendar mode="Gregorian" onChange={() => {*/}
-            {/*            setIsOpen({...isOpen, nestedPopover: false})*/}
-            {/*        }}/>*/}
+            {/*        <Popover.Trigger>*/}
+            {/*            <button>Top start</button>*/}
+            {/*        </Popover.Trigger>*/}
+            {/*        <Popover.Content>*/}
+            {/*            <Calendar mode="Gregorian" onChange={() => {*/}
+            {/*                setIsOpen({...isOpen, nestedPopover: false})*/}
+            {/*            }}/>*/}
+            {/*        </Popover.Content>*/}
             {/*    </Popover>*/}
             {/*</Modal>*/}
             {/*<p>Basic usage</p>*/}
@@ -169,89 +190,144 @@ function App() {
             {/*<p>Basic usage</p>*/}
             {/*<div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
-            {/*        <Popover placement="top-start" isOpen={isOpen.topStartPopover}*/}
+
+            {/*        <Popover placement="top-start" isOpen={isOpen.topStartPopover} classNames = {{*/}
+            {/*            root: "root-custom-class"*/}
+            {/*        }}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>*/}
-            {/*            <button>Top start</button>*/}
-            {/*            <Calendar mode="Gregorian" onChange={() => {*/}
-            {/*                setIsOpen({...isOpen, topStartPopover: false})*/}
-            {/*            }}/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Top start</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content classNames = {{*/}
+            {/*                content: "content-custom-class",*/}
+            {/*                backdrop: "backdrop-custom-class"*/}
+            {/*            }}>*/}
+            {/*                <Calendar mode="Gregorian" onChange={() => {*/}
+            {/*                    setIsOpen({...isOpen, topStartPopover: false})*/}
+            {/*                }}/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="top" isOpen={isOpen.topPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topPopover: e})}>*/}
-            {/*            <button>Top</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Top</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="top-end" isOpen={isOpen.topEndPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topEndPopover: e})}>*/}
-            {/*            <button>Top end</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Top end</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="bottom-start" isOpen={isOpen.bottomStartPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, bottomStartPopover: e})}>*/}
-            {/*            <button>Bottom start</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Bottom start</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="bottom" isOpen={isOpen.bottomPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, bottomPopover: e})}>*/}
-            {/*            <button>Bottom</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Bottom</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="bottom-end" isOpen={isOpen.bottomEndPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, bottomEndPopover: e})}>*/}
-            {/*            <button>Bottom end</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Bottom end</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="right-start" isOpen={isOpen.rightStartPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, rightStartPopover: e})}>*/}
-            {/*            <button>Right start</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Right start</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="right" isOpen={isOpen.rightPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, rightPopover: e})}>*/}
-            {/*            <button>Right</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Right</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="right-end" isOpen={isOpen.rightEndPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, rightEndPopover: e})}>*/}
-            {/*            <button>Right end</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Bottom end</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="left-start" isOpen={isOpen.leftStartPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, leftStartPopover: e})}>*/}
-            {/*            <button>Left start</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Left start</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="left" isOpen={isOpen.leftPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, leftPopover: e})}>*/}
-            {/*            <button>Left</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Left</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="left-end" isOpen={isOpen.leftEndPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, leftEndPopover: e})}>*/}
-            {/*            <button>Left end</button>*/}
-            {/*            <Calendar mode="Gregorian"/>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Left end</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content>*/}
+            {/*                <Calendar mode="Gregorian"/>*/}
+            {/*            </Popover.Content>*/}
             {/*        </Popover>*/}
             {/*    </div>*/}
             {/*</div>*/}
@@ -684,7 +760,34 @@ function App() {
             {/*    <Pagination.Prev classNames={{*/}
             {/*        prev: "prev-custom-class"*/}
             {/*    }}/>*/}
+            {/*    <Pagination.Pages separator={<>***</>} classNames={{*/}
+            {/*        page: "page-custom-class",*/}
+            {/*        active: "active-custom-class",*/}
+            {/*        separator: "separator-custom-class",*/}
+            {/*        pagesContainer: "pages-container-custom-class",*/}
+            {/*    }}/>*/}
+            {/*    <Pagination.Next classNames={{*/}
+            {/*        next: "prev-custom-class"*/}
+            {/*    }}/>*/}
+            {/*    <Pagination.Content classNames={{*/}
+            {/*        content: "content-custom-class"*/}
+            {/*    }}>*/}
+            {/*        {({page, totalPages}) => (*/}
+            {/*            <span style={{marginLeft: "10px"}}>*/}
+            {/*  صفحه {page} از {totalPages}*/}
+            {/*</span>*/}
+            {/*        )}*/}
+            {/*    </Pagination.Content>*/}
+            {/*</Pagination>*/}
+            {/*<p>Change Positions</p>*/}
+            {/*<Pagination page={page.positions} size={10} total={100} onPageChange={(e) => {*/}
+            {/*    setPage({*/}
+            {/*        ...page,*/}
+            {/*        positions: e*/}
+            {/*    })*/}
+            {/*}}>*/}
             {/*    <Pagination.Pages separator={<>***</>}/>*/}
+            {/*    <Pagination.Prev />*/}
             {/*    <Pagination.Next/>*/}
             {/*    <Pagination.Content>*/}
             {/*        {({page, totalPages}) => (*/}
@@ -694,8 +797,84 @@ function App() {
             {/*        )}*/}
             {/*    </Pagination.Content>*/}
             {/*</Pagination>*/}
+            {/*<hr/>*/}
+            {/*<h1>Table</h1>*/}
+            {/*<p>Default</p>*/}
+            {/*<Table>*/}
+            {/*    <TableHeader>*/}
+            {/*        <TableRow>*/}
+            {/*            <TableHead className="w-[100px]">Invoice</TableHead>*/}
+            {/*            <TableHead>Status</TableHead>*/}
+            {/*            <TableHead>Method</TableHead>*/}
+            {/*            <TableHead className="text-right">Amount</TableHead>*/}
+            {/*        </TableRow>*/}
+            {/*    </TableHeader>*/}
+
+            {/*    <TableBody>*/}
+            {/*        {invoices.map((invoice) => (*/}
+            {/*            <TableRow key={invoice.invoice}>*/}
+            {/*                <TableCell className="font-medium" data-label="نام مشتری">{invoice.invoice}</TableCell>*/}
+            {/*                <TableCell data-label="نام مشتری">{invoice.paymentStatus}</TableCell>*/}
+            {/*                <TableCell data-label="نام مشتری">{invoice.paymentMethod}</TableCell>*/}
+            {/*                <TableCell className="text-right" data-label="نام مشتری">{invoice.totalAmount}</TableCell>*/}
+            {/*            </TableRow>*/}
+            {/*        ))}*/}
+            {/*    </TableBody>*/}
+
+            {/*    <TableFooter>*/}
+            {/*        <TableRow>*/}
+            {/*            <TableCell colSpan={3}>Total</TableCell>*/}
+            {/*            <TableCell className="text-right">$2,500.00</TableCell>*/}
+            {/*        </TableRow>*/}
+            {/*    </TableFooter>*/}
+            {/*</Table>*/}
+
+            <hr/>
+            <h1>Tabs</h1>
+            <p>Default</p>
+            <Tabs
+                value={value}
+                onChange={handleChange}
+            >
+                <Tab label="Item One" />
+                <Tab label="Item Two" />
+                <Tab label="Item Three" />
+                <Tab label="Item Four" />
+                <Tab label="Item Five" />
+                <Tab label="Item Six" />
+                <Tab label="Item Seven" />
+
+                <TabContent label="Item One" value={value} index={0}>
+                    Test 1
+                </TabContent>
+
+                <TabContent label="Item Two" value={value} index={1}>
+                    Test 2
+                </TabContent>
+
+                <TabContent label="Item Three" value={value} index={2}>
+                    Test 3
+                </TabContent>
+
+                <TabContent label="Item Four" value={value} index={3}>
+                    Test 4
+                </TabContent>
+
+                <TabContent label="Item Five" value={value} index={4}>
+                    Test 5
+                </TabContent>
+
+                <TabContent label="Item Six" value={value} index={5}>
+                    Test 6
+                </TabContent>
+
+                <TabContent label="Item Seven" value={value} index={6}>
+                    Test 7
+                </TabContent>
+            </Tabs>
         </>
     )
 }
 
 export default App;
+

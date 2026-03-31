@@ -45,7 +45,7 @@ export const Radio: FC<Props> = ({value, selected, name, onChange, disabled, chi
     );
 };
 
-Radio.Indicator = ({children, classNames}: {
+export const RadioIndicator = ({children, classNames}: {
     children?: React.ReactNode, classNames?: {
         indicator?: string;
         icon?: string;
@@ -60,9 +60,13 @@ Radio.Indicator = ({children, classNames}: {
     );
 };
 
-Radio.Content = ({children, classNames}: { children?: React.ReactNode, classNames?: {
+export const RadioContent = ({children, classNames}: { children?: React.ReactNode, classNames?: {
         content?: string;
     }
 }) => {
     return <div className={`naria-radio__content ${classNames.content || ''}`} data-class-prop="content">{children}</div>;
 };
+
+Radio.Indicator = RadioIndicator;
+Radio.Content = RadioContent;
+Radio.displayName = 'Radio';

@@ -1,9 +1,59 @@
-.naria-button {
-  display: flex;
-  align-items: center;
+.naria-tabs {
+  position: relative;
   width: 100%;
-  .naria-loading {
-    width: 14px;
-    height: 14px;
+  overflow: hidden;
+  display: flex;
+
+  .tabs-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+  }
+
+  .tabs-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #eee;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .tab.active {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .scroll-btn {
+    background: rgba(0,0,0,0.1);
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 18px;
+    z-index: 2;
+    border-radius: 4px;
+  }
+
+  .scroll-btn.left {
+    left: 5px;
+  }
+
+  .scroll-btn.right {
+    right: 5px;
+  }
+
+  .tab-content {
+    margin-top: 20px;
+    padding: 10px;
+    background: #f8f8f8;
+    border-radius: 5px;
   }
 }

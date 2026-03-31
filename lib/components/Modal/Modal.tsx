@@ -1,4 +1,4 @@
-import {cloneElement, FC, forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
+import {cloneElement, FC, useEffect, useRef} from "react";
 import {useWidth} from "../../hooks/use-width";
 import {addNavigation, onHashChanges, removeNavigation} from "../../utils/navigator";
 import Close from '../../assets/icons/close.svg?react';
@@ -117,6 +117,7 @@ export const Modal: FC<LibModalProps> = ({
                                                 {
                                                     closeIcon ? cloneElement((closeIcon as any), {onClick: () => onClose()}) : (
                                                         <button
+                                                            type="button"
                                                             className={`naria-modal__close-icon ${classNames.closeIcon}`}
                                                             onClick={onClose} data-class-prop="closeIcon">
                                                             <Close/>
@@ -147,4 +148,4 @@ export const Modal: FC<LibModalProps> = ({
         </>
     )
 };
-
+Modal.displayName = 'Modal';

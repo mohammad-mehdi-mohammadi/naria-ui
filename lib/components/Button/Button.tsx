@@ -44,5 +44,5 @@ export const Button: FC<props> = ({
         }} data-class-prop="root" data-class-prop-color="color"/> : icon}{value}</button>
     );
 };
-
+Button.displayName = 'Button';
 

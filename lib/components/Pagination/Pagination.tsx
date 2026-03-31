@@ -37,7 +37,7 @@ export const Pagination: React.FC<props> = ({page, size, total, onPageChange, ch
     );
 };
 
-Pagination.Prev = ({children, classNames}: { children?: React.ReactNode, classNames?: {
+export const PaginationPrev = ({children, classNames}: { children?: React.ReactNode, classNames?: {
         prev?: string;
     }
 }) => {
@@ -45,7 +45,7 @@ Pagination.Prev = ({children, classNames}: { children?: React.ReactNode, classNa
     if (!context) throw new Error("Pagination components must be used within Pagination");
     const {page, onPageChange} = context;
     return (
-        <button onClick={() => onPageChange(page - 1)} disabled={page === 1}
+        <button type="button" onClick={() => onPageChange(page - 1)} disabled={page === 1}
                 className = {`naria-pagination__prev ${classNames?.prev || ""}`}
                 data-class-prop="prev">
             {children ? children : "Prev"}
@@ -53,7 +53,7 @@ Pagination.Prev = ({children, classNames}: { children?: React.ReactNode, classNa
     );
 };
 
-Pagination.Next = ({children, classNames}: { children?: React.ReactNode, classNames?: {
+export const PaginationNext = ({children, classNames}: { children?: React.ReactNode, classNames?: {
         next?: string;
     }
 }) => {
@@ -62,6 +62,7 @@ Pagination.Next = ({children, classNames}: { children?: React.ReactNode, classNa
     const {page, totalPages, onPageChange} = context;
     return (
         <button
+            type="button"
             onClick={() => onPageChange(page + 1)}
             disabled={page === totalPages}
             className = {`naria-pagination__next ${classNames?.next || ""}`}
@@ -72,11 +73,12 @@ Pagination.Next = ({children, classNames}: { children?: React.ReactNode, classNa
     );
 };
 
-Pagination.Pages = ({separator, classNames}: {
+export const PaginationPages = ({separator, classNames}: {
     separator?: React.ReactNode, classNames?: {
         page?: string;
         active?: string;
         separator?: string;
+        pagesContainer?: string;
     }
 }) => {
     const context = useContext(PaginationContext);
@@ -117,24 +119,31 @@ Pagination.Pages = ({separator, classNames}: {
 
     const pageNumbers = getPageNumbers();
 
-    return pageNumbers.map((p, idx) =>
-        typeof p === "number" ? (
-            <button
-                key={p}
-                onClick={() => onPageChange(+p)}
-                aria-current={page === p ? "page" : undefined}
-                className={`naria-pagination__page ${classNames?.page || ""} ${page === p ? `naria-pagination__page--active ${classNames?.active || ""}` : ""}`}
-                data-class-prop="page"
-                data-class-prop-active="active"
-            >
-                {p}
-            </button>
-        ) : (
-            <span key={`separator-${idx}`} className = {`naria-pagination__separator ${classNames?.separator || ""}`} data-class-prop="separator">{p}</span>
-        )
+    return (
+        <div className = {`naria-pagination__pages-container ${classNames?.pagesContainer || ""}`}>
+            {
+                pageNumbers.map((p, idx) =>
+                    typeof p === "number" ? (
+                        <button
+                            type="button"
+                            key={p}
+                            onClick={() => onPageChange(+p)}
+                            aria-current={page === p ? "page" : undefined}
+                            className={`naria-pagination__page ${classNames?.page || ""} ${page === p ? `naria-pagination__page--active ${classNames?.active || ""}` : ""}`}
+                            data-class-prop="page"
+                            data-class-prop-active="active"
+                        >
+                            {p}
+                        </button>
+                    ) : (
+                        <span key={`separator-${idx}`} className = {`naria-pagination__separator ${classNames?.separator || ""}`} data-class-prop="separator">{p}</span>
+                    )
+                )
+            }
+        </div>
     );
 };
-Pagination.Content = ({children, classNames}: {
+export const PaginationContent = ({children, classNames}: {
     children?: React.ReactNode,
     classNames?: {
         content?: string;
@@ -148,3 +157,9 @@ Pagination.Content = ({children, classNames}: {
         </div>
     );
 };
+
+Pagination.Prev = PaginationPrev;
+Pagination.Next = PaginationNext;
+Pagination.Content = PaginationContent;
+Pagination.Pages = PaginationPages;
+Pagination.displayName = 'Pagination';

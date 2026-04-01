@@ -10,6 +10,7 @@ import CheckIcon from '../lib/assets/icons/check.svg?react';
 import {Pagination} from "../lib/components/Pagination";
 import {TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow} from "../lib/components/Table/Table";
 import {Tab, TabContent} from "../lib/components/Tabs/Tabs";
+import {Switch} from '../lib/components/Switch';
 
 function App() {
 
@@ -93,6 +94,12 @@ function App() {
         console.log(newValue)
         setValue(newValue);
     };
+    // _________________END______________//
+    // _________________BEGIN______________//
+    const [isEnabled, setIsEnabled] = useState({
+        default: false,
+        notification: false,
+    });
     // _________________END______________
     return (
         <>
@@ -844,7 +851,10 @@ function App() {
                 <Tab label="Item Six" />
                 <Tab label="Item Seven" />
 
-                <TabContent label="Item One" value={value} index={0}>
+                <TabContent label="Item One" value={value} index={0} classNames={{
+                    content: 'content-custom-class',
+                    active: 'active-custom-class',
+                }}>
                     Test 1
                 </TabContent>
 
@@ -872,6 +882,44 @@ function App() {
                     Test 7
                 </TabContent>
             </Tabs>
+            <hr/>
+            <h1>Switch</h1>
+            <p>Default</p>
+            <Switch
+                checked={isEnabled.default}
+                onChange={(e) => setIsEnabled({
+                    ...isEnabled,
+                    default: e
+                })}
+            />
+            <p>Label</p>
+            <Switch
+                checked={isEnabled.notification}
+                onChange={(e) => setIsEnabled({
+                    ...isEnabled,
+                    notification: e
+                })}
+                label="دریافت نوتیفیکیشن"
+            />
+            <p>Label Position | JSX</p>
+            <Switch
+                label={
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-xl">🌙</span>
+                            <span>حالت تاریک</span>
+                        </div>
+                        <p>Test</p>
+                    </div>
+                }
+                labelPosition="left"
+            />
+            <p>Disabled</p>
+            <Switch
+                disabled
+                checked={true}
+                label="غیرفعال"
+            />
         </>
     )
 }

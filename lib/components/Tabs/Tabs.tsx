@@ -7,8 +7,10 @@ export interface props {
     children: ReactElement[];
     classNames?: {
         root?: string;
-        disabled?: string;
-        input?: string;
+        prev?: string;
+        next?: string;
+        tabWrapper?: string;
+        contentWrapper?: string;
     };
 }
 
@@ -16,6 +18,7 @@ export const Tabs: FC<props> = ({
                                     value,
                                     onChange,
                                     children,
+                                    classNames
                                 }) => {
     const tabsRef = useRef<HTMLDivElement>(null);
     const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -32,21 +35,17 @@ export const Tabs: FC<props> = ({
         (child) => React.isValidElement(child) && child.type === TabContent
     );
 
-    // تشخیص RTL
     const checkRTL = () => {
         const dir = document.documentElement.getAttribute('dir') ||
             document.body.getAttribute('dir');
         setIsRTL(dir === 'rtl');
     };
 
-    // دریافت مقدار اسکرول فعلی به صورت نرمال شده
     const getNormalizedScrollLeft = () => {
         if (!tabsRef.current) return 0;
 
         if (isRTL) {
-            // در RTL، scrollLeft می‌تواند منفی باشد
-            // ما آن را به مقدار مثبت تبدیل می‌کنیم
-            const { scrollLeft, scrollWidth, clientWidth } = tabsRef.current;
+            const {scrollLeft} = tabsRef.current;
             return Math.abs(scrollLeft);
         }
         return tabsRef.current.scrollLeft;
@@ -54,7 +53,7 @@ export const Tabs: FC<props> = ({
 
     const checkScroll = () => {
         if (!tabsRef.current) return;
-        const { scrollWidth, clientWidth } = tabsRef.current;
+        const {scrollWidth, clientWidth} = tabsRef.current;
         const hasScroll = scrollWidth > clientWidth;
 
         setShowScrollButtons(hasScroll);
@@ -76,7 +75,7 @@ export const Tabs: FC<props> = ({
 
         const container = tabsRef.current;
         const selectedTab = tabRefs.current[value];
-        console.log("targetScroll")
+
         if (!selectedTab) return;
 
         const containerRect = container.getBoundingClientRect();
@@ -198,12 +197,13 @@ export const Tabs: FC<props> = ({
     };
 
     return (
-        <div className="naria-tabs" dir={isRTL ? "rtl" : "ltr"}>
+        <div className={`naria-tabs ${classNames?.root || ''}`} dir={isRTL ? "rtl" : "ltr"} data-class-prop="root">
             <div className="naria-tabs__container">
                 {showScrollButtons && (
                     <button
                         type="button"
-                        className="naria-tabs__scroll-btn naria-tabs__scroll-btn--prev"
+                        className={`naria-tabs__scroll-btn naria-tabs__scroll-btn--prev ${classNames?.prev || ''}`}
+                        data-class-prop="prev"
                         disabled={!canScrollPrev}
                         onClick={scrollPrev}
                     >
@@ -211,7 +211,8 @@ export const Tabs: FC<props> = ({
                     </button>
                 )}
                 <div
-                    className="naria-tabs__wrapper"
+                    className={`naria-tabs__tab-wrapper ${classNames?.tabWrapper || ''}`}
+                    data-class-prop="tabWrapper"
                     ref={tabsRef}
                     onScroll={checkScroll}
                     onTouchMove={checkScroll}
@@ -232,7 +233,8 @@ export const Tabs: FC<props> = ({
                 {showScrollButtons && (
                     <button
                         type="button"
-                        className="naria-tabs__scroll-btn naria-tabs__scroll-btn--next"
+                        className={`naria-tabs__scroll-btn naria-tabs__scroll-btn--next ${classNames?.next || ''}`}
+                        data-class-prop="next"
                         disabled={!canScrollNext}
                         onClick={scrollNext}
                     >
@@ -241,7 +243,8 @@ export const Tabs: FC<props> = ({
                 )}
             </div>
 
-            <div className="naria-tabs__contents">
+            <div className={`naria-tabs__content-wrapper ${classNames?.contentWrapper || ''}`}
+                 data-class-prop="contentWrapper">
                 {contents.map((content, index) => {
                     if (React.isValidElement(content)) {
                         return cloneElement(content, {
@@ -261,14 +264,20 @@ interface TabProps {
     selected?: boolean;
     onClick?: () => void;
     ref?: React.Ref<HTMLDivElement>;
+    classNames?: {
+        tab?: string;
+        active?: string;
+    };
 }
 
 export const Tab = React.forwardRef<HTMLDivElement, TabProps>(
-    ({label, selected, onClick}, ref) => {
+    ({label, selected, onClick, classNames}, ref) => {
         return (
             <div
                 ref={ref}
-                className={`naria-tabs__tab ${selected ? "naria-tabs__tab--active" : ""}`}
+                className={`naria-tabs__tab ${selected ? "naria-tabs__tab--active" : ""} ${classNames?.tab || ''} ${classNames?.active || ''}`}
+                data-class-prop="tab"
+                data-class-prop-active="active"
                 onClick={onClick}
             >
                 {label}
@@ -281,21 +290,28 @@ interface TabContentProps {
     index: number;
     value?: number;
     children: React.ReactNode;
+    classNames?: {
+        content?: string;
+        inner?: string;
+        active?: string;
+    };
 }
 
 export const TabContent: FC<TabContentProps> = ({
                                                     index,
                                                     value,
-                                                    children
+                                                    children,
+                                                    classNames
                                                 }) => {
     return (
         <div
-            className="naria-tabs__content"
+            className={`naria-tabs__content ${classNames?.content || ''} ${value === index ? (classNames?.active || '') : ''}`}
+            data-class-prop="content"
+            data-class-prop-active="active"
             role="tabpanel"
-            hidden={value !== index}
-        >
+            hidden={value !== index}>
             {value === index && (
-                <div className="naria-tabs__content__inner">
+                <div className={`naria-tabs__content__inner ${classNames?.inner || ''}`}>
                     {children}
                 </div>
             )}

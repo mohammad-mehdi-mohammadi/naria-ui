@@ -1,13 +1,7 @@
 // tabs.scss
 .naria-tabs {
-  width: 100%;
 
   &__container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border-bottom: 1px solid #e0e0e0;
   }
 
   &__wrapper {
@@ -15,27 +9,23 @@
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 
     &::-webkit-scrollbar {
       display: none;
     }
-
-    -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 
   &__scroll-btn {
-    background: white;
     border: none;
     cursor: pointer;
-    padding: 8px 12px;
-    font-size: 16px;
     z-index: 1;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     flex-shrink: 0;
 
     &:hover:not(:disabled) {
-      background-color: #f5f5f5;
+
     }
 
     &:disabled {
@@ -44,77 +34,57 @@
     }
 
     &--prev {
-      border-right: 1px solid #e0e0e0;
+
     }
 
     &--next {
-      border-left: 1px solid #e0e0e0;
+
     }
   }
 
-  // استایل‌های RTL
   &[dir="rtl"] {
     .naria-tabs__scroll-btn {
       &--prev {
-        border-right: none;
-        border-left: 1px solid #e0e0e0;
+
       }
 
       &--next {
-        border-left: none;
-        border-right: 1px solid #e0e0e0;
+
       }
     }
 
-    .naria-tabs__tab {
-      text-align: right;
+    .naria-tabs__tab-wrapper {
+
     }
   }
 
   &__tab {
-    padding: 12px 24px;
-    cursor: pointer;
     white-space: nowrap;
-    transition: all 0.3s ease;
-    border-bottom: 2px solid transparent;
-    color: #666;
+    transition: all 0.2s ease;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-      color: #333;
+
     }
 
     &--active {
-      color: #1976d2;
-      border-bottom-color: #1976d2;
+
     }
   }
 
-  &__contents {
-    padding: 20px 0;
+  &__content-wrapper {
+
   }
 
   &__content {
     display: none;
-    animation: fadeIn 0.3s ease;
+    animation: fadeInTranslateY 0.2s ease-out forwards;
 
     &:not([hidden]) {
       display: block;
     }
 
     &__inner {
-      padding: 0;
-    }
-  }
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    }
   }
 }

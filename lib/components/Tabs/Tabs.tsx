@@ -152,7 +152,7 @@ const TabsBase: FC<TabsProps> = ({value, onChange, children, prevIcon, nextIcon,
     };
 
     return (
-        <div className={`naria-tabs ${classNames?.root || ''}`} dir={isRTL ? "rtl" : "ltr"} data-class-prop="root">
+        <div className={`naria-tabs ${classNames?.root || ''}`} data-class-prop="root">
             <div className="naria-tabs__container">
                 {showScrollButtons && (
                     <button

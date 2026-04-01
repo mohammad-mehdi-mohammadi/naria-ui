@@ -1,1 +1,1 @@
-export { Pagination } from './Pagination';
+export {Pagination, PaginationContent, PaginationNext, PaginationPages, PaginationPrev} from './Pagination';

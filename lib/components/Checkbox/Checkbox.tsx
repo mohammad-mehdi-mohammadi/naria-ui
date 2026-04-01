@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, { FC } from "react";
 import './checkbox.scss';
 import CheckIcon from '../../assets/icons/check.svg?react';
 
@@ -14,9 +14,25 @@ export interface Props {
     };
 }
 
-export const Checkbox: FC<Props> = ({checked, onChange, disabled, children, classNames}) => {
+export const CheckboxIndicator = ({ children, classNames }: {
+    children?: React.ReactNode,
+    classNames?: { indicator?: string; icon?: string }
+}) => (
+    <div className={`naria-checkbox__indicator ${classNames?.indicator || ''}`} data-class-prop="indicator">
+        <span>
+            {children ? children : <CheckIcon className={`naria-checkbox__indicator__icon ${classNames?.icon || ''}`} data-class-prop="icon" />}
+        </span>
+    </div>
+);
+
+export const CheckboxContent = ({ children, classNames }: { children?: React.ReactNode; classNames?: { content?: string } }) => (
+    <div className={`naria-checkbox__content ${classNames?.content || ''}`} data-class-prop="content">{children}</div>
+);
+
+const CheckboxBase: FC<Props> = ({ checked, onChange, disabled, children, classNames }) => {
     const hasIndicator = React.Children.toArray(children).some(
-        (child: any) => child?.type === Checkbox.Indicator
+        (child): child is React.ReactElement =>
+            React.isValidElement(child) && child.type === CheckboxIndicator
     );
 
     return (
@@ -35,35 +51,19 @@ export const Checkbox: FC<Props> = ({checked, onChange, disabled, children, clas
                 data-class-prop="input"
             />
 
-            {!hasIndicator && <Checkbox.Indicator />}
+            {!hasIndicator && <CheckboxIndicator />}
 
             {children || null}
         </label>
     );
 };
 
-export const CheckboxIndicator = ({children, classNames}: {
-    children?: React.ReactNode, classNames?: {
-        indicator?: string;
-        icon?: string;
-    }
-}) => {
-    return (
-        <div className={`naria-checkbox__indicator ${classNames?.indicator || ''}`} data-class-prop="indicator">
-            <span>
-                {children ? children : <CheckIcon className={`naria-checkbox__indicator__icon ${classNames?.icon || ''}`} data-class-prop="icon"/>}
-            </span>
-        </div>
-    );
-};
+interface CheckboxComponent extends FC<Props> {
+    Indicator: typeof CheckboxIndicator;
+    Content: typeof CheckboxContent;
+}
 
-export const CheckboxContent = ({children, classNames}: { children?: React.ReactNode, classNames?: {
-        content?: string;
-    }
-}) => {
-    return <div className={`naria-checkbox__content ${classNames?.content || ''}`} data-class-prop="content">{children}</div>;
-};
-
+export const Checkbox = CheckboxBase as CheckboxComponent;
 Checkbox.Indicator = CheckboxIndicator;
 Checkbox.Content = CheckboxContent;
 Checkbox.displayName = 'Checkbox';

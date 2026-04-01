@@ -6,7 +6,8 @@ import React, {
     useContext,
     useEffect,
     useRef,
-    useState
+    useState,
+    ReactElement
 } from "react";
 import useClickOutside from "../../hooks/click-outside";
 import './popover.scss';
@@ -15,7 +16,7 @@ import {useWidth} from "../../hooks/use-width";
 import {Portal} from "../Portal";
 import {generateRandom} from "../../utils/generate-random";
 
-export interface props {
+export interface Props {
     classNames?: {
         root?: string;
     };
@@ -47,16 +48,87 @@ interface PopoverContextType {
 
 const PopoverContext = createContext<PopoverContextType | null>(null);
 
-export const Popover: FC<props> = ({
-                                       classNames = {
-                                           root: ""
-                                       },
-                                       backdrop = "opaque",
-                                       placement = "bottom-start",
-                                       isOpen = false,
-                                       onOpenChange,
-                                       children,
-                                   }) => {
+export const PopoverTrigger = ({children}: {
+    children?: React.ReactNode,
+}) => {
+    const context = useContext(PopoverContext);
+    if (!context) throw new Error("PopoverTrigger must be used within Popover");
+
+    const {onToggle, handlerRef} = context;
+
+    return (
+        <>
+            {cloneElement(children as any, {
+                onClick: onToggle,
+                ref: handlerRef
+            })}
+        </>
+    );
+};
+
+export const PopoverContent = ({children, classNames}: {
+    children?: React.ReactNode,
+    classNames?: { content?: string; backdrop?: string; }
+}) => {
+    const context = useContext(PopoverContext);
+    if (!context) throw new Error("PopoverContent must be used within Popover");
+
+    const {
+        isOpen,
+        onBackdropClick,
+        backdrop,
+        animate,
+        bounds,
+        rootRef,
+    } = context;
+
+    const getDeviceWidth = useWidth();
+
+    return (
+        <>
+            {isOpen ? (
+                <Portal>
+                    {getDeviceWidth < 768 ? (
+                        <div
+                            onClick={onBackdropClick}
+                            className={`naria-popover__backdrop ${backdrop !== 'transparent' ? `backdrop--${backdrop}` : ''} ${classNames?.backdrop || ''}`}
+                            data-class-prop="backdrop">
+                            <div
+                                className={`naria-popover__content naria-popover__content--mobile ${classNames?.content || ''}`}
+                                data-class-prop="content">
+                                {children}
+                            </div>
+                        </div>
+                    ) : (
+                        <div
+                            className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position} ${classNames?.content || ''}`}
+                            ref={rootRef}
+                            style={{
+                                bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
+                                top: bounds.top !== undefined ? bounds.top : "unset",
+                                left: bounds.left !== undefined ? bounds.left : "unset",
+                                right: bounds.right !== undefined ? bounds.right : "unset",
+                            }}
+                            data-class-prop="content">
+                            {children}
+                        </div>
+                    )}
+                </Portal>
+            ) : null}
+        </>
+    );
+};
+
+const PopoverBase: FC<Props> = ({
+                                    classNames = {
+                                        root: ""
+                                    },
+                                    backdrop = "opaque",
+                                    placement = "bottom-start",
+                                    isOpen = false,
+                                    onOpenChange,
+                                    children,
+                                }) => {
     const [animate, setAnimation] = useState({
         type: "fade-in-scale",
         position: ""
@@ -121,7 +193,7 @@ export const Popover: FC<props> = ({
                 }, 0)
             }
         }
-    }, [isOpen])
+    }, [isOpen, getDeviceWidth])
 
     useEffect(() => {
         if (isHashChanged) {
@@ -534,77 +606,12 @@ export const Popover: FC<props> = ({
     );
 };
 
-export const PopoverTrigger = ({children}: {
-    children?: React.ReactNode,
-}) => {
-    const context = useContext(PopoverContext);
-    if (!context) throw new Error("PopoverTrigger must be used within Popover");
+interface PopoverComponent extends FC<Props> {
+    Trigger: typeof PopoverTrigger;
+    Content: typeof PopoverContent;
+}
 
-    const {onToggle, handlerRef} = context;
-
-    return (
-        <>
-            {cloneElement(children as any, {
-                onClick: onToggle,
-                ref: handlerRef
-            })}
-        </>
-    );
-};
-
-export const PopoverContent = ({children, classNames}: {
-    children?: React.ReactNode,
-    classNames?: { content?: string; backdrop?: string; }
-}) => {
-    const context = useContext(PopoverContext);
-    if (!context) throw new Error("PopoverContent must be used within Popover");
-
-    const {
-        isOpen,
-        onBackdropClick,
-        backdrop,
-        animate,
-        bounds,
-        rootRef,
-    } = context;
-
-    const getDeviceWidth = useWidth();
-
-    return (
-        <>
-            {isOpen ? (
-                <Portal>
-                    {getDeviceWidth < 768 ? (
-                        <div
-                            onClick={onBackdropClick}
-                            className={`naria-popover__backdrop ${backdrop !== 'transparent' ? `backdrop--${backdrop}` : ''} ${classNames?.backdrop || ''}`}
-                            data-class-prop="backdrop">
-                            <div
-                                className={`naria-popover__content naria-popover__content--mobile ${classNames?.content || ''}`}
-                                data-class-prop="content">
-                                {children}
-                            </div>
-                        </div>
-                    ) : (
-                        <div
-                            className={`naria-popover__content naria-popover__content--desktop ${animate.type} ${animate.position} ${classNames?.content || ''}`}
-                            ref={rootRef}
-                            style={{
-                                bottom: bounds.bottom !== undefined ? bounds.bottom : "unset",
-                                top: bounds.top !== undefined ? bounds.top : "unset",
-                                left: bounds.left !== undefined ? bounds.left : "unset",
-                                right: bounds.right !== undefined ? bounds.right : "unset",
-                            }}
-                            data-class-prop="content">
-                            {children}
-                        </div>
-                    )}
-                </Portal>
-            ) : null}
-        </>
-    );
-};
-
+export const Popover = PopoverBase as PopoverComponent;
 Popover.Trigger = PopoverTrigger;
 Popover.Content = PopoverContent;
 Popover.displayName = 'Popover';

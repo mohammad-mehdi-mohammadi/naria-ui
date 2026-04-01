@@ -1,16 +1,18 @@
-// tabs.scss
 .naria-tabs {
 
   &__container {
+    display: flex;
+    align-items: center;
   }
 
-  &__wrapper {
+  &__tab-wrapper {
     flex: 1;
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    align-items: center;
 
     &::-webkit-scrollbar {
       display: none;
@@ -23,6 +25,7 @@
     z-index: 1;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    display: flex;
 
     &:hover:not(:disabled) {
 
@@ -40,21 +43,25 @@
     &--next {
 
     }
+    &__arrow {
+      width: 20px;
+      height: 20px;
+      &--rotate {
+        transform: rotate(180deg);
+      }
+    }
   }
 
   &[dir="rtl"] {
-    .naria-tabs__scroll-btn {
-      &--prev {
+    .naria-tabs {
+      &__scroll-btn {
+        &--prev {
 
+        }
+        &--next {
+
+        }
       }
-
-      &--next {
-
-      }
-    }
-
-    .naria-tabs__tab-wrapper {
-
     }
   }
 
@@ -83,8 +90,7 @@
       display: block;
     }
 
-    &__inner {
-
+    &__content-inner {
     }
   }
 }

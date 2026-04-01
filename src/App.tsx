@@ -836,90 +836,90 @@ function App() {
             {/*    </TableFooter>*/}
             {/*</Table>*/}
 
-            <hr/>
-            <h1>Tabs</h1>
-            <p>Default</p>
-            <Tabs
-                value={value}
-                onChange={handleChange}
-            >
-                <Tab label="Item One" />
-                <Tab label="Item Two" />
-                <Tab label="Item Three" />
-                <Tab label="Item Four" />
-                <Tab label="Item Five" />
-                <Tab label="Item Six" />
-                <Tab label="Item Seven" />
-
-                <TabContent label="Item One" value={value} index={0} classNames={{
-                    content: 'content-custom-class',
-                    active: 'active-custom-class',
-                }}>
-                    Test 1
-                </TabContent>
-
-                <TabContent label="Item Two" value={value} index={1}>
-                    Test 2
-                </TabContent>
-
-                <TabContent label="Item Three" value={value} index={2}>
-                    Test 3
-                </TabContent>
-
-                <TabContent label="Item Four" value={value} index={3}>
-                    Test 4
-                </TabContent>
-
-                <TabContent label="Item Five" value={value} index={4}>
-                    Test 5
-                </TabContent>
-
-                <TabContent label="Item Six" value={value} index={5}>
-                    Test 6
-                </TabContent>
-
-                <TabContent label="Item Seven" value={value} index={6}>
-                    Test 7
-                </TabContent>
-            </Tabs>
-            <hr/>
-            <h1>Switch</h1>
-            <p>Default</p>
-            <Switch
-                checked={isEnabled.default}
-                onChange={(e) => setIsEnabled({
-                    ...isEnabled,
-                    default: e
-                })}
-            />
-            <p>Label</p>
-            <Switch
-                checked={isEnabled.notification}
-                onChange={(e) => setIsEnabled({
-                    ...isEnabled,
-                    notification: e
-                })}
-                label="دریافت نوتیفیکیشن"
-            />
-            <p>Label Position | JSX</p>
-            <Switch
-                label={
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-xl">🌙</span>
-                            <span>حالت تاریک</span>
-                        </div>
-                        <p>Test</p>
-                    </div>
-                }
-                labelPosition="left"
-            />
-            <p>Disabled</p>
-            <Switch
-                disabled
-                checked={true}
-                label="غیرفعال"
-            />
+            {/*<hr/>*/}
+            {/*<h1>Tabs</h1>*/}
+            {/*<p>Default</p>*/}
+            {/*<Tabs*/}
+            {/*    value={value}*/}
+            {/*    onChange={handleChange}*/}
+            {/*>*/}
+            {/*    <Tab label="Item One" />*/}
+            {/*    <Tab label="Item Two" />*/}
+            {/*    <Tab label="Item Three" />*/}
+            {/*    <Tab label="Item Four" />*/}
+            {/*    <Tab label="Item Five" />*/}
+            {/*    <Tab label="Item Six" />*/}
+            {/*    <Tab label="Item Seven" />*/}
+            
+            {/*    <TabContent label="Item One" value={value} index={0} classNames={{*/}
+            {/*        content: 'content-custom-class',*/}
+            {/*        active: 'active-custom-class',*/}
+            {/*    }}>*/}
+            {/*        Test 1*/}
+            {/*    </TabContent>*/}
+            
+            {/*    <TabContent label="Item Two" value={value} index={1}>*/}
+            {/*        Test 2*/}
+            {/*    </TabContent>*/}
+            
+            {/*    <TabContent label="Item Three" value={value} index={2}>*/}
+            {/*        Test 3*/}
+            {/*    </TabContent>*/}
+            
+            {/*    <TabContent label="Item Four" value={value} index={3}>*/}
+            {/*        Test 4*/}
+            {/*    </TabContent>*/}
+            
+            {/*    <TabContent label="Item Five" value={value} index={4}>*/}
+            {/*        Test 5*/}
+            {/*    </TabContent>*/}
+            
+            {/*    <TabContent label="Item Six" value={value} index={5}>*/}
+            {/*        Test 6*/}
+            {/*    </TabContent>*/}
+            
+            {/*    <TabContent label="Item Seven" value={value} index={6}>*/}
+            {/*        Test 7*/}
+            {/*    </TabContent>*/}
+            {/*</Tabs>*/}
+            {/*<hr/>*/}
+            {/*<h1>Switch</h1>*/}
+            {/*<p>Default</p>*/}
+            {/*<Switch*/}
+            {/*    checked={isEnabled.default}*/}
+            {/*    onChange={(e) => setIsEnabled({*/}
+            {/*        ...isEnabled,*/}
+            {/*        default: e*/}
+            {/*    })}*/}
+            {/*/>*/}
+            {/*<p>Label</p>*/}
+            {/*<Switch*/}
+            {/*    checked={isEnabled.notification}*/}
+            {/*    onChange={(e) => setIsEnabled({*/}
+            {/*        ...isEnabled,*/}
+            {/*        notification: e*/}
+            {/*    })}*/}
+            {/*    label="دریافت نوتیفیکیشن"*/}
+            {/*/>*/}
+            {/*<p>Label Position | JSX</p>*/}
+            {/*<Switch*/}
+            {/*    label={*/}
+            {/*        <div>*/}
+            {/*            <div className="flex items-center gap-2">*/}
+            {/*                <span className="text-xl">🌙</span>*/}
+            {/*                <span>حالت تاریک</span>*/}
+            {/*            </div>*/}
+            {/*            <p>Test</p>*/}
+            {/*        </div>*/}
+            {/*    }*/}
+            {/*    labelPosition="left"*/}
+            {/*/>*/}
+            {/*<p>Disabled</p>*/}
+            {/*<Switch*/}
+            {/*    disabled*/}
+            {/*    checked={true}*/}
+            {/*    label="غیرفعال"*/}
+            {/*/>*/}
         </>
     )
 }

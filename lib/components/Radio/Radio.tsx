@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, { FC, ReactElement } from "react";
 import './radio.scss';
 
 export interface Props {
@@ -15,9 +15,25 @@ export interface Props {
     };
 }
 
-export const Radio: FC<Props> = ({value, selected, name, onChange, disabled, children, classNames}) => {
+export const RadioIndicator = ({ children, classNames }: {
+    children?: React.ReactNode,
+    classNames?: { indicator?: string; icon?: string }
+}) => (
+    <div className={`naria-radio__indicator ${classNames?.indicator || ''}`} data-class-prop="indicator">
+        <div>
+            {children ? children : <span className={`naria-radio__indicator__icon ${classNames?.icon || ''}`} data-class-prop="icon" />}
+        </div>
+    </div>
+);
+
+export const RadioContent = ({ children, classNames }: { children?: React.ReactNode; classNames?: { content?: string } }) => (
+    <div className={`naria-radio__content ${classNames?.content || ''}`} data-class-prop="content">{children}</div>
+);
+
+const RadioBase: FC<Props> = ({ value, selected, name, onChange, disabled, children, classNames }) => {
     const hasIndicator = React.Children.toArray(children).some(
-        (child: any) => child?.type === Radio.Indicator
+        (child): child is ReactElement =>
+            React.isValidElement(child) && child.type === RadioIndicator
     );
 
     return (
@@ -38,35 +54,19 @@ export const Radio: FC<Props> = ({value, selected, name, onChange, disabled, chi
                 data-class-prop="input"
             />
 
-            {!hasIndicator && <Radio.Indicator />}
+            {!hasIndicator && <RadioIndicator />}
 
             {children || null}
         </label>
     );
 };
 
-export const RadioIndicator = ({children, classNames}: {
-    children?: React.ReactNode, classNames?: {
-        indicator?: string;
-        icon?: string;
-    }
-}) => {
-    return (
-        <div className={`naria-radio__indicator ${classNames?.indicator || ''}`} data-class-prop="indicator">
-            <div>
-                {children ? children : <span className={`naria-radio__indicator__icon ${classNames?.icon || ''}`} data-class-prop="icon"/>}
-            </div>
-        </div>
-    );
-};
+interface RadioComponent extends FC<Props> {
+    Indicator: typeof RadioIndicator;
+    Content: typeof RadioContent;
+}
 
-export const RadioContent = ({children, classNames}: { children?: React.ReactNode, classNames?: {
-        content?: string;
-    }
-}) => {
-    return <div className={`naria-radio__content ${classNames.content || ''}`} data-class-prop="content">{children}</div>;
-};
-
+export const Radio = RadioBase as RadioComponent;
 Radio.Indicator = RadioIndicator;
 Radio.Content = RadioContent;
 Radio.displayName = 'Radio';

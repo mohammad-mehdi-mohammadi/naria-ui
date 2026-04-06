@@ -2,7 +2,7 @@ import React, {
     Children,
     cloneElement,
     FC,
-    ReactElement, ReactNode,
+    ReactNode,
     useEffect,
     useRef,
     useState
@@ -13,7 +13,7 @@ import './tabs.scss';
 export interface TabsProps {
     value: number;
     onChange: (index: number) => void;
-    children: ReactElement[];
+    children: ReactNode[];
     prevIcon?: ReactNode | string;
     nextIcon?: ReactNode | string;
     classNames?: {
@@ -34,11 +34,11 @@ const TabsBase: FC<TabsProps> = ({value, onChange, children, prevIcon, nextIcon,
     const [isRTL, setIsRTL] = useState(false);
 
     const tabs = Children.toArray(children).filter(
-        (child): child is ReactElement => React.isValidElement(child) && child.type === Tab
+        (child): child is ReactNode => React.isValidElement(child) && child.type === Tab
     );
 
     const contents = Children.toArray(children).filter(
-        (child): child is ReactElement => React.isValidElement(child) && child.type === TabContent
+        (child): child is ReactNode => React.isValidElement(child) && child.type === TabContent
     );
 
     const checkRTL = () => {

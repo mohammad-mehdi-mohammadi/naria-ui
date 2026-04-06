@@ -20,7 +20,7 @@
     cursor: not-allowed;
   }
   &.active .naria-switch__thumb {
-    transform: translateX(16px);
+    transform: translateX(16px) translateY(-50%);
   }
 
 }
@@ -44,7 +44,8 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   width: 16px;
   height: 16px;
-  top: 2px;
+  top: 50%;
+  transform: translateY(-50%);
   left: 2px;
 }
 

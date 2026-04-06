@@ -13,7 +13,7 @@ import './tabs.scss';
 export interface TabsProps {
     value: number;
     onChange: (index: number) => void;
-    children: ReactNode[];
+    children: ReactNode;
     prevIcon?: ReactNode | string;
     nextIcon?: ReactNode | string;
     classNames?: {
@@ -34,11 +34,19 @@ const TabsBase: FC<TabsProps> = ({value, onChange, children, prevIcon, nextIcon,
     const [isRTL, setIsRTL] = useState(false);
 
     const tabs = Children.toArray(children).filter(
-        (child): child is ReactNode => React.isValidElement(child) && child.type === Tab
+        (child): child is React.ReactElement => {
+            if (!React.isValidElement(child)) return false;
+            const childType = child.type as any;
+            return childType.displayName === 'Tab';
+        }
     );
 
     const contents = Children.toArray(children).filter(
-        (child): child is ReactNode => React.isValidElement(child) && child.type === TabContent
+        (child): child is React.ReactElement => {
+            if (!React.isValidElement(child)) return false;
+            const childType = child.type as any;
+            return childType.displayName === 'TabContent';
+        }
     );
 
     const checkRTL = () => {
@@ -237,6 +245,7 @@ export const Tab = React.forwardRef<HTMLDivElement, TabProps>(({label, selected,
         {label}
     </div>
 ));
+Tab.displayName = 'Tab';
 
 interface TabContentProps {
     index: number;
@@ -256,6 +265,7 @@ export const TabContent: FC<TabContentProps> = ({index, value, children, classNa
         {value === index && <div className={`naria-tabs__content-inner ${classNames?.inner || ''}`}>{children}</div>}
     </div>
 );
+TabContent.displayName = 'TabContent';
 
 interface TabsComponent extends FC<TabsProps> {
     Tab: typeof Tab;
@@ -265,4 +275,5 @@ interface TabsComponent extends FC<TabsProps> {
 export const Tabs = TabsBase as TabsComponent;
 Tabs.Tab = Tab;
 Tabs.TabContent = TabContent;
+
 Tabs.displayName = 'Tabs';

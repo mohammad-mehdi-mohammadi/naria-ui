@@ -6,8 +6,7 @@ import React, {
     useContext,
     useEffect,
     useRef,
-    useState,
-    ReactElement
+    useState
 } from "react";
 import useClickOutside from "../../hooks/click-outside";
 import './popover.scss';

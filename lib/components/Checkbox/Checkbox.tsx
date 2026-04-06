@@ -24,15 +24,20 @@ export const CheckboxIndicator = ({ children, classNames }: {
         </span>
     </div>
 );
+CheckboxIndicator.displayName = 'CheckboxIndicator';
 
 export const CheckboxContent = ({ children, classNames }: { children?: React.ReactNode; classNames?: { content?: string } }) => (
     <div className={`naria-checkbox__content ${classNames?.content || ''}`} data-class-prop="content">{children}</div>
 );
+CheckboxContent.displayName = 'CheckboxContent';
 
 const CheckboxBase: FC<Props> = ({ checked, onChange, disabled, children, classNames }) => {
     const hasIndicator = React.Children.toArray(children).some(
-        (child): child is React.ReactElement =>
-            React.isValidElement(child) && child.type === CheckboxIndicator
+        (child): boolean => {
+            if (!React.isValidElement(child)) return false;
+            const elementType = child.type as any;
+            return elementType.displayName === 'CheckboxIndicator'
+        }
     );
 
     return (

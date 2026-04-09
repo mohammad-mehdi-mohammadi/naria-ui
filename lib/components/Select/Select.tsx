@@ -55,6 +55,7 @@ export interface props {
         arrowIcon?: string;
         searchIcon?: string;
         backdrop?: string;
+        placeholder?: string;
     };
     onSelectChange?: any;
 }
@@ -98,6 +99,7 @@ export const Select: FC<props> = ({
                                           arrowIcon: "",
                                           searchIcon: "",
                                           backdrop: "",
+                                          placeholder: "",
                                       },
                                       onSelectChange
                                   }) => {
@@ -184,10 +186,10 @@ export const Select: FC<props> = ({
                         ...localPagination,
                         isLoading: false
                     })
-                    if(localPagination.page === 1) {
+                    if (localPagination.page === 1) {
                         setLocalOptions(res);
                     } else {
-                        if(res.length < localPagination.size) {
+                        if (res.length < localPagination.size) {
                             setPreventLoadMore(true)
                         }
                         setLocalOptions([
@@ -374,9 +376,10 @@ export const Select: FC<props> = ({
             return `naria-select__option--active ${classNames?.optionActive}`
         }
     }
-    const onScroll = (e) => {
+    const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const target = e.currentTarget;
         if (fetch && localOptions?.length && !localPagination.isLoading && !preventLoadMore) {
-            const bottom = e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - 20;
+            const bottom = target.offsetHeight + target.scrollTop >= target.scrollHeight - 20;
 
             if (bottom) {
                 setLocalPagination({
@@ -459,14 +462,20 @@ export const Select: FC<props> = ({
                         <button type="button"
                                 ref={handlerRef}
                                 disabled={disabled}
-                                className={`naria-select__handler ${localSelected ? "select__handler--selected" : ""} 
+                                className={`naria-select__handler ${localSelected ? "naria-select__handler--selected" : ""} 
                                 ${hasError && "select__handler--error"} ${classNames?.button}`}
                                 data-class-prop="button"
                                 onClick={onToggle}>
                             {
                                 localSelected ? (
                                     value?.length ? localSelected[value] : localSelected
-                                ) : (placeholder?.length ? placeholder : "Select")
+                                ) : (
+                                    placeholder?.length ? (
+                                        <span className={`naria-select__handler--placeholder ${classNames?.placeholder || ''}`} data-class-prop="placeholder">{placeholder}</span>
+                                    ) : (
+                                        <span className={`naria-select__handler--placeholder ${classNames?.placeholder || ''}`} data-class-prop="placeholder">Select</span>
+                                    )
+                                )
                             }
                             <div className={`naria-select__icon-root ${classNames?.iconRoot}`}
                                  data-class-prop="iconRoot">

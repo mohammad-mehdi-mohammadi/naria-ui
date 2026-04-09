@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './switch.scss';
 
 export interface props {
@@ -27,7 +27,9 @@ export const Switch: React.FC<props> = ({
                                             classNames,
                                         }) => {
     const [isChecked, setIsChecked] = useState(checked);
-
+    useEffect(() => {
+        setIsChecked(checked);
+    }, [checked])
     const handleToggle = () => {
         if (disabled) return;
 

@@ -47,15 +47,15 @@
     }
   }
 
-  &:not(.disabled):hover .naria-checkbox__indicator {
+  &:not(.naria-checkbox--disabled):hover .naria-checkbox__indicator {
     border-color: red;
   }
 
-  &:not(.disabled):focus .naria-checkbox__indicator {
+  &:not(.naria-checkbox--disabled):focus .naria-checkbox__indicator {
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
   }
 
-  &.disabled {
+  &.naria-checkbox--disabled {
     cursor: not-allowed;
     opacity: 0.6;
   }

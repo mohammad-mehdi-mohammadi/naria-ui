@@ -472,16 +472,16 @@ function App() {
             {/*<hr/>*/}
             {/*<h1>Checkbox</h1>*/}
             {/*<p>Default</p>*/}
-            {/*<Checkbox checked={isCheck.default} onChange={(e) => {*/}
-            {/*    setIsCheck({*/}
-            {/*        ...isCheck,*/}
-            {/*        default: e*/}
-            {/*    })*/}
-            {/*}}>*/}
-            {/*    <Checkbox.Content>*/}
-            {/*        Default*/}
-            {/*    </Checkbox.Content>*/}
-            {/*</Checkbox>*/}
+            <Checkbox checked={isCheck.default} disabled={true} onChange={(e) => {
+                setIsCheck({
+                    ...isCheck,
+                    default: e
+                })
+            }}>
+                <Checkbox.Content>
+                    Default
+                </Checkbox.Content>
+            </Checkbox>
 
             {/*<p>Custom Classes</p>*/}
             {/*<Checkbox checked={isCheck.customClass} classNames={{*/}

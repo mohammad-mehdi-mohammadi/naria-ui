@@ -37,7 +37,7 @@ const TabsBase: FC<TabsProps> = ({value, onChange, children, prevIcon, nextIcon,
         (child): child is React.ReactElement => {
             if (!React.isValidElement(child)) return false;
             const childType = child.type as any;
-            return childType.displayName === 'Tab';
+            return childType.displayName === 'Tab' || childType === React.Fragment;
         }
     );
 
@@ -45,7 +45,7 @@ const TabsBase: FC<TabsProps> = ({value, onChange, children, prevIcon, nextIcon,
         (child): child is React.ReactElement => {
             if (!React.isValidElement(child)) return false;
             const childType = child.type as any;
-            return childType.displayName === 'TabContent';
+            return childType.displayName === 'TabContent' || childType === React.Fragment;
         }
     );
 

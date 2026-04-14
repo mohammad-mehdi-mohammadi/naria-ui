@@ -32,7 +32,9 @@ export interface TimePickerProps {
     labels?: {
         am?: ReactNode | string;
         pm?: ReactNode | string;
-        toggleLabel?: ReactNode | string | undefined;
+        toggleHourLabel?: ReactNode | string | undefined;
+        toggleMinuteLabel?: ReactNode | string | undefined;
+        toggleSecondLabel?: ReactNode | string | undefined;
     };
     enabledParts?: {
         hour?: boolean;
@@ -78,7 +80,9 @@ export const TimePicker: FC<TimePickerProps> = ({
                                                     labels = {
                                                         am: 'AM',
                                                         pm: 'PM',
-                                                        toggleLabel: undefined,
+                                                        toggleHourLabel: undefined,
+                                                        toggleMinuteLabel: undefined,
+                                                        toggleSecondLabel: undefined,
                                                     },
                                                     enabledParts = {hour: true, minute: true, second: false},
                                                     initialPart = "hour",
@@ -401,7 +405,17 @@ export const TimePicker: FC<TimePickerProps> = ({
                                     {
                                         isToggleLabelEnable ? <div
                                             className={`naria-time-picker__toggle-label ${classNames?.toggleLabel || ''}`}
-                                            data-class-prop="toggleLabel">{labels?.toggleLabel ? labels.toggleLabel : btn.label}</div> : undefined
+                                            data-class-prop="toggleLabel">
+                                            {
+                                                btn.mode === 'hour' && labels?.toggleHourLabel ? labels.toggleHourLabel : btn.label
+                                            }
+                                            {
+                                                btn.mode === 'minute' && labels?.toggleMinuteLabel ? labels.toggleMinuteLabel : btn.label
+                                            }
+                                            {
+                                                btn.mode === 'second' && labels?.toggleSecondLabel ? labels.toggleSecondLabel : btn.label
+                                            }
+                                        </div> : undefined
                                     }
                                     <div className={`naria-time-picker__toggle-value ${classNames?.toggleValue || ''}`}
                                          data-class-prop="toggleValue">

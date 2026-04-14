@@ -962,6 +962,10 @@ function App() {
             <p>Hour, minute, second (All)</p>
             <TimePicker
                 enabledParts={{ hour: true, minute: true, second: true }}
+                labels = {{
+                    toggleMinuteLabel: 'Minute_Test',
+                    pm: 'PM_TEST',
+                }}
                 onChange={(time) => console.log(time)}
             />
 

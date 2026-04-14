@@ -213,7 +213,7 @@ const PopoverBase: FC<Props> = ({
             window.removeEventListener('scroll', handleScroll, { capture: true });
             document.body.style.overflow = "auto";
         };
-    }, [isOpen, onClose]);
+    }, [isOpen]);
 
     const update = useCallback(() => {
         if (handlerRef?.current && rootRef.current) {

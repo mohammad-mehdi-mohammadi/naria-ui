@@ -203,25 +203,25 @@ function App() {
             {/*<h1>Popover</h1>*/}
             {/*<p>Basic usage</p>*/}
             {/*<div>*/}
-            {/*    <div style={{padding: '300px'}}>*/}
+                <div style={{padding: '300px'}}>
 
-            {/*        <Popover placement="top-start" isOpen={isOpen.topStartPopover} classNames = {{*/}
-            {/*            root: "root-custom-class"*/}
-            {/*        }}*/}
-            {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>*/}
-            {/*            <Popover.Trigger>*/}
-            {/*                <button>Top start</button>*/}
-            {/*            </Popover.Trigger>*/}
-            {/*            <Popover.Content classNames = {{*/}
-            {/*                content: "content-custom-class",*/}
-            {/*                backdrop: "backdrop-custom-class"*/}
-            {/*            }}>*/}
-            {/*                <Calendar mode="Gregorian" onChange={() => {*/}
-            {/*                    setIsOpen({...isOpen, topStartPopover: false})*/}
-            {/*                }}/>*/}
-            {/*            </Popover.Content>*/}
-            {/*        </Popover>*/}
-            {/*    </div>*/}
+                    <Popover placement="top-start" isOpen={isOpen.topStartPopover} classNames = {{
+                        root: "root-custom-class"
+                    }}
+                             onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>
+                        <Popover.Trigger>
+                            <button>Top start</button>
+                        </Popover.Trigger>
+                        <Popover.Content classNames = {{
+                            content: "content-custom-class",
+                            backdrop: "backdrop-custom-class"
+                        }}>
+                            <Calendar mode="Gregorian" onChange={() => {
+                                setIsOpen({...isOpen, topStartPopover: false})
+                            }}/>
+                        </Popover.Content>
+                    </Popover>
+                </div>
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="top" isOpen={isOpen.topPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topPopover: e})}>*/}

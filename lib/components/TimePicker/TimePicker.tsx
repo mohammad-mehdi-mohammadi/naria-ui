@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, FC, ReactNode} from "react";
+import React, {useState, useRef, useEffect, FC, ReactNode, useCallback} from "react";
 import "./time-picker.scss";
 
 export interface TimePickerProps {
@@ -89,6 +89,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                                                     isToggleLabelEnable = true,
                                                 }) => {
     const continuousAngle = useRef(0);
+    const touchId = useRef<number | null>(null);
 
     const [selectedAmPm, setSelectedAmPm] = useState<'am' | 'pm' | undefined>(undefined);
     const [selectedHour, setSelectedHour] = useState(value?.hour || 12);
@@ -105,7 +106,7 @@ export const TimePicker: FC<TimePickerProps> = ({
     };
 
     const [timeMode, setTimeMode] = useState(getInitialTimeMode());
-    const clockRef = useRef(null);
+    const clockRef = useRef<HTMLDivElement>(null);
     const isDragging = useRef(false);
 
     useEffect(() => {
@@ -122,6 +123,14 @@ export const TimePicker: FC<TimePickerProps> = ({
         }
     }, [value]);
 
+    useEffect(() => {
+        if (mode === '12') {
+            setSelectedAmPm('am');
+        } else {
+            setSelectedAmPm(undefined);
+        }
+    }, [mode]);
+
     const getActiveButtons = () => {
         const buttons = [];
         if (enabledParts.hour) buttons.push({mode: "hour", label: "Hour"});
@@ -130,7 +139,7 @@ export const TimePicker: FC<TimePickerProps> = ({
         return buttons;
     };
 
-    const calculateHour = (clientX, clientY, rect) => {
+    const calculateHour = (clientX: number, clientY: number, rect: DOMRect) => {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         const x = clientX - centerX;
@@ -164,7 +173,7 @@ export const TimePicker: FC<TimePickerProps> = ({
         return hour;
     };
 
-    const calculateMinute = (clientX, clientY, rect) => {
+    const calculateMinute = (clientX: number, clientY: number, rect: DOMRect) => {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         const x = clientX - centerX;
@@ -179,7 +188,7 @@ export const TimePicker: FC<TimePickerProps> = ({
         return minute;
     };
 
-    const calculateSecond = (clientX, clientY, rect) => {
+    const calculateSecond = (clientX: number, clientY: number, rect: DOMRect) => {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         const x = clientX - centerX;
@@ -194,18 +203,40 @@ export const TimePicker: FC<TimePickerProps> = ({
         return second;
     };
 
-    const handleMouseEvent = (e) => {
+    const handleMouseEvent = useCallback((e: MouseEvent | TouchEvent) => {
         if (disabled) return;
-        e.preventDefault();
-        const rect = clockRef.current.getBoundingClientRect();
 
-        let clientX, clientY;
-        if (e.touches) {
-            clientX = e.touches[0].clientX;
-            clientY = e.touches[0].clientY;
-        } else {
+        const target = e.target as HTMLElement;
+        if (target.closest('.naria-time-picker__toggle') ||
+            target.closest('.naria-time-picker__am') ||
+            target.closest('.naria-time-picker__pm')) {
+            return;
+        }
+
+        e.preventDefault();
+        const rect = clockRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        let clientX: number, clientY: number;
+
+        if ('touches' in e) {
+            let targetTouch: Touch | undefined;
+            if (touchId.current !== null) {
+                targetTouch = Array.from(e.touches).find(
+                    touch => touch.identifier === touchId.current
+                );
+            }
+            if (!targetTouch && e.touches.length > 0) {
+                targetTouch = e.touches[0];
+            }
+            if (!targetTouch) return;
+            clientX = targetTouch.clientX;
+            clientY = targetTouch.clientY;
+        } else if ('clientX' in e) {
             clientX = e.clientX;
             clientY = e.clientY;
+        } else {
+            return;
         }
 
         if (timeMode === "minute" && enabledParts.minute) {
@@ -239,63 +270,52 @@ export const TimePicker: FC<TimePickerProps> = ({
                 }
             }
         }
-    };
+    }, [disabled, timeMode, enabledParts, selectedHour, selectedMinute, selectedSecond, selectedAmPm, onChange, mode]);
 
-    const handleMouseDown = (e) => {
+    const handleMouseDown = (e: React.MouseEvent) => {
         if (disabled) return;
         isDragging.current = true;
-        handleMouseEvent(e);
+        handleMouseEvent(e.nativeEvent);
     };
 
-    const handleMouseMove = (e) => {
-        if (disabled || !isDragging.current) return;
-        handleMouseEvent(e);
-    };
-
-    const handleMouseUp = () => {
-        isDragging.current = false;
-    };
-
-    const handleTouchStart = (e) => {
+    const handleTouchStart = (e: React.TouchEvent) => {
         if (disabled) return;
         e.preventDefault();
-        isDragging.current = true;
-        handleMouseEvent(e);
-    };
-
-    const handleTouchMove = (e) => {
-        if (disabled || !isDragging.current) return;
-        e.preventDefault();
-        handleMouseEvent(e);
-    };
-
-    const handleTouchEnd = (e) => {
-        if (disabled) return;
-        e.preventDefault();
-        isDragging.current = false;
+        if (e.touches.length > 0) {
+            touchId.current = e.touches[0].identifier;
+            isDragging.current = true;
+            handleMouseEvent(e.nativeEvent);
+        }
     };
 
     useEffect(() => {
-        if (mode) {
-            setSelectedAmPm(mode === '12' ? 'am' : undefined);
-        }
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseup", handleMouseUp);
-        window.addEventListener("touchmove", handleTouchMove, {passive: false});
-        window.addEventListener("touchend", handleTouchEnd);
-        window.addEventListener("touchcancel", handleTouchEnd);
+        const handleGlobalMove = (e: MouseEvent | TouchEvent) => {
+            if (!isDragging.current || disabled) return;
+            handleMouseEvent(e);
+        };
+
+        const handleGlobalUp = () => {
+            isDragging.current = false;
+            touchId.current = null;
+        };
+
+        window.addEventListener("mousemove", handleGlobalMove);
+        window.addEventListener("mouseup", handleGlobalUp);
+        window.addEventListener("touchmove", handleGlobalMove, { passive: false });
+        window.addEventListener("touchend", handleGlobalUp);
+        window.addEventListener("touchcancel", handleGlobalUp);
 
         return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
-            window.removeEventListener("touchmove", handleTouchMove);
-            window.removeEventListener("touchend", handleTouchEnd);
-            window.removeEventListener("touchcancel", handleTouchEnd);
+            window.removeEventListener("mousemove", handleGlobalMove);
+            window.removeEventListener("mouseup", handleGlobalUp);
+            window.removeEventListener("touchmove", handleGlobalMove);
+            window.removeEventListener("touchend", handleGlobalUp);
+            window.removeEventListener("touchcancel", handleGlobalUp);
         };
-    }, [mode, timeMode, disabled]);
+    }, [disabled, handleMouseEvent]);
 
     const getHandStyle = () => {
-        let targetAngle, handLength;
+        let targetAngle: number, handLength: string;
 
         if (timeMode === "second" && enabledParts.second) {
             targetAngle = selectedSecond * 6;
@@ -318,10 +338,8 @@ export const TimePicker: FC<TimePickerProps> = ({
         }
 
         let normalizedTarget = ((targetAngle % 360) + 360) % 360;
-
         let currentAngle = continuousAngle.current;
         let currentNormalized = ((currentAngle % 360) + 360) % 360;
-
         let delta = normalizedTarget - currentNormalized;
 
         if (delta > 180) {
@@ -338,38 +356,52 @@ export const TimePicker: FC<TimePickerProps> = ({
             height: handLength,
         };
     };
+
     const handStyle = getHandStyle();
 
-    const setTimeModeHandler = (mode) => {
+    const setTimeModeHandler = (modeType: "hour" | "minute" | "second") => {
         if (disabled) return;
-        setTimeMode(mode);
+        setTimeMode(modeType);
     };
 
     const getHour = () => {
         return selectedHour.toString().padStart(2, '0');
     };
+
     const getMinute = () => {
         return selectedMinute.toString().padStart(2, '0');
     };
+
     const getSecond = () => {
         return selectedSecond.toString().padStart(2, '0');
     };
-    const handleAmPm = (value) => {
+
+    const handleAmPm = (value: 'am' | 'pm') => {
         setSelectedAmPm(value);
         if (onChange) {
             onChange({hour: selectedHour, minute: selectedMinute, second: selectedSecond, ampm: value});
         }
     };
 
+    const handleClockTouchStart = (e: React.TouchEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target.closest('.naria-time-picker__toggle') &&
+            !target.closest('.naria-time-picker__am') &&
+            !target.closest('.naria-time-picker__pm')) {
+            handleTouchStart(e);
+        }
+    };
+
     const activeButtons = getActiveButtons();
-    const getToggleLabel = (mode: "hour" | "minute" | "second", label: string) => {
-        if(mode === "hour") {
+
+    const getToggleLabel = (modeType: "hour" | "minute" | "second", label: string) => {
+        if(modeType === "hour") {
             return labels?.toggleHourLabel || label;
         }
-        if(mode === "minute") {
+        if(modeType === "minute") {
             return labels?.toggleMinuteLabel || label;
         }
-        if(mode === "second") {
+        if(modeType === "second") {
             return labels?.toggleSecondLabel || label;
         }
         return label;
@@ -384,14 +416,22 @@ export const TimePicker: FC<TimePickerProps> = ({
                         enabledParts.hour && mode === '12' ? (
                             <div className={`naria-time-picker__ampm-wrapper ${classNames?.ampmWrapper || ''}`}
                                  data-class-prop="ampmWrapper">
-                                <button type="button" onClick={() => handleAmPm('am')}
-                                        className={`naria-time-picker__am ${classNames?.am || ''}`}
-                                        data-class-prop="am">
+                                <button
+                                    type="button"
+                                    onClick={() => handleAmPm('am')}
+                                    className={`naria-time-picker__am ${classNames?.am || ''} ${selectedAmPm === 'am' ? 'naria-time-picker__am--active' : ''}`}
+                                    data-class-prop="am"
+                                    disabled={disabled}
+                                >
                                     {labels?.am || 'AM'}
                                 </button>
-                                <button type="button" onClick={() => handleAmPm('pm')}
-                                        className={`naria-time-picker__pm ${classNames?.pm || ''}`}
-                                        data-class-prop="pm">
+                                <button
+                                    type="button"
+                                    onClick={() => handleAmPm('pm')}
+                                    className={`naria-time-picker__pm ${classNames?.pm || ''} ${selectedAmPm === 'pm' ? 'naria-time-picker__pm--active' : ''}`}
+                                    data-class-prop="pm"
+                                    disabled={disabled}
+                                >
                                     {labels?.pm || 'PM'}
                                 </button>
                             </div>
@@ -406,7 +446,6 @@ export const TimePicker: FC<TimePickerProps> = ({
                                     className={`naria-time-picker__toggle ${classNames?.toggle || ''} ${timeMode === btn.mode ? `naria-time-picker__toggle--active ${classNames?.toggleActive || ''}` : ''}`}
                                     onClick={() => setTimeModeHandler(btn.mode)}
                                     onTouchStart={(e) => {
-                                        e.preventDefault();
                                         e.stopPropagation();
                                         setTimeModeHandler(btn.mode);
                                     }}
@@ -418,7 +457,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                                         isToggleLabelEnable ? <div
                                             className={`naria-time-picker__toggle-label ${classNames?.toggleLabel || ''}`}
                                             data-class-prop="toggleLabel">
-                                                {getToggleLabel(btn.mode, btn.label)}
+                                            {getToggleLabel(btn.mode, btn.label)}
                                         </div> : undefined
                                     }
                                     <div className={`naria-time-picker__toggle-value ${classNames?.toggleValue || ''}`}
@@ -441,9 +480,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                     ref={clockRef}
                     className={`naria-time-picker__clock naria-time-picker__clock--mode-${mode} naria-time-picker__clock--${timeMode}-mode ${disabled ? 'naria-time-picker__clock--disabled' : ''} ${classNames?.clock || ''}`}
                     onMouseDown={handleMouseDown}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
+                    onTouchStart={handleClockTouchStart}
                     data-class-prop="clock"
                 >
                     {timeMode === "hour" && enabledParts.hour && hours12.map((hour) => {

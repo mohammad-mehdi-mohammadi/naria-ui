@@ -121,23 +121,14 @@ function App() {
         <>
             {/*<h1>Modal</h1>*/}
             {/*<p>Nested</p>*/}
-            {/*<button onClick={() => setIsOpen({...isOpen, nested: true})}>Open modal</button>*/}
-            {/*<Modal isOpen={isOpen.nested} title="Modal" onOpenChange={(e) => setIsOpen({...isOpen, nested: e})}*/}
-            {/*       footer={<>asdadadda</>}>*/}
-            {/*    <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
-            {/*            value="name"/>*/}
-            {/*    <Popover backdrop="blur" placement="top-start" isOpen={isOpen.nestedPopover}*/}
-            {/*             onOpenChange={(e) => setIsOpen({...isOpen, nestedPopover: e})}>*/}
-            {/*        <Popover.Trigger>*/}
-            {/*            <button>Top start</button>*/}
-            {/*        </Popover.Trigger>*/}
-            {/*        <Popover.Content>*/}
-            {/*            <Calendar mode="Gregorian" onChange={() => {*/}
-            {/*                setIsOpen({...isOpen, nestedPopover: false})*/}
-            {/*            }}/>*/}
-            {/*        </Popover.Content>*/}
-            {/*    </Popover>*/}
-            {/*</Modal>*/}
+            <button onClick={() => setIsOpen({...isOpen, nested: true})}>Open modal</button>
+            <Modal isOpen={isOpen.nested} title="Modal" onOpenChange={(e) => setIsOpen({...isOpen, nested: e})}
+                   footer={<>asdadadda</>}>
+                <TimePicker
+                    mode = "24"
+                    onChange={(time) => console.log(time)}
+                />
+            </Modal>
             {/*<p>Basic usage</p>*/}
             {/*<button onClick={() => setIsOpen({...isOpen, basicModal: true})}>Open modal</button>*/}
 

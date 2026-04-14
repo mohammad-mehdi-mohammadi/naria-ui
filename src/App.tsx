@@ -3,7 +3,7 @@ import {Button, Calendar, Input, Popover, Select, Tabs, Table} from "../lib";
 import momentJalali from "jalali-moment";
 import momentHijri from "moment-hijri";
 import {Modal} from "../lib/components/Modal";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Checkbox} from "../lib/components/Checkbox/Checkbox";
 import {Radio} from "../lib/components/Radio/Radio";
 import CheckIcon from '../lib/assets/icons/check.svg?react';
@@ -11,6 +11,7 @@ import {Pagination} from "../lib/components/Pagination";
 import {TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow} from "../lib/components/Table/Table";
 import {Tab, TabContent} from "../lib/components/Tabs/Tabs";
 import {Switch} from '../lib/components/Switch';
+import {TimePicker} from "../lib/components/TimePicker";
 
 function App() {
 
@@ -108,6 +109,13 @@ function App() {
             })
         }, 1000)
     }, [])
+    // _________________END______________
+    // _________________BEGIN______________
+    const [selectedTime, setSelectedTime] = useState({ hour: 3, minute: 30, second: 15 });
+    const handleTimeChange = (newTime) => {
+        console.log('زمان انتخاب شده:', newTime);
+        setSelectedTime(newTime);
+    };
     // _________________END______________
     return (
         <>
@@ -472,16 +480,16 @@ function App() {
             {/*<hr/>*/}
             {/*<h1>Checkbox</h1>*/}
             {/*<p>Default</p>*/}
-            <Checkbox checked={isCheck.default} disabled={true} onChange={(e) => {
-                setIsCheck({
-                    ...isCheck,
-                    default: e
-                })
-            }}>
-                <Checkbox.Content>
-                    Default
-                </Checkbox.Content>
-            </Checkbox>
+            {/*<Checkbox checked={isCheck.default} disabled={true} onChange={(e) => {*/}
+            {/*    setIsCheck({*/}
+            {/*        ...isCheck,*/}
+            {/*        default: e*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Checkbox.Content>*/}
+            {/*        Default*/}
+            {/*    </Checkbox.Content>*/}
+            {/*</Checkbox>*/}
 
             {/*<p>Custom Classes</p>*/}
             {/*<Checkbox checked={isCheck.customClass} classNames={{*/}
@@ -845,88 +853,130 @@ function App() {
             {/*</Table>*/}
 
             {/*<hr/>*/}
-            <h1>Tabs</h1>
-            <p>Default</p>
-            <Tabs
-                value={value}
-                onChange={handleChange}
-            >
-                <Tab label="Item One" />
-                <Tab label="Item Two" />
-                <Tab label="Item Three" />
-                <Tab label="Item Four" />
-                <Tab label="Item Five" />
-                <Tab label="Item Six" />
-                <Tab label="Item Seven" />
+            {/*<h1>Tabs</h1>*/}
+            {/*<p>Default</p>*/}
+            {/*<Tabs*/}
+            {/*    value={value}*/}
+            {/*    onChange={handleChange}*/}
+            {/*>*/}
+            {/*    <Tab label="Item One" />*/}
+            {/*    <Tab label="Item Two" />*/}
+            {/*    <Tab label="Item Three" />*/}
+            {/*    <Tab label="Item Four" />*/}
+            {/*    <Tab label="Item Five" />*/}
+            {/*    <Tab label="Item Six" />*/}
+            {/*    <Tab label="Item Seven" />*/}
             
-                <TabContent label="Item One" value={value} index={0} classNames={{
-                    content: 'content-custom-class',
-                    active: 'active-custom-class',
-                }}>
-                    Test 1
-                </TabContent>
+            {/*    <TabContent label="Item One" value={value} index={0} classNames={{*/}
+            {/*        content: 'content-custom-class',*/}
+            {/*        active: 'active-custom-class',*/}
+            {/*    }}>*/}
+            {/*        Test 1*/}
+            {/*    </TabContent>*/}
             
-                <TabContent label="Item Two" value={value} index={1}>
-                    Test 2
-                </TabContent>
+            {/*    <TabContent label="Item Two" value={value} index={1}>*/}
+            {/*        Test 2*/}
+            {/*    </TabContent>*/}
             
-                <TabContent label="Item Three" value={value} index={2}>
-                    Test 3
-                </TabContent>
+            {/*    <TabContent label="Item Three" value={value} index={2}>*/}
+            {/*        Test 3*/}
+            {/*    </TabContent>*/}
             
-                <TabContent label="Item Four" value={value} index={3}>
-                    Test 4
-                </TabContent>
+            {/*    <TabContent label="Item Four" value={value} index={3}>*/}
+            {/*        Test 4*/}
+            {/*    </TabContent>*/}
             
-                <TabContent label="Item Five" value={value} index={4}>
-                    Test 5
-                </TabContent>
+            {/*    <TabContent label="Item Five" value={value} index={4}>*/}
+            {/*        Test 5*/}
+            {/*    </TabContent>*/}
             
-                <TabContent label="Item Six" value={value} index={5}>
-                    Test 6
-                </TabContent>
+            {/*    <TabContent label="Item Six" value={value} index={5}>*/}
+            {/*        Test 6*/}
+            {/*    </TabContent>*/}
             
-                <TabContent label="Item Seven" value={value} index={6}>
-                    Test 7
-                </TabContent>
-            </Tabs>
+            {/*    <TabContent label="Item Seven" value={value} index={6}>*/}
+            {/*        Test 7*/}
+            {/*    </TabContent>*/}
+            {/*</Tabs>*/}
+            {/*<hr/>*/}
+            {/*<h1>Switch</h1>*/}
+            {/*<p>Default</p>*/}
+            {/*<Switch*/}
+            {/*    checked={isEnabled.default}*/}
+            {/*    onChange={(e) => setIsEnabled({*/}
+            {/*        ...isEnabled,*/}
+            {/*        default: e*/}
+            {/*    })}*/}
+            {/*/>*/}
+            {/*<p>Label</p>*/}
+            {/*<Switch*/}
+            {/*    checked={isEnabled.notification}*/}
+            {/*    onChange={(e) => setIsEnabled({*/}
+            {/*        ...isEnabled,*/}
+            {/*        notification: e*/}
+            {/*    })}*/}
+            {/*    label="دریافت نوتیفیکیشن"*/}
+            {/*/>*/}
+            {/*<p>Label Position | JSX</p>*/}
+            {/*<Switch*/}
+            {/*    label={*/}
+            {/*        <div>*/}
+            {/*            <div className="flex items-center gap-2">*/}
+            {/*                <span className="text-xl">🌙</span>*/}
+            {/*                <span>حالت تاریک</span>*/}
+            {/*            </div>*/}
+            {/*            <p>Test</p>*/}
+            {/*        </div>*/}
+            {/*    }*/}
+            {/*    labelPosition="left"*/}
+            {/*/>*/}
+            {/*<p>Disabled</p>*/}
+            {/*<Switch*/}
+            {/*    disabled*/}
+            {/*    checked={true}*/}
+            {/*    label="غیرفعال"*/}
+            {/*/>*/}
             <hr/>
-            <h1>Switch</h1>
+            <h1>Time Picker</h1>
             <p>Default</p>
-            <Switch
-                checked={isEnabled.default}
-                onChange={(e) => setIsEnabled({
-                    ...isEnabled,
-                    default: e
-                })}
+            <TimePicker
+                onChange={(time) => console.log(time)}
             />
-            <p>Label</p>
-            <Switch
-                checked={isEnabled.notification}
-                onChange={(e) => setIsEnabled({
-                    ...isEnabled,
-                    notification: e
-                })}
-                label="دریافت نوتیفیکیشن"
+            <p>24H</p>
+            <TimePicker
+                mode = "24"
+                onChange={(time) => console.log(time)}
             />
-            <p>Label Position | JSX</p>
-            <Switch
-                label={
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-xl">🌙</span>
-                            <span>حالت تاریک</span>
-                        </div>
-                        <p>Test</p>
-                    </div>
-                }
-                labelPosition="left"
+            <p>Only hour</p>
+            <p>Only hour and minute</p>
+            <TimePicker
+                enabledParts={{ hour: true, minute: true, second: false }}
+                onChange={(time) => console.log(time)}
             />
-            <p>Disabled</p>
-            <Switch
-                disabled
-                checked={true}
-                label="غیرفعال"
+            <p>Only hour</p>
+            <TimePicker
+                enabledParts={{ hour: true, minute: false, second: false }}
+                onChange={(time) => console.log(time)}
+            />
+
+            <p>Hour, minute, second (All)</p>
+            <TimePicker
+                enabledParts={{ hour: true, minute: true, second: true }}
+                onChange={(time) => console.log(time)}
+            />
+
+            <p>Only minute and second</p>
+            <TimePicker
+                enabledParts={{ hour: false, minute: true, second: true }}
+                initialPart="minute"
+                onChange={(time) => console.log(time)}
+            />
+
+            <p>Initial time</p>
+            <TimePicker
+                enabledParts={{ hour: true, minute: true, second: true }}
+                value={{ hour: 14, minute: 30, second: 45 }}
+                onChange={(time) => console.log(time)}
             />
         </>
     )

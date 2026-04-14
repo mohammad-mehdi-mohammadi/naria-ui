@@ -22,7 +22,7 @@ interface SDS extends Pagination {
     isLoading?: boolean;
 }
 
-export interface props {
+export interface Props {
     options?: any[];
     label?: string;
     title: string;
@@ -38,7 +38,7 @@ export interface props {
     backdrop?: "opaque" | "blur" | "transparent";
     closeIcon?: ReactNode | boolean;
     classNames?: {
-        root: string;
+        root?: string;
         label?: string;
         title?: string;
         button?: string;
@@ -60,7 +60,7 @@ export interface props {
     onSelectChange?: any;
 }
 
-export const Select: FC<props> = ({
+export const Select: FC<Props> = ({
                                       options,
                                       label,
                                       hasError,

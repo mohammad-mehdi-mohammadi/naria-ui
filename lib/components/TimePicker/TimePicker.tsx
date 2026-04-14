@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect, FC, ReactNode} from "react";
 import "./time-picker.scss";
 
-export interface Props {
+export interface TimePickerProps {
     mode?: "12" | "24";
     value?: { hour: number; minute: number; second?: number };
     onChange?: (time: { hour: number; minute: number; second: number, ampm?: undefined | 'am' | 'pm' }) => void;
@@ -47,7 +47,7 @@ const hours12 = Array.from({length: 12}, (_, i) => i + 1);
 const hours24 = Array.from({length: 24}, (_, i) => i + 1);
 const minutes = Array.from({length: 60}, (_, i) => i);
 
-export const TimePicker: FC<Props> = ({
+export const TimePicker: FC<TimePickerProps> = ({
                                           onChange,
                                           mode = "12",
                                           value,

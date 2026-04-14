@@ -6,7 +6,7 @@ import './modal.scss';
 import {Portal} from "../Portal";
 import {generateRandom} from "../../utils/generate-random";
 
-export interface LibModalProps {
+export interface ModalProps {
     isOpen: boolean;
     title?: string;
     children?: React.ReactNode;
@@ -27,7 +27,7 @@ export interface LibModalProps {
     };
 }
 
-export const Modal: FC<LibModalProps> = ({
+export const Modal: FC<ModalProps> = ({
                                              isOpen = false,
                                              title,
                                              backdropDismissible = true,

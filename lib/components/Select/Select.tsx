@@ -37,6 +37,7 @@ export interface Props {
     hasSearch?: boolean;
     backdrop?: "opaque" | "blur" | "transparent";
     closeIcon?: ReactNode | boolean;
+    noData?: ReactNode | string;
     classNames?: {
         root?: string;
         label?: string;
@@ -56,6 +57,7 @@ export interface Props {
         searchIcon?: string;
         backdrop?: string;
         placeholder?: string;
+        noData?: string;
     };
     onSelectChange?: any;
 }
@@ -81,6 +83,7 @@ export const Select: FC<Props> = ({
                                       hasSearch = false,
                                       backdrop = "opaque",
                                       closeIcon = true,
+                                      noData = "No Data",
                                       classNames = {
                                           root: "",
                                           label: "",
@@ -100,6 +103,7 @@ export const Select: FC<Props> = ({
                                           searchIcon: "",
                                           backdrop: "",
                                           placeholder: "",
+                                          noData: "",
                                       },
                                       onSelectChange
                                   }) => {
@@ -587,8 +591,8 @@ export const Select: FC<Props> = ({
                                                                 }
                                                             </>
                                                         ) : (
-                                                            <div>
-                                                                No Data
+                                                            <div className = {`naria-select__no-data ${classNames?.noData || ''}`}>
+                                                                {noData}
                                                             </div>
                                                         )
                                                     }
@@ -654,8 +658,8 @@ export const Select: FC<Props> = ({
                                                                 }
                                                             </>
                                                         ) : (
-                                                            <div>
-                                                                No Data
+                                                            <div className = {`naria-select__no-data ${classNames?.noData || ''}`}>
+                                                                {noData}
                                                             </div>
                                                         )
                                                     }

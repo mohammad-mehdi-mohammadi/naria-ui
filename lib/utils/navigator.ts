@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 
 let NARIA_URL = undefined
 export const removeNavigation = (state: string) => {
-    console.log(state, 'aa--a-a--1', window.location.hash)
     let newUrl;
     if (window.location.hash.includes("/")) {
         newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`/#` + state, '')}`;
@@ -14,7 +13,6 @@ export const removeNavigation = (state: string) => {
 }
 
 export const addNavigation = (state: string) => {
-    console.log(state, 'aa--a-a--2222', window.location.hash)
     if (!window.location.hash) {
         window.location.hash = state;
     } else {
@@ -28,7 +26,6 @@ export const onHashChanges = (state: string) => {
     useEffect(() => {
         NARIA_URL = window.location.href
         const handleHashChange = (e) => {
-            console.log(state, 'aa--a-a--33333', window.location.hash, NARIA_URL, e)
             if (window.location.hash.includes(state)) {
                 if (window.location.hash.length === window.location.hash.indexOf(state) + state.length) {
                     if (window.location.href === NARIA_URL) {

@@ -73,10 +73,12 @@ export const Modal: FC<ModalProps> = ({
         if (isOpen) {
 
             setTimeout(() => {
-                addNavigation(`modal-` + randomUUIDRef.current);
-            }, 20)
+                addNavigation(`modal-${randomUUIDRef.current}`);
+            }, 50)
         } else {
-            // removeNavigation(`modal-` + randomUUIDRef.current);
+            if (window.location.hash && !document.referrer.includes('#')) {
+                removeNavigation(`modal-${randomUUIDRef.current}`);
+            }
         }
 
         document.body.style.overflow = isOpen ? "hidden" : "";

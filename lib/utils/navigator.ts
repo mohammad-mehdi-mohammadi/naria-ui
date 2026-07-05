@@ -1,55 +1,58 @@
-import {useEffect, useState} from "react";
-
-let NARIA_URL = undefined
-export const removeNavigation = (state: string) => {
-    let newUrl;
-    if (window.location.hash.includes("/")) {
-        newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`/#` + state, '')}`;
-    } else {
-        newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`#` + state, '')}`;
-    }
-    NARIA_URL = `${window.location.origin}${newUrl}`;
-    window.history.replaceState(null, '', newUrl);
-}
+import { useEffect, useState } from "react";
 
 export const addNavigation = (state: string) => {
-    if (!window.location.hash) {
+    if (window.location.hash.includes(state)) return;
+
+    const hash = window.location.hash.replace(/^#/, "");
+
+    if (!hash) {
         window.location.hash = state;
     } else {
-        window.location.hash = window.location.hash + "/#" + state;
+        window.location.hash = `${hash}/#${state}`;
     }
-}
+};
 
+export const removeNavigation = (state: string) => {
+    const hash = window.location.hash.replace(/^#/, "");
+
+    if (!hash) return;
+
+    const items = hash
+        .split("/#")
+        .filter(item => item !== state);
+
+    if (items.length === 0) {
+        history.back();
+        return;
+    }
+
+    window.location.hash = items.join("/#");
+};
 
 export const onHashChanges = (state: string) => {
-    const [isHashChanged, setIsHashChanged] = useState(false)
+    const [closed, setClosed] = useState(false);
+
     useEffect(() => {
-        NARIA_URL = window.location.href
-        const handleHashChange = (e) => {
+        const handler = () => {
+            const hash = window.location.hash.replace(/^#/, "");
 
-            if (window.location.hash.includes(state)) {
-                if (window.location.hash.length === window.location.hash.indexOf(state) + state.length) {
-                    if (window.location.href === NARIA_URL) {
-
-                        window.history.replaceState(null, '', `${window.location.origin}${window.location.pathname}`);
-                        NARIA_URL = `${window.location.origin}${window.location.pathname}`;
-                        setIsHashChanged(true);
-                    } else {
-                        setIsHashChanged(false);
-                        NARIA_URL = `${window.location.origin}${window.location.pathname}`;
-                    }
-
-
-                }
+            if (!hash.includes(state)) {
+                setClosed(true);
             } else {
-                setIsHashChanged(true);
+                setClosed(false);
             }
         };
 
-        window.addEventListener('popstate', handleHashChange);
+        window.addEventListener("hashchange", handler);
+        window.addEventListener("popstate", handler);
+
+        handler();
+
         return () => {
-            window.removeEventListener('popstate', handleHashChange);
+            window.removeEventListener("hashchange", handler);
+            window.removeEventListener("popstate", handler);
         };
-    }, [])
-    return isHashChanged
+    }, [state]);
+
+    return closed;
 };

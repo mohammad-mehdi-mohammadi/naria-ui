@@ -49,7 +49,7 @@ export const Modal: FC<ModalProps> = ({
                                          }) => {
     const getDeviceWidth = useWidth();
     const randomUUIDRef = useRef<string>(generateRandom(5));
-    const isHashChanged = onHashChanges(`#modal-` + randomUUIDRef.current);
+    const isHashChanged = onHashChanges(`modal-` + randomUUIDRef.current);
     // const [isShow, setIsShow] = useState(false);
 
     // const open = () => setIsShow(true);
@@ -61,33 +61,50 @@ export const Modal: FC<ModalProps> = ({
     };
 
     useEffect(() => {
-        if (isHashChanged) {
+        if (isHashChanged && isOpen) {
             onClose();
         }
-    }, [isHashChanged])
+    }, [isHashChanged]);
+
+    // useEffect(() => {
+    //     return () => {
+    //         onClose()
+    //     };
+    //
+    // }, [])
+
+    // useEffect(() => {
+    //     if (getDeviceWidth < 768) {
+    //         if (isOpen) {
+    //             setTimeout(() => {
+    //                 addNavigation(`modal-` + randomUUIDRef.current)
+    //             }, 30)
+    //         } else {
+    //             removeNavigation(`modal-` + randomUUIDRef.current);
+    //         }
+    //     }
+    //     document.body.style.overflow = isOpen ? "hidden" : "auto";
+    //     return () => {
+    //         document.body.style.overflow = "auto";
+    //     };
+    //
+    // }, [isOpen]);
 
     useEffect(() => {
-        return () => {
-            onClose()
-        };
+        if (getDeviceWidth >= 768) return;
 
-    }, [])
 
-    useEffect(() => {
-        if (getDeviceWidth < 768) {
-            if (isOpen) {
-                setTimeout(() => {
-                    addNavigation(`modal-` + randomUUIDRef.current)
-                }, 30)
-            } else {
-                removeNavigation(`modal-` + randomUUIDRef.current);
-            }
+        if (isOpen) {
+            addNavigation(`modal-` + randomUUIDRef.current);
+        } else {
+            removeNavigation(`modal-` + randomUUIDRef.current);
         }
-        document.body.style.overflow = isOpen ? "hidden" : "auto";
-        return () => {
-            document.body.style.overflow = "auto";
-        };
 
+        document.body.style.overflow = isOpen ? "hidden" : "";
+
+        return () => {
+            document.body.style.overflow = "";
+        };
     }, [isOpen]);
 
     return (

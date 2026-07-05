@@ -142,7 +142,7 @@ const PopoverBase: FC<Props> = ({
     const rootRef = useRef<HTMLDivElement | null>(null);
     const handlerRef = useRef<HTMLDivElement | null>(null);
     const randomUUIDRef = useRef<string>(generateRandom(5));
-    const isHashChanged = onHashChanges(`#popover-${randomUUIDRef.current}`);
+    const isHashChanged = onHashChanges(`popover-${randomUUIDRef.current}`);
 
     const onClose = () => {
         if (onOpenChange) {

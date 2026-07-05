@@ -28,7 +28,7 @@ export const onHashChanges = (state: string) => {
     useEffect(() => {
         NARIA_URL = window.location.href
         const handleHashChange = (e) => {
-            console.log(state, 'aa--a-a--33333', window.location.hash)
+            console.log(state, 'aa--a-a--33333', window.location.hash, NARIA_URL, e)
             if (window.location.hash.includes(state)) {
                 if (window.location.hash.length === window.location.hash.indexOf(state) + state.length) {
                     if (window.location.href === NARIA_URL) {

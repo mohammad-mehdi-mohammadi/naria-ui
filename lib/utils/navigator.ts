@@ -2,15 +2,15 @@ import {useEffect, useState} from "react";
 
 let NARIA_URL = undefined
 export const removeNavigation = (state: string) => {
-    console.log(state, 'aa--a-a--1', window.location.hash)
-    let newUrl;
-    if (window.location.hash.includes("/")) {
-        newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`/#` + state, '')}`;
-    } else {
-        newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`#` + state, '')}`;
-    }
-    NARIA_URL = `${window.location.origin}${newUrl}`;
-    window.history.replaceState(null, '', newUrl);
+    // console.log(state, 'aa--a-a--1', window.location.hash)
+    // let newUrl;
+    // if (window.location.hash.includes("/")) {
+    //     newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`/#` + state, '')}`;
+    // } else {
+    //     newUrl = `${window.location.pathname}${window.location.search}${window.location.hash.replace(`#` + state, '')}`;
+    // }
+    // NARIA_URL = `${window.location.origin}${newUrl}`;
+    // window.history.replaceState(null, '', newUrl);
 }
 
 export const addNavigation = (state: string) => {

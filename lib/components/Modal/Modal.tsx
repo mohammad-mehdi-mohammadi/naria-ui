@@ -28,25 +28,25 @@ export interface ModalProps {
 }
 
 export const Modal: FC<ModalProps> = ({
-                                             isOpen = false,
-                                             title,
-                                             backdropDismissible = true,
-                                             backdrop = "opaque",
-                                             hideCloseButton = false,
-                                             footer,
-                                             closeIcon,
-                                             onOpenChange,
-                                             classNames = {
-                                                 root: "",
-                                                 backdrop: "",
-                                                 title: "",
-                                                 header: "",
-                                                 body: "",
-                                                 footer: "",
-                                                 closeIcon: "",
-                                             },
-                                             children
-                                         }) => {
+                                          isOpen = false,
+                                          title,
+                                          backdropDismissible = true,
+                                          backdrop = "opaque",
+                                          hideCloseButton = false,
+                                          footer,
+                                          closeIcon,
+                                          onOpenChange,
+                                          classNames = {
+                                              root: "",
+                                              backdrop: "",
+                                              title: "",
+                                              header: "",
+                                              body: "",
+                                              footer: "",
+                                              closeIcon: "",
+                                          },
+                                          children
+                                      }) => {
     const getDeviceWidth = useWidth();
     const randomUUIDRef = useRef<string>(generateRandom(5));
     const isHashChanged = onHashChanges(`modal-` + randomUUIDRef.current);
@@ -66,36 +66,15 @@ export const Modal: FC<ModalProps> = ({
         }
     }, [isHashChanged]);
 
-    // useEffect(() => {
-    //     return () => {
-    //         onClose()
-    //     };
-    //
-    // }, [])
-
-    // useEffect(() => {
-    //     if (getDeviceWidth < 768) {
-    //         if (isOpen) {
-    //             setTimeout(() => {
-    //                 addNavigation(`modal-` + randomUUIDRef.current)
-    //             }, 30)
-    //         } else {
-    //             removeNavigation(`modal-` + randomUUIDRef.current);
-    //         }
-    //     }
-    //     document.body.style.overflow = isOpen ? "hidden" : "auto";
-    //     return () => {
-    //         document.body.style.overflow = "auto";
-    //     };
-    //
-    // }, [isOpen]);
-
     useEffect(() => {
         if (getDeviceWidth >= 768) return;
 
 
         if (isOpen) {
-            addNavigation(`modal-` + randomUUIDRef.current);
+
+            setTimeout(() => {
+                addNavigation(`modal-` + randomUUIDRef.current);
+            }, 20)
         } else {
             removeNavigation(`modal-` + randomUUIDRef.current);
         }

@@ -76,7 +76,7 @@ export const Modal: FC<ModalProps> = ({
                 addNavigation(`modal-` + randomUUIDRef.current);
             }, 20)
         } else {
-            removeNavigation(`modal-` + randomUUIDRef.current);
+            // removeNavigation(`modal-` + randomUUIDRef.current);
         }
 
         document.body.style.overflow = isOpen ? "hidden" : "";

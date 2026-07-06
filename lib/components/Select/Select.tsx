@@ -107,7 +107,6 @@ export const Select: FC<Props> = ({
                                       },
                                       onSelectChange
                                   }) => {
-    let isSubscribed = true;
     const getDeviceWidth = useWidth();
     const randomUUIDRef = useRef<string>(generateRandom(5));
     const debounceTime = useRef<any>(undefined);
@@ -143,12 +142,14 @@ export const Select: FC<Props> = ({
         sizeLabel: 'size',
         isLoading: false
     });
+    const shouldUpdateSelected = useRef(true);
+    const isSubscribed = useRef(true);
     const listRef = useRef(undefined);
     const handlerRef = useRef(undefined);
 
     useEffect(() => {
         return () => {
-            isSubscribed = false;
+            isSubscribed.current = false;
         };
     }, [])
     useEffect(() => {
@@ -166,7 +167,7 @@ export const Select: FC<Props> = ({
             }
             setIsLoading(true);
             fetch(params).then(res => {
-                if (isSubscribed) {
+                if (isSubscribed.current) {
                     setIsLoading(false);
                     setLocalOptions(res);
                 }
@@ -184,7 +185,7 @@ export const Select: FC<Props> = ({
                 params[pagination?.searchLabel || 'search'] = searchTerm;
             }
             fetch(params).then(res => {
-                if (isSubscribed) {
+                if (isSubscribed.current) {
                     setIsLoading(false);
                     setLocalPagination({
                         ...localPagination,
@@ -266,24 +267,21 @@ export const Select: FC<Props> = ({
         }
     };
     useEffect(() => {
-        if (selected && options?.length) {
-            if (options?.find(item => item[label] === selected)) {
-                setLocalSelected(options?.find(item => item[label] === selected));
-            } else {
-                setLocalSelected(selected);
-            }
-        } else if (selected && fetch && localOptions?.length) {
-            if (localOptions?.find(item => item[label] === selected)) {
-                setLocalSelected(localOptions?.find(item => item[label] === selected));
-            } else {
-                setLocalSelected(selected);
-            }
-        } else if (localSelected !== undefined) {
+        if (selected === null || selected === undefined) {
             setLocalSelected(undefined);
             setSearchTerm("");
             setInputValue("");
+            return;
+        }
+        if (selected && options?.length) {
+            const found = options?.find(item => item[label] === selected);
+            setLocalSelected(found || selected);
+        } else if (selected && fetch && localOptions?.length) {
+            const found = localOptions?.find(item => item[label] === selected);
+            setLocalSelected(found || selected);
         }
     }, [selected]);
+
     useEffect(() => {
         document.addEventListener('scroll', update, {capture: true});
         window.addEventListener("resize", update);
@@ -324,13 +322,20 @@ export const Select: FC<Props> = ({
     }, [options]);
 
     useEffect(() => {
-        if (localOptions?.length) {
-            if (localOptions?.find(item => item[label] === selected)) {
-                setLocalSelected(localOptions?.find(item => item[label] === selected));
-            } else {
-                setLocalSelected(selected);
+        if (!shouldUpdateSelected.current) {
+            shouldUpdateSelected.current = true;
+            return;
+        }
+        if(!localSelected) {
+            if (localOptions?.length) {
+                if (localOptions?.find(item => item[label] === selected)) {
+                    setLocalSelected(localOptions?.find(item => item[label] === selected));
+                } else {
+                    setLocalSelected(selected);
+                }
             }
         }
+
     }, [localOptions]);
 
     const onToggle = () => {
@@ -355,6 +360,7 @@ export const Select: FC<Props> = ({
         setIsOpen(false);
     }
     const onSelect = (item) => {
+        shouldUpdateSelected.current = false;
         if (hasSearch) {
             if (value?.length) {
                 setInputValue(item[value]);
@@ -396,6 +402,7 @@ export const Select: FC<Props> = ({
 
     }
     const onSearch = (e) => {
+        shouldUpdateSelected.current = false;
         if (fetch) {
             setInputValue(e?.target?.value);
             if (debounceTime?.current) {
@@ -416,12 +423,15 @@ export const Select: FC<Props> = ({
 
         } else {
             const tempList = e?.target?.value?.length ? options.filter(val => typeof val === "object" ? val[(optionFilterLabel?.length ? optionFilterLabel : value)].includes(e?.target?.value) : val.includes(e?.target?.value)) : options
-            setLocalOptions(tempList)
-            setInputValue(e?.target?.value)
+            setLocalOptions(tempList);
+            setInputValue(e?.target?.value);
         }
         if (!isOpen) {
             setIsOpen(true)
         }
+        setTimeout(() => {
+            shouldUpdateSelected.current = true;
+        }, 100);
     }
     useClickOutside(listRef, handlerRef, onClose);
     return (

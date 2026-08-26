@@ -203,25 +203,25 @@ function App() {
             {/*<h1>Popover</h1>*/}
             {/*<p>Basic usage</p>*/}
             {/*<div>*/}
-                <div style={{padding: '300px'}}>
+            {/*    <div style={{padding: '300px'}}>*/}
 
-                    <Popover placement="top-start" isOpen={isOpen.topStartPopover} classNames = {{
-                        root: "root-custom-class"
-                    }}
-                             onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>
-                        <Popover.Trigger>
-                            <button>Top start</button>
-                        </Popover.Trigger>
-                        <Popover.Content classNames = {{
-                            content: "content-custom-class",
-                            backdrop: "backdrop-custom-class"
-                        }}>
-                            <Calendar mode="Gregorian" onChange={() => {
-                                setIsOpen({...isOpen, topStartPopover: false})
-                            }}/>
-                        </Popover.Content>
-                    </Popover>
-                </div>
+            {/*        <Popover placement="top-start" isOpen={isOpen.topStartPopover} classNames = {{*/}
+            {/*            root: "root-custom-class"*/}
+            {/*        }}*/}
+            {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topStartPopover: e})}>*/}
+            {/*            <Popover.Trigger>*/}
+            {/*                <button>Top start</button>*/}
+            {/*            </Popover.Trigger>*/}
+            {/*            <Popover.Content classNames = {{*/}
+            {/*                content: "content-custom-class",*/}
+            {/*                backdrop: "backdrop-custom-class"*/}
+            {/*            }}>*/}
+            {/*                <Calendar mode="Gregorian" onChange={() => {*/}
+            {/*                    setIsOpen({...isOpen, topStartPopover: false})*/}
+            {/*                }}/>*/}
+            {/*            </Popover.Content>*/}
+            {/*        </Popover>*/}
+            {/*    </div>*/}
             {/*    <div style={{padding: '300px'}}>*/}
             {/*        <Popover placement="top" isOpen={isOpen.topPopover}*/}
             {/*                 onOpenChange={(e) => setIsOpen({...isOpen, topPopover: e})}>*/}
@@ -396,79 +396,79 @@ function App() {
             {/*<Input placeholder="Placeholder" title="Placeholder"/>*/}
             {/*<p>Disabled</p>*/}
             {/*<Input disabled={true} placeholder="Placeholder" title="Disabled"/>*/}
-            {/*<hr/>*/}
-            {/*<h1>Select</h1>*/}
-            {/*<p>Primitive list</p>*/}
-            {/*<Select options={["Yellow", "Red", "Blue"]} classNames={*/}
-            {/*    {*/}
-            {/*        input: "input input-bordered w-full",*/}
-            {/*        title: "text-[var(--primary-800)] font-bold text-xs mr-2 mb-1.5",*/}
-            {/*    }*/}
-            {/*}/>*/}
-            {/*<p>Non-primitive list</p>*/}
-            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
-            {/*        value="name"/>*/}
-            {/*<p>Disabled</p>*/}
-            {/*<Select disabled={true} options={["Yellow", "Red", "Blue"]}/>*/}
-            {/*<p>Placeholder</p>*/}
-            {/*<Select options={["Yellow", "Red", "Blue"]} placeholder="Custom placeholder"/>*/}
-            {/*<p>Selected | Primitive</p>*/}
-            {/*<Select options={["Yellow", "Red", "Blue"]} selected="Yellow"/>*/}
-            {/*<p>Selected | Non-primitive list</p>*/}
-            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
-            {/*        value="name" selected={3}/>*/}
-            {/*<p>Search with search field | Primitive</p>*/}
-            {/*<Select*/}
-            {/*    options={["Yellow", "Red", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"]}*/}
-            {/*    hasSearch={true}/>*/}
-            {/*<p>Search with search field | Non-primitive</p>*/}
-            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
-            {/*        value="name" hasSearch={true}/>*/}
-            {/*<p>Search with search field | Non-primitive | Custom filter prop</p>*/}
-            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"*/}
-            {/*        value="name" hasSearch={true} optionFilterLabel="name"/>*/}
-            {/*<p>Search with search field | primitive | Selected</p>*/}
-            {/*<Select options={["Yellow", "Red", "Blue"]} selected={"Red"} hasSearch={true}/>*/}
-            {/*<p>Search with search field | Non-primitive | Selected</p>*/}
-            {/*<Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]}*/}
-            {/*        label="id" value="name"*/}
-            {/*        hasSearch={true}*/}
-            {/*        selected={2}/>*/}
-            {/*<hr/>*/}
-            {/*<h1>Call api</h1>*/}
-            {/*<p>Basic usage</p>*/}
-            {/*<Select fetch={fetchApi()} label="id" value="title"/>*/}
-            {/*<p>Pagination</p>*/}
-            {/*<Select closeIcon={false} fetch={fetchApi()} label="id"*/}
-            {/*        value="title"*/}
-            {/*        pagination={{*/}
-            {/*            pageLabel: 'offset',*/}
-            {/*            sizeLabel: 'limit'*/}
-            {/*        }}/>*/}
-            {/*<p>Pagination | Custom page and size</p>*/}
-            {/*<Select closeIcon={<div>CLOSE</div>} fetch={fetchApi()}*/}
-            {/*        label="id" value="title"*/}
-            {/*        pagination={{*/}
-            {/*            page: 5,*/}
-            {/*            pageLabel: 'offset',*/}
-            {/*            size: 10,*/}
-            {/*            sizeLabel: 'limit'*/}
-            {/*        }}/>*/}
-            {/*<p>Pagination | api + has search + set api header</p>*/}
-            {/*<Select fetch={fetchApi()} label="id" value="name"*/}
-            {/*        onSelectChange = {(e) => console.log(e)}*/}
-            {/*        selected = {{*/}
-            {/*            "id": 1,*/}
-            {/*            "name": "Classic White Crew Neck T-Shirt",*/}
-            {/*        }}*/}
-            {/*        pagination={{*/}
-            {/*            page: 1,*/}
-            {/*            pageLabel: 'page',*/}
-            {/*            size: 10,*/}
-            {/*            sizeLabel: 'size',*/}
-            {/*            searchLabel: 'title',*/}
-            {/*        }}/>*/}
-            {/*<hr/>*/}
+            <hr/>
+            <h1>Select</h1>
+            <p>Primitive list</p>
+            <Select options={["Yellow", "Red", "Blue"]} classNames={
+                {
+                    input: "input input-bordered w-full",
+                    title: "text-[var(--primary-800)] font-bold text-xs mr-2 mb-1.5",
+                }
+            }/>
+            <p>Non-primitive list</p>
+            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
+                    value="name"/>
+            <p>Disabled</p>
+            <Select disabled={true} options={["Yellow", "Red", "Blue"]}/>
+            <p>Placeholder</p>
+            <Select options={["Yellow", "Red", "Blue"]} placeholder="Custom placeholder"/>
+            <p>Selected | Primitive</p>
+            <Select options={["Yellow", "Red", "Blue"]} selected="Yellow"/>
+            <p>Selected | Non-primitive list</p>
+            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
+                    value="name" selected={3}/>
+            <p>Search with search field | Primitive</p>
+            <Select
+                options={["Yellow", "Red", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"]}
+                hasSearch={true}/>
+            <p>Search with search field | Non-primitive</p>
+            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
+                    value="name" hasSearch={true}/>
+            <p>Search with search field | Non-primitive | Custom filter prop</p>
+            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]} label="id"
+                    value="name" hasSearch={true} optionFilterLabel="name"/>
+            <p>Search with search field | primitive | Selected</p>
+            <Select options={["Yellow", "Red", "Blue"]} selected={"Red"} hasSearch={true}/>
+            <p>Search with search field | Non-primitive | Selected</p>
+            <Select options={[{id: 1, name: "Yellow"}, {id: 2, name: "Red"}, {id: 3, name: "Blue"}]}
+                    label="id" value="name"
+                    hasSearch={true}
+                    selected={2}/>
+            <hr/>
+            <h1>Call api</h1>
+            <p>Basic usage</p>
+            <Select fetch={fetchApi()} label="id" value="title"/>
+            <p>Pagination</p>
+            <Select closeIcon={false} fetch={fetchApi()} label="id"
+                    value="title"
+                    pagination={{
+                        pageLabel: 'offset',
+                        sizeLabel: 'limit'
+                    }}/>
+            <p>Pagination | Custom page and size</p>
+            <Select closeIcon={<div>CLOSE</div>} fetch={fetchApi()}
+                    label="id" value="title"
+                    pagination={{
+                        page: 5,
+                        pageLabel: 'offset',
+                        size: 10,
+                        sizeLabel: 'limit'
+                    }}/>
+            <p>Pagination | api + has search + set api header</p>
+            <Select fetch={fetchApi()} label="id" value="name"
+                    onSelectChange = {(e) => console.log(e)}
+                    selected = {{
+                        "id": 1,
+                        "name": "Classic White Crew Neck T-Shirt",
+                    }}
+                    pagination={{
+                        page: 1,
+                        pageLabel: 'page',
+                        size: 10,
+                        sizeLabel: 'size',
+                        searchLabel: 'title',
+                    }}/>
+            <hr/>
             {/*<h1>Checkbox</h1>*/}
             {/*<p>Default</p>*/}
             {/*<Checkbox checked={isCheck.default} disabled={true} onChange={(e) => {*/}

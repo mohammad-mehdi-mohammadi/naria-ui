@@ -1,11 +1,11 @@
 {
   "name": "naria-ui",
   "author": {
-    "email": "",
-    "name": "",
-    "url": ""
+    "email": "phoneticem@gmail.com",
+    "name": "Mohammad Mehdi Mohammadi",
+    "url": "https://github.com/mohammad-mehdi-mohammadi"
   },
-  "version": "0.5.31",
+  "version": "0.5.32",
   "type": "module",
 
   "main": "./dist/naria-ui.cjs",
@@ -22,7 +22,9 @@
   },
 
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
 
   "publishConfig": {
@@ -67,5 +69,6 @@
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-svgr": "^4.5.0",
     "vitest": "^3.1.4"
-  }
+  },
+  "license": "MIT"
 }

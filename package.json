@@ -5,7 +5,7 @@
     "name": "Mohammad Mehdi Mohammadi",
     "url": "https://github.com/mohammad-mehdi-mohammadi"
   },
-  "version": "0.5.32",
+  "version": "0.5.33",
   "type": "module",
 
   "main": "./dist/naria-ui.cjs",
